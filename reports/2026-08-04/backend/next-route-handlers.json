@@ -3,7 +3,7 @@
   "role": "backend",
   "source_url": "https://nextjs.org/docs/app/api-reference/file-conventions/route",
   "authority": "primary",
-  "retrieved_at": "2026-08-04T12:13:02.090Z",
+  "retrieved_at": "2026-08-04T12:18:16.393Z",
   "content_sha256": "2aeba6c475be39ebeeac824a3393b0af8ce5723f3207e1215b5ad7b63717aff1",
   "http_status": 200,
   "title": "File-system conventions: route.js | Next.js",
