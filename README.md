@@ -29,3 +29,7 @@ npm run prepare-promotion
 
 자동화 토큰은 main에 직접 커밋하지 않습니다. 주간 promotion PR은 저장소 소유자가 검토하고
 병합합니다.
+
+현재 private 저장소 플랜에서는 GitHub ruleset의 required review를 강제할 수 없습니다. 따라서
+workflow에는 자동 병합 권한을 주지 않고 CODEOWNERS와 수동 병합을 운영 경계로 사용합니다.
+향후 GitHub Pro 이상으로 전환하면 main ruleset에 code-owner 승인 1명을 필수로 설정합니다.
