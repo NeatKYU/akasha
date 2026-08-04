@@ -1,10 +1,16 @@
 import { mkdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
 import {
+  MAX_REDIRECTS,
+  MAX_RESPONSE_BYTES,
   ROOT,
-  detectPromptInjection,
+  assertDate,
+  assertSnapshot,
+  detectRawHtmlPromptInjection,
+  detectRawHtmlSecret,
   extractMetadata,
+  fetchAllowlistedHtml,
   loadSources,
+  resolveContained,
   sha256
 } from './lib.mjs';
 
@@ -14,26 +20,37 @@ function argument(name) {
 }
 
 const date = argument('--date') ?? new Date().toISOString().slice(0, 10);
+assertDate(date);
 const limit = Number(argument('--limit') ?? Number.POSITIVE_INFINITY);
+if (!Number.isFinite(limit) && limit !== Number.POSITIVE_INFINITY) {
+  throw new Error(`Invalid --limit value: ${argument('--limit')}`);
+}
+if (Number.isFinite(limit) && (!Number.isInteger(limit) || limit < 1)) {
+  throw new Error(`Invalid --limit value: ${argument('--limit')}`);
+}
 const enabledSources = (await loadSources()).filter((source) => source.enabled);
 const sources = enabledSources.slice(0, limit);
 const failures = [];
 
 for (const source of sources) {
   try {
-    const response = await fetch(source.url, {
+    const result = await fetchAllowlistedHtml(source.url, {
       headers: {
         'user-agent': 'NeatKYU-agent-knowledge-refresh/1.0 (+https://github.com/NeatKYU/agent-knowledge-base)'
       },
-      redirect: 'follow',
+      maxRedirects: MAX_REDIRECTS,
+      maxBytes: MAX_RESPONSE_BYTES,
       signal: AbortSignal.timeout(20_000)
     });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-    const html = await response.text();
-    const injectionPattern = detectPromptInjection(html);
+    const html = result.html;
+    const injectionPattern = detectRawHtmlPromptInjection(html);
     if (injectionPattern) {
       throw new Error(`prompt-injection pattern detected: ${injectionPattern}`);
+    }
+    const secretPattern = detectRawHtmlSecret(html);
+    if (secretPattern) {
+      throw new Error(`secret-like pattern detected: ${secretPattern}`);
     }
 
     const metadata = extractMetadata(html);
@@ -41,19 +58,31 @@ for (const source of sources) {
       source_id: source.id,
       role: source.role,
       source_url: source.url,
+      final_url: result.finalUrl,
       authority: source.authority,
       retrieved_at: new Date().toISOString(),
       content_sha256: sha256(metadata.normalizedText),
-      http_status: response.status,
+      metadata_sha256: sha256(
+        JSON.stringify({
+          title: metadata.title || source.title,
+          description: metadata.description.slice(0, 800),
+          headings: metadata.headings
+        })
+      ),
+      http_status: result.response.status,
       title: metadata.title || source.title,
       description: metadata.description.slice(0, 800),
       headings: metadata.headings,
+      redirect_hops: result.redirect_hops,
+      storage_mode: 'metadata-only',
+      body_stored: false,
       trust: 'untrusted-external-data'
     };
-    const outputDir = path.join(ROOT, 'reports', date, source.role);
+    assertSnapshot(snapshot);
+    const outputDir = resolveContained(ROOT, 'reports', date, source.role);
     await mkdir(outputDir, { recursive: true });
     await writeFile(
-      path.join(outputDir, `${source.id}.json`),
+      resolveContained(outputDir, `${source.id}.json`),
       `${JSON.stringify(snapshot, null, 2)}\n`
     );
   } catch (error) {
@@ -61,10 +90,10 @@ for (const source of sources) {
   }
 }
 
-const reportRoot = path.join(ROOT, 'reports', date);
+const reportRoot = resolveContained(ROOT, 'reports', date);
 await mkdir(reportRoot, { recursive: true });
 await writeFile(
-  path.join(reportRoot, '_collection.json'),
+  resolveContained(reportRoot, '_collection.json'),
   `${JSON.stringify(
     {
       schema_version: 1,
@@ -74,6 +103,8 @@ await writeFile(
       complete: sources.length === enabledSources.length,
       succeeded: sources.length - failures.length,
       failures,
+      max_response_bytes: MAX_RESPONSE_BYTES,
+      max_redirects: MAX_REDIRECTS,
       trust: 'quarantine-only'
     },
     null,

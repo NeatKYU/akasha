@@ -1,31 +1,94 @@
 name: Tag approved snapshot
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - manifest.json
-      - knowledge/**
-      - reports/**
+  workflow_dispatch:
+    inputs:
+      promotion_pr:
+        description: Merged promotion PR number
+        required: true
+        type: string
+      merge_sha:
+        description: Merge commit SHA to tag
+        required: true
+        type: string
+      tag_name:
+        description: Optional kb-* tag name; defaults to the ISO week and merge SHA prefix
+        required: false
+        type: string
 
 permissions:
   contents: write
+  pull-requests: read
 
 jobs:
   tag:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Verify owner-gated promotion provenance
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PROMOTION_PR: ${{ inputs.promotion_pr }}
+          MERGE_SHA: ${{ inputs.merge_sha }}
+        run: |
+          set -euo pipefail
+
+          test "$GITHUB_ACTOR" = "NeatKYU"
+          case "$PROMOTION_PR" in
+            ''|*[!0-9]*) echo "promotion_pr must be a number" >&2; exit 1 ;;
+          esac
+          case "$MERGE_SHA" in
+            [a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9]) ;;
+            *) echo "merge_sha must be a full lowercase commit SHA" >&2; exit 1 ;;
+          esac
+
+          pr_json="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PROMOTION_PR}")"
+          test "$(jq -r '.merged' <<<"$pr_json")" = "true"
+          test "$(jq -r '.base.ref' <<<"$pr_json")" = "main"
+          test "$(jq -r '.merge_commit_sha' <<<"$pr_json")" = "$MERGE_SHA"
+          head_sha="$(jq -r '.head.sha' <<<"$pr_json")"
+
+          reviews_json="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PROMOTION_PR}/reviews")"
+          approval_count="$(
+            jq --arg head "$head_sha" '[.[] | select(.state == "APPROVED" and .user.login == "NeatKYU" and .commit_id == $head)] | length' \
+              <<<"$reviews_json"
+          )"
+          test "$approval_count" -ge 1
+
+      # actions/checkout v6 resolved with gh api on 2026-08-04.
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v6
+          ref: ${{ inputs.merge_sha }}
+      # actions/setup-node v6 resolved with gh api on 2026-08-04.
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with:
           node-version: 22
-      - run: npm run validate
-      - name: Create immutable snapshot tag
+      - name: Validate approved snapshot
+        run: npm run validate
+      - name: Create annotated immutable snapshot tag
+        env:
+          PROMOTION_PR: ${{ inputs.promotion_pr }}
+          MERGE_SHA: ${{ inputs.merge_sha }}
+          TAG_NAME: ${{ inputs.tag_name }}
         run: |
-          tag="kb-$(date -u +%G-W%V)-${GITHUB_SHA::7}"
+          set -euo pipefail
+
+          test "$(git rev-parse HEAD)" = "$MERGE_SHA"
+          if [ -n "$TAG_NAME" ]; then
+            tag="$TAG_NAME"
+          else
+            tag="kb-$(date -u +%G-W%V)-${MERGE_SHA::7}"
+          fi
+          case "$tag" in
+            kb-[0-9][0-9][0-9][0-9]-W[0-9][0-9]-[a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9]) ;;
+            *) echo "tag_name must match kb-YYYY-Www-abcdef0" >&2; exit 1 ;;
+          esac
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag -a "$tag" -m "Approved knowledge snapshot $tag"
+          git tag -a "$tag" "$MERGE_SHA" \
+            -m "Approved knowledge snapshot ${tag}" \
+            -m "promotion_pr=${PROMOTION_PR}" \
+            -m "merge_sha=${MERGE_SHA}" \
+            -m "approved_by=NeatKYU"
           git push origin "$tag"

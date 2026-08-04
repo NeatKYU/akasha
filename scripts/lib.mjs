@@ -1,8 +1,12 @@
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
+import Ajv2020 from 'ajv/dist/2020.js';
 
 export const ROOT = path.resolve(new URL('..', import.meta.url).pathname);
+export const MAX_RESPONSE_BYTES = 1_000_000;
+export const MAX_REDIRECTS = 5;
 
 export const ALLOWED_HOSTS = new Set([
   'cheatsheetseries.owasp.org',
@@ -11,6 +15,7 @@ export const ALLOWED_HOSTS = new Set([
   'developers.google.com',
   'developers.openai.com',
   'docs.github.com',
+  'learn.chatgpt.com',
   'learn.thedesignsystem.guide',
   'next-auth.js.org',
   'nextjs.org',
@@ -27,21 +32,118 @@ export const ALLOWED_HOSTS = new Set([
 
 const INJECTION_PATTERNS = [
   /ignore (?:all|any|the) previous instructions/i,
+  /disregard (?:all|any|the) previous instructions/i,
   /reveal (?:the )?(?:system|developer) prompt/i,
+  /(?:system|developer) (?:prompt|message):/i,
   /execute (?:this|the following) command/i,
   /send (?:the )?(?:secret|token|credential)/i,
-  /override (?:the )?(?:system|developer) instructions/i
+  /override (?:the )?(?:system|developer) instructions/i,
+  /\b(?:call|invoke)\s+(?:the\s+)?tool[_ -]?call\b/i,
+  /exfiltrat(?:e|ion)/i
+];
+
+const RAW_HTML_INJECTION_PATTERNS = [
+  /ignore (?:all|any|the) previous instructions/i,
+  /disregard (?:all|any|the) previous instructions/i,
+  /reveal (?:the )?(?:system|developer) prompt/i,
+  /execute (?:this|the following) command/i,
+  /override (?:the )?(?:system|developer) instructions/i,
+  /exfiltrat(?:e|ion)/i
+];
+
+const SECRET_PATTERNS = [
+  /(?:api[_-]?key|secret|token|password|credential)\s*[:=]\s*["']?[A-Za-z0-9_./+=-]{20,}/i,
+  /ghp_[A-Za-z0-9_]{36,}/,
+  /github_pat_[A-Za-z0-9_]{40,}/,
+  /sk-[A-Za-z0-9]{20,}/,
+  /-----BEGIN (?:RSA |EC |OPENSSH |PGP )?PRIVATE KEY-----/
+];
+
+const RAW_HTML_SECRET_PATTERNS = [
+  /(?:api[_-]?key|secret|token|password|credential)\s*[:=]\s*["']?[A-Za-z0-9_./+=-]{32,}/i,
+  /ghp_[A-Za-z0-9_]{36,}/,
+  /github_pat_[A-Za-z0-9_]{40,}/,
+  /-----BEGIN (?:RSA |EC |OPENSSH |PGP )?PRIVATE KEY-----/
 ];
 
 export function detectPromptInjection(value) {
   return INJECTION_PATTERNS.find((pattern) => pattern.test(value))?.source ?? null;
 }
 
+export function detectRawHtmlPromptInjection(value) {
+  return RAW_HTML_INJECTION_PATTERNS.find((pattern) => pattern.test(value))?.source ?? null;
+}
+
+export function detectSecret(value) {
+  return SECRET_PATTERNS.find((pattern) => pattern.test(value))?.source ?? null;
+}
+
+export function detectRawHtmlSecret(value) {
+  return RAW_HTML_SECRET_PATTERNS.find((pattern) => pattern.test(value))?.source ?? null;
+}
+
 export function sha256(value) {
   return createHash('sha256').update(value).digest('hex');
 }
 
+const ajv = new Ajv2020({ allErrors: true, strict: true });
+const sourceSchema = JSON.parse(readFileSync(path.join(ROOT, 'schema', 'source.schema.json'), 'utf8'));
+const snapshotSchema = JSON.parse(
+  readFileSync(path.join(ROOT, 'schema', 'snapshot.schema.json'), 'utf8')
+);
+const validateSourceSchema = ajv.compile(sourceSchema);
+const validateSnapshotSchema = ajv.compile(snapshotSchema);
+
+function schemaErrorText(validate) {
+  return ajv.errorsText(validate.errors, { separator: '; ' });
+}
+
+export function assertSchema(value, schemaName) {
+  const validate = schemaName === 'source' ? validateSourceSchema : validateSnapshotSchema;
+  if (!validate(value)) {
+    throw new Error(`${schemaName} schema validation failed: ${schemaErrorText(validate)}`);
+  }
+}
+
+export function assertRelativePath(value, label) {
+  if (typeof value !== 'string' || value.trim() === '') {
+    throw new Error(`${label} must be a non-empty relative path`);
+  }
+  if (value.includes('\0') || path.isAbsolute(value) || value.split(/[\\/]+/).includes('..')) {
+    throw new Error(`${label} must stay inside the repository: ${value}`);
+  }
+}
+
+export function resolveContained(base, ...segments) {
+  const resolvedBase = path.resolve(base);
+  const resolved = path.resolve(resolvedBase, ...segments);
+  const relative = path.relative(resolvedBase, resolved);
+  if (relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative))) {
+    return resolved;
+  }
+  throw new Error(`Path escapes ${resolvedBase}: ${resolved}`);
+}
+
+export function assertDate(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    throw new Error(`Invalid report date: ${value}`);
+  }
+  const parsed = new Date(`${value}T00:00:00.000Z`);
+  if (Number.isNaN(parsed.valueOf()) || parsed.toISOString().slice(0, 10) !== value) {
+    throw new Error(`Invalid report date: ${value}`);
+  }
+}
+
+export function assertAllowlistedUrl(value, label = 'URL') {
+  const url = new URL(value);
+  if (url.protocol !== 'https:' || !ALLOWED_HOSTS.has(url.hostname) || url.username || url.password) {
+    throw new Error(`${label} uses a non-allowlisted URL: ${value}`);
+  }
+  return url;
+}
+
 export function assertSource(source, expectedRole) {
+  assertSchema(source, 'source');
   const requiredStrings = [
     'id',
     'role',
@@ -67,10 +169,7 @@ export function assertSource(source, expectedRole) {
     throw new Error(`Source ${source.id} role ${source.role} does not match ${expectedRole}`);
   }
 
-  const url = new URL(source.url);
-  if (url.protocol !== 'https:' || !ALLOWED_HOSTS.has(url.hostname)) {
-    throw new Error(`Source ${source.id} uses a non-allowlisted URL: ${source.url}`);
-  }
+  assertAllowlistedUrl(source.url, `Source ${source.id}`);
 
   if (!['primary', 'secondary'].includes(source.authority)) {
     throw new Error(`Source ${source.id} has invalid authority ${source.authority}`);
@@ -78,6 +177,17 @@ export function assertSource(source, expectedRole) {
 
   if (typeof source.enabled !== 'boolean') {
     throw new Error(`Source ${source.id} has invalid enabled flag`);
+  }
+}
+
+export function assertSnapshot(snapshot) {
+  assertSchema(snapshot, 'snapshot');
+  if (detectPromptInjection(JSON.stringify(snapshot)) !== null) {
+    throw new Error(`Snapshot ${snapshot.source_id} contains an instruction-like payload`);
+  }
+  const secretPattern = detectSecret(JSON.stringify(snapshot));
+  if (secretPattern) {
+    throw new Error(`Snapshot ${snapshot.source_id} contains a secret-like payload: ${secretPattern}`);
   }
 }
 
@@ -105,6 +215,70 @@ export async function loadSources() {
   }
 
   return sources.sort((left, right) => left.id.localeCompare(right.id));
+}
+
+export async function fetchAllowlistedHtml(startUrl, options = {}) {
+  const headers = options.headers ?? {};
+  const maxRedirects = options.maxRedirects ?? MAX_REDIRECTS;
+  const maxBytes = options.maxBytes ?? MAX_RESPONSE_BYTES;
+  const signal = options.signal;
+  let currentUrl = assertAllowlistedUrl(startUrl, 'Fetch URL');
+  const hops = [];
+
+  for (let redirectCount = 0; redirectCount <= maxRedirects; redirectCount += 1) {
+    const response = await fetch(currentUrl, {
+      headers,
+      redirect: 'manual',
+      signal
+    });
+    hops.push(currentUrl.href);
+
+    if ([301, 302, 303, 307, 308].includes(response.status)) {
+      const location = response.headers.get('location');
+      if (!location) throw new Error(`Redirect without location from ${currentUrl.href}`);
+      if (redirectCount === maxRedirects) {
+        throw new Error(`Too many redirects from ${startUrl}`);
+      }
+      currentUrl = assertAllowlistedUrl(new URL(location, currentUrl).href, 'Redirect URL');
+      continue;
+    }
+
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return {
+      response,
+      html: await readResponseBodyLimited(response, maxBytes),
+      finalUrl: currentUrl.href,
+      redirect_hops: hops
+    };
+  }
+
+  throw new Error(`Too many redirects from ${startUrl}`);
+}
+
+async function readResponseBodyLimited(response, maxBytes) {
+  const contentLength = response.headers.get('content-length');
+  if (contentLength !== null && Number(contentLength) > maxBytes) {
+    throw new Error(`Response body exceeds ${maxBytes} bytes`);
+  }
+
+  const reader = response.body?.getReader();
+  if (!reader) {
+    const buffer = Buffer.from(await response.arrayBuffer());
+    if (buffer.byteLength > maxBytes) throw new Error(`Response body exceeds ${maxBytes} bytes`);
+    return buffer.toString('utf8');
+  }
+
+  const chunks = [];
+  let total = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > maxBytes) throw new Error(`Response body exceeds ${maxBytes} bytes`);
+    chunks.push(value);
+  }
+
+  return Buffer.concat(chunks.map((chunk) => Buffer.from(chunk))).toString('utf8');
 }
 
 function decodeEntities(value) {

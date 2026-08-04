@@ -12,20 +12,34 @@
     "content_sha256",
     "http_status",
     "title",
+    "description",
     "headings",
     "trust"
   ],
   "properties": {
-    "source_id": { "type": "string" },
-    "role": { "type": "string" },
-    "source_url": { "type": "string", "pattern": "^https://" },
+    "source_id": { "type": "string", "pattern": "^[a-z0-9-]+$", "maxLength": 80 },
+    "role": { "type": "string", "pattern": "^[a-z0-9-]+$", "maxLength": 40 },
+    "source_url": { "type": "string", "pattern": "^https://[^\\s]+$", "maxLength": 500 },
+    "final_url": { "type": "string", "pattern": "^https://[^\\s]+$", "maxLength": 500 },
     "authority": { "enum": ["primary", "secondary"] },
-    "retrieved_at": { "type": "string" },
+    "retrieved_at": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T[^\\s]+Z$" },
     "content_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "metadata_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
     "http_status": { "type": "integer", "minimum": 200, "maximum": 399 },
-    "title": { "type": "string" },
-    "description": { "type": "string" },
-    "headings": { "type": "array", "items": { "type": "string" }, "maxItems": 40 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 240 },
+    "description": { "type": "string", "maxLength": 800 },
+    "headings": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 240 },
+      "maxItems": 40
+    },
+    "redirect_hops": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^https://[^\\s]+$", "maxLength": 500 },
+      "maxItems": 6
+    },
+    "storage_mode": { "const": "metadata-only" },
+    "body_stored": { "const": false },
     "trust": { "const": "untrusted-external-data" }
   },
   "additionalProperties": false

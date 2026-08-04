@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "snapshot_status": "approved-main",
+  "approved_report_date": "2026-08-04",
+  "approved_at": "2026-08-04T00:00:00.000Z",
+  "approved_commit": null,
+  "trust": "human-reviewed-main-only",
+  "knowledge_index": "../knowledge/INDEX.md",
+  "source_hashes": {}
+}

@@ -15,14 +15,14 @@
     "enabled"
   ],
   "properties": {
-    "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
-    "role": { "type": "string", "pattern": "^[a-z0-9-]+$" },
-    "title": { "type": "string", "minLength": 1 },
-    "url": { "type": "string", "pattern": "^https://" },
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$", "maxLength": 80 },
+    "role": { "type": "string", "pattern": "^[a-z0-9-]+$", "maxLength": 40 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "url": { "type": "string", "pattern": "^https://[^\\s]+$", "maxLength": 500 },
     "authority": { "enum": ["primary", "secondary"] },
-    "owner": { "type": "string", "minLength": 1 },
-    "license_note": { "type": "string", "minLength": 1 },
-    "allowed_purpose": { "type": "string", "minLength": 1 },
+    "owner": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "license_note": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "allowed_purpose": { "type": "string", "minLength": 1, "maxLength": 500 },
     "enabled": { "type": "boolean" }
   },
   "additionalProperties": false
