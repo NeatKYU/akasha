@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, rm, writeFile } from 'node:fs/promises';
 import {
   MAX_REDIRECTS,
   MAX_RESPONSE_BYTES,
@@ -31,6 +31,12 @@ if (Number.isFinite(limit) && (!Number.isInteger(limit) || limit < 1)) {
 const enabledSources = (await loadSources()).filter((source) => source.enabled);
 const sources = enabledSources.slice(0, limit);
 const failures = [];
+const reportRoot = resolveContained(ROOT, 'reports', date);
+
+// A same-day rerun must not retain a snapshot from an earlier attempt when the
+// current fetch fails. The validated date keeps this deletion inside reports/.
+await rm(reportRoot, { recursive: true, force: true });
+await mkdir(reportRoot, { recursive: true });
 
 for (const source of sources) {
   try {
@@ -90,8 +96,6 @@ for (const source of sources) {
   }
 }
 
-const reportRoot = resolveContained(ROOT, 'reports', date);
-await mkdir(reportRoot, { recursive: true });
 await writeFile(
   resolveContained(reportRoot, '_collection.json'),
   `${JSON.stringify(
@@ -113,4 +117,7 @@ await writeFile(
 );
 
 console.log(`Refreshed ${sources.length - failures.length}/${sources.length} sources for ${date}.`);
-if (failures.length > 0) console.warn(`${failures.length} source(s) remain quarantined as failures.`);
+if (failures.length > 0) {
+  console.warn(`${failures.length} source(s) remain quarantined as failures.`);
+  for (const failure of failures) console.warn(`${failure.source_id}: ${failure.error}`);
+}
