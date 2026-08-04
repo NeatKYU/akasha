@@ -63,6 +63,8 @@ jobs:
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with:
           node-version: 22
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
       - name: Validate approved snapshot
         run: npm run validate
       - name: Create annotated immutable snapshot tag
