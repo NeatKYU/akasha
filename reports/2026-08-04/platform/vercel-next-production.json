@@ -2,9 +2,11 @@
   "source_id": "vercel-next-production",
   "role": "platform",
   "source_url": "https://nextjs.org/docs/app/guides/production-checklist",
+  "final_url": "https://nextjs.org/docs/app/guides/production-checklist",
   "authority": "primary",
-  "retrieved_at": "2026-08-04T12:13:08.900Z",
+  "retrieved_at": "2026-08-04T12:56:05.683Z",
   "content_sha256": "12d03fbf45afafbeaa914869468056714175b5486a3845d7aca073bce1cd1115",
+  "metadata_sha256": "d597dc6781bf56a9dad707e1b8d7336f4f4853ceaf53764c53c8c30843b6ec0c",
   "http_status": 200,
   "title": "Guides: Production | Next.js",
   "description": "Recommendations to ensure the best performance and user experience before taking your Next.js application to production.",
@@ -22,5 +24,10 @@
     "Core Web Vitals",
     "Analyzing bundles"
   ],
+  "redirect_hops": [
+    "https://nextjs.org/docs/app/guides/production-checklist"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
   "trust": "untrusted-external-data"
 }
