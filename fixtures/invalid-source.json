@@ -1,0 +1,11 @@
+{
+  "id": "invalid-source",
+  "role": "security",
+  "title": "Invalid HTTP source",
+  "url": "http://example.com/unsafe",
+  "authority": "primary",
+  "owner": "Fixture",
+  "license_note": "Fixture only.",
+  "allowed_purpose": "Validation fixture.",
+  "enabled": true
+}

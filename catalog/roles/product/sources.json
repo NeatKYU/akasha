@@ -1,0 +1,13 @@
+[
+  {
+    "id": "govuk-user-needs",
+    "role": "product",
+    "title": "Start by learning user needs",
+    "url": "https://www.gov.uk/service-manual/user-research/start-by-learning-user-needs",
+    "authority": "primary",
+    "owner": "UK Government Digital Service",
+    "license_note": "Use metadata and concise attributed summaries only.",
+    "allowed_purpose": "User-needs discovery and acceptance-criteria framing.",
+    "enabled": true
+  }
+]

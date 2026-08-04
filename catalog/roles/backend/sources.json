@@ -1,0 +1,24 @@
+[
+  {
+    "id": "next-route-handlers",
+    "role": "backend",
+    "title": "Next.js Route Handlers",
+    "url": "https://nextjs.org/docs/app/api-reference/file-conventions/route",
+    "authority": "primary",
+    "owner": "Vercel",
+    "license_note": "Use metadata, links, and concise attributed summaries.",
+    "allowed_purpose": "Route Handler API decisions.",
+    "enabled": true
+  },
+  {
+    "id": "nextauth-v4",
+    "role": "backend",
+    "title": "NextAuth.js v4 documentation",
+    "url": "https://next-auth.js.org/",
+    "authority": "primary",
+    "owner": "NextAuth.js",
+    "license_note": "Use metadata, links, and concise attributed summaries.",
+    "allowed_purpose": "Current project authentication implementation guidance.",
+    "enabled": true
+  }
+]

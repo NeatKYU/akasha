@@ -1,0 +1,24 @@
+[
+  {
+    "id": "prisma-docs",
+    "role": "data",
+    "title": "Prisma ORM documentation",
+    "url": "https://www.prisma.io/docs/orm",
+    "authority": "primary",
+    "owner": "Prisma Data",
+    "license_note": "Use metadata, links, and concise attributed summaries.",
+    "allowed_purpose": "Prisma schema, query, and migration guidance.",
+    "enabled": true
+  },
+  {
+    "id": "postgres-docs",
+    "role": "data",
+    "title": "PostgreSQL documentation",
+    "url": "https://www.postgresql.org/docs/current/",
+    "authority": "primary",
+    "owner": "PostgreSQL Global Development Group",
+    "license_note": "Use metadata, links, and concise attributed summaries.",
+    "allowed_purpose": "PostgreSQL integrity, indexing, and SQL semantics.",
+    "enabled": true
+  }
+]

@@ -1,0 +1,51 @@
+name: Prepare weekly promotion
+
+on:
+  schedule:
+    - cron: '30 18 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: knowledge-promotion
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Select latest quarantine report
+        run: |
+          latest=$(git branch -r --sort=-committerdate --format='%(refname:short)' \
+            | awk '/origin\/automation\/quarantine-/{print; exit}')
+          test -n "$latest"
+          git checkout "$latest" -- reports/
+      - name: Prepare and validate promotion
+        run: |
+          npm run prepare-promotion
+          npm run validate
+      - name: Open human-approval promotion PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch="promotion/$(date -u +%G-W%V)-${GITHUB_RUN_ID}"
+          git switch -c "$branch"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/ manifest.json
+          git commit -m "📝 지식 승격: $(date -u +%G-W%V) 검토 스냅샷 준비"
+          git push origin "$branch"
+          gh pr create \
+            --base main \
+            --head "$branch" \
+            --title "📝 지식 승격: $(date -u +%G-W%V) 승인 요청" \
+            --body "주간 승인 스냅샷입니다. CODEOWNERS 검토 후에만 병합해 주세요."

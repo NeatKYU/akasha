@@ -1,0 +1,24 @@
+[
+  {
+    "id": "owasp-asvs",
+    "role": "security",
+    "title": "OWASP Application Security Verification Standard",
+    "url": "https://owasp.org/www-project-application-security-verification-standard/",
+    "authority": "primary",
+    "owner": "OWASP Foundation",
+    "license_note": "Follow the source license; store links and concise mappings.",
+    "allowed_purpose": "Application-security verification planning.",
+    "enabled": true
+  },
+  {
+    "id": "owasp-cheat-sheets",
+    "role": "security",
+    "title": "OWASP Cheat Sheet Series",
+    "url": "https://cheatsheetseries.owasp.org/",
+    "authority": "primary",
+    "owner": "OWASP Foundation",
+    "license_note": "Follow the source license; store links and concise mappings.",
+    "allowed_purpose": "Auth, input, session, and secret-handling review.",
+    "enabled": true
+  }
+]

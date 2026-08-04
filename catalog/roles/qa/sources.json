@@ -1,0 +1,13 @@
+[
+  {
+    "id": "playwright-best-practices",
+    "role": "qa",
+    "title": "Playwright best practices",
+    "url": "https://playwright.dev/docs/best-practices",
+    "authority": "primary",
+    "owner": "Microsoft",
+    "license_note": "Use metadata, links, and concise attributed summaries.",
+    "allowed_purpose": "Browser-test design and flaky-test prevention.",
+    "enabled": true
+  }
+]

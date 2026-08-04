@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NeatKYU/agent-knowledge-base/schema/snapshot.schema.json",
+  "title": "Quarantined source snapshot",
+  "type": "object",
+  "required": [
+    "source_id",
+    "role",
+    "source_url",
+    "authority",
+    "retrieved_at",
+    "content_sha256",
+    "http_status",
+    "title",
+    "headings",
+    "trust"
+  ],
+  "properties": {
+    "source_id": { "type": "string" },
+    "role": { "type": "string" },
+    "source_url": { "type": "string", "pattern": "^https://" },
+    "authority": { "enum": ["primary", "secondary"] },
+    "retrieved_at": { "type": "string" },
+    "content_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "http_status": { "type": "integer", "minimum": 200, "maximum": 399 },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "headings": { "type": "array", "items": { "type": "string" }, "maxItems": 40 },
+    "trust": { "const": "untrusted-external-data" }
+  },
+  "additionalProperties": false
+}

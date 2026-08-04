@@ -1,0 +1,11 @@
+{
+  "name": "agent-knowledge-base",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate.mjs --fixtures",
+    "refresh": "node scripts/refresh.mjs",
+    "prepare-promotion": "node scripts/prepare-promotion.mjs"
+  }
+}

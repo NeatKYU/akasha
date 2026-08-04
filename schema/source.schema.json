@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NeatKYU/agent-knowledge-base/schema/source.schema.json",
+  "title": "Agent knowledge source",
+  "type": "object",
+  "required": [
+    "id",
+    "role",
+    "title",
+    "url",
+    "authority",
+    "owner",
+    "license_note",
+    "allowed_purpose",
+    "enabled"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "role": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "title": { "type": "string", "minLength": 1 },
+    "url": { "type": "string", "pattern": "^https://" },
+    "authority": { "enum": ["primary", "secondary"] },
+    "owner": { "type": "string", "minLength": 1 },
+    "license_note": { "type": "string", "minLength": 1 },
+    "allowed_purpose": { "type": "string", "minLength": 1 },
+    "enabled": { "type": "boolean" }
+  },
+  "additionalProperties": false
+}

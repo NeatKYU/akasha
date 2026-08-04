@@ -1,0 +1,31 @@
+name: Tag approved snapshot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - manifest.json
+      - knowledge/**
+      - reports/**
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - run: npm run validate
+      - name: Create immutable snapshot tag
+        run: |
+          tag="kb-$(date -u +%G-W%V)-${GITHUB_SHA::7}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$tag" -m "Approved knowledge snapshot $tag"
+          git push origin "$tag"
