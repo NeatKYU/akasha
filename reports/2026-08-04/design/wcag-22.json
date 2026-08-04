@@ -2,9 +2,11 @@
   "source_id": "wcag-22",
   "role": "design",
   "source_url": "https://www.w3.org/TR/WCAG22/",
+  "final_url": "https://www.w3.org/TR/WCAG22/",
   "authority": "primary",
-  "retrieved_at": "2026-08-04T12:13:09.015Z",
+  "retrieved_at": "2026-08-04T19:57:21.723Z",
   "content_sha256": "64fd73cdb7725d9511488f5de6386081329d365872547b2d5000ef771ac37bd0",
+  "metadata_sha256": "1cc56727c4bc55fa729a17d1600a0cde6d5192c7005da0cb7831a93023e0e486",
   "http_status": 200,
   "title": "Web Content Accessibility Guidelines (WCAG) 2.2",
   "description": "Web Content Accessibility Guidelines (WCAG) 2.2 covers a wide range of recommendations for making web content more accessible. Following these guidelines will make content more accessible to a wider range of people with disabilities, including accommodations for blindness and low vision, deafness and hearing loss, limited movement, speech disabilities, photosensitivity, and combinations of these, and some accommodation for learning disabilities and cognitive limitations; but will not address every user need for people with these disabilities. These guidelines address accessibility of web content on any kind of device (including desktops, laptops, kiosks, and mobile devices). Following these guidelines will also often make web content more usable to users in general.",
@@ -50,5 +52,10 @@
     "A. Change Log",
     "B. Acknowledgments"
   ],
+  "redirect_hops": [
+    "https://www.w3.org/TR/WCAG22/"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
   "trust": "untrusted-external-data"
 }

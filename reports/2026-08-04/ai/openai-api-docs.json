@@ -2,9 +2,11 @@
   "source_id": "openai-api-docs",
   "role": "ai",
   "source_url": "https://developers.openai.com/api/docs/",
+  "final_url": "https://developers.openai.com/api/docs",
   "authority": "primary",
-  "retrieved_at": "2026-08-04T12:13:02.485Z",
-  "content_sha256": "e8d94c6726d3a18384af3756493e9a0f50910b7eafdbdccb6e2884c7d7dddd42",
+  "retrieved_at": "2026-08-04T19:57:15.285Z",
+  "content_sha256": "3386a006eaf0430a7fd053c50618ca10366c2c6ee7aab6c18621c12369a6f9a3",
+  "metadata_sha256": "de5f8b0a0cea611a43a92487a11c19a511748ce632cc05260ff5663e4d9ce595",
   "http_status": 200,
   "title": "OpenAI API Platform Documentation",
   "description": "Explore guides, API docs, and examples for the OpenAI API.",
@@ -50,5 +52,11 @@
     "Resources",
     "Get started"
   ],
+  "redirect_hops": [
+    "https://developers.openai.com/api/docs/",
+    "https://developers.openai.com/api/docs"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
   "trust": "untrusted-external-data"
 }

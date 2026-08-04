@@ -2,9 +2,11 @@
   "source_id": "govuk-user-needs",
   "role": "product",
   "source_url": "https://www.gov.uk/service-manual/user-research/start-by-learning-user-needs",
+  "final_url": "https://www.gov.uk/service-manual/user-research/start-by-learning-user-needs",
   "authority": "primary",
-  "retrieved_at": "2026-08-04T12:13:01.311Z",
+  "retrieved_at": "2026-08-04T19:57:13.753Z",
   "content_sha256": "7fe3fe95a0dc845c4398ea4332833958e1d4160ebd32bbe0b2140d5ce9078c5f",
+  "metadata_sha256": "86e82aeb5213f26e11d0cabd0838c82aac712394eb25ce0dc8d9679b6cb404f3",
   "http_status": 200,
   "title": "Learning about users and their needs - Service Manual - GOV.UK",
   "description": "Finding out what users need from your service will help you design a service that’s easy to use and valued by the people who need it.",
@@ -34,5 +36,10 @@
     "Government activity",
     "Support links"
   ],
+  "redirect_hops": [
+    "https://www.gov.uk/service-manual/user-research/start-by-learning-user-needs"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
   "trust": "untrusted-external-data"
 }

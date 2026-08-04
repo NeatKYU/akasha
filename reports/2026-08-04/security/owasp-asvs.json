@@ -2,9 +2,11 @@
   "source_id": "owasp-asvs",
   "role": "security",
   "source_url": "https://owasp.org/www-project-application-security-verification-standard/",
+  "final_url": "https://owasp.org/www-project-application-security-verification-standard/",
   "authority": "primary",
-  "retrieved_at": "2026-08-04T12:13:02.978Z",
+  "retrieved_at": "2026-08-04T19:57:15.864Z",
   "content_sha256": "4c8406d61c8c37fbdef39787a99d2c149a3569ea5699b83c48e663b7928a3d4a",
+  "metadata_sha256": "077270ba68462fb75e07d0c8f1291b26fe9b041cdf978e46df1b4a27ac68972a",
   "http_status": 200,
   "title": "OWASP Application Security Verification Standard (ASVS) | OWASP Foundation",
   "description": "The OWASP Application Security Verification Standard (ASVS) Project is a framework of security requirements that focus on defining the security controls required when designing, developing and testing modern web applications and web services.",
@@ -50,5 +52,10 @@
     "Source in GitHub",
     "Downloads (ASVS 5.0.0)"
   ],
+  "redirect_hops": [
+    "https://owasp.org/www-project-application-security-verification-standard/"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
   "trust": "untrusted-external-data"
 }

@@ -2,9 +2,11 @@
   "source_id": "google-seo-starter",
   "role": "marketing",
   "source_url": "https://developers.google.com/search/docs/fundamentals/seo-starter-guide",
+  "final_url": "https://developers.google.com/search/docs/fundamentals/seo-starter-guide",
   "authority": "primary",
-  "retrieved_at": "2026-08-04T12:12:58.541Z",
+  "retrieved_at": "2026-08-04T19:57:12.514Z",
   "content_sha256": "ad029ebc4b95310010664b6d447bfe9573db20bd54a6292e7773bd2040a41165",
+  "metadata_sha256": "969a753c56d857e5d45a80253590fd1234bd3a057ae03d37cb3b0e25a81127d3",
   "http_status": 200,
   "title": "SEO Starter Guide: The Basics | Google Search Central &nbsp;|&nbsp; Documentation &nbsp;|&nbsp; Google for Developers",
   "description": "A knowledge of basic SEO can have a noticeable impact. Explore the Google SEO starter guide for an overview of search engine optimization essentials.",
@@ -38,5 +40,10 @@
     "Resources",
     "Tools"
   ],
+  "redirect_hops": [
+    "https://developers.google.com/search/docs/fundamentals/seo-starter-guide"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
   "trust": "untrusted-external-data"
 }
