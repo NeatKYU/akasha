@@ -24,13 +24,14 @@ npm run prepare-promotion
 ```
 
 - `refresh-quarantine.yml`: 매일 출처의 메타데이터와 내용 해시를 날짜별 격리 브랜치에 기록
-- `prepare-weekly-promotion.yml`: 최신 격리 결과로 주간 승격 PR 생성
+- `prepare-weekly-promotion.yml`: 최신 격리 결과로 사람이 PR을 열 수 있는 주간 승격 브랜치 생성
 - `tag-approved-snapshot.yml`: 저장소 소유자가 `workflow_dispatch`로 promotion PR 번호와 merge
   commit SHA를 입력했을 때만 불변 `kb-*` annotated tag 생성
 
 저장소의 기본 Actions 권한은 read-only로 운영하고, 쓰기가 필요한 workflow만 파일 단위
-`permissions`로 `contents: write` 또는 `pull-requests: write`를 요청합니다. 자동화 토큰은
-main에 직접 커밋하지 않습니다. 주간 promotion PR은 저장소 소유자가 검토하고 병합합니다.
+`permissions`로 `contents: write`를 요청합니다. Actions의 PR 생성·승인 권한은 비활성화되어
+있으므로 workflow는 브랜치와 job summary만 만들고, 저장소 소유자가 promotion PR을 직접 열어
+검토·병합합니다. 자동화 토큰은 main에 직접 커밋하지 않습니다.
 태그 생성은 push trigger가 아니라 수동 owner-gated workflow이며, actor가 `NeatKYU`인지,
 promotion PR이 main에 병합되었는지, 입력한 merge SHA가 PR의 merge commit인지, `NeatKYU`의
 approving review가 있는지 확인한 뒤 annotated tag만 생성합니다.

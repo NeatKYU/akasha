@@ -12,7 +12,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 concurrency:
   group: knowledge-refresh
@@ -46,8 +45,6 @@ jobs:
       - name: Validate quarantine report
         run: npm run validate
       - name: Push date-scoped quarantine branch
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           branch="automation/quarantine-$(date -u +%F)-${GITHUB_RUN_ID}"
           git switch -c "$branch"
@@ -56,9 +53,9 @@ jobs:
           git add reports/
           git commit -m "📝 지식 격리: $(date -u +%F) 출처 변경 기록"
           git push origin "$branch"
-          gh pr create \
-            --draft \
-            --base main \
-            --head "$branch" \
-            --title "📝 지식 격리: $(date -u +%F) 외부 문서 점검" \
-            --body "자동 수집된 비신뢰 외부 문서 메타데이터입니다. 이 PR은 직접 병합하지 않고 주간 promotion 입력으로만 사용합니다."
+          {
+            echo "### Quarantine branch ready"
+            echo
+            echo "Review branch: \`$branch\`"
+            echo "This branch is input for weekly promotion and must not be merged directly."
+          } >> "$GITHUB_STEP_SUMMARY"

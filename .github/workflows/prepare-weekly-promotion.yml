@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 concurrency:
   group: knowledge-promotion
@@ -37,9 +36,7 @@ jobs:
         run: |
           npm run prepare-promotion
           npm run validate
-      - name: Open human-approval promotion PR
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Push human-review promotion branch
         run: |
           branch="promotion/$(date -u +%G-W%V)-${GITHUB_RUN_ID}"
           git switch -c "$branch"
@@ -48,8 +45,8 @@ jobs:
           git add reports/ manifest.json
           git commit -m "📝 지식 승격: $(date -u +%G-W%V) 검토 스냅샷 준비"
           git push origin "$branch"
-          gh pr create \
-            --base main \
-            --head "$branch" \
-            --title "📝 지식 승격: $(date -u +%G-W%V) 승인 요청" \
-            --body "주간 승인 스냅샷입니다. CODEOWNERS 검토 후에만 병합해 주세요."
+          {
+            echo "### Promotion branch ready"
+            echo
+            echo "Open a PR from \`$branch\` to \`main\`, then require owner review before merge."
+          } >> "$GITHUB_STEP_SUMMARY"
