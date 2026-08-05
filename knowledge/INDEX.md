@@ -8,3 +8,5 @@
 - [React/Next.js 기준](frontend/runtime-baseline.md)
 - [API·데이터 기준](backend/data-baseline.md)
 - [보안·품질 기준](security/quality-baseline.md)
+- [품질보증 E2E 테스트 기준](qa/e2e-test-baseline.md)
+- [플랫폼 운영·릴리스 기준](platform/production-release-baseline.md)
