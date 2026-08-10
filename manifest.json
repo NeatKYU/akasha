@@ -1,121 +1,122 @@
 {
   "schema_version": 1,
   "snapshot_status": "approved-main",
-  "approved_report_date": "2026-08-05",
-  "approved_at": "2026-08-05T12:04:36.892Z",
+  "approved_report_date": "2026-08-09",
+  "approved_at": "2026-08-10T05:54:17.060Z",
   "approved_commit": null,
   "trust": "human-reviewed-main-only",
   "knowledge_index": "knowledge/INDEX.md",
+  "unavailable_sources": [
+    {
+      "source_id": "netflix-hawkins-interview",
+      "authority": "secondary"
+    }
+  ],
   "source_hashes": {
     "openai-api-docs": {
-      "content_sha256": "7c66bf7dfb2e0a7eb29f0eb4e70bfb5655aaa4304883d0ce7ba41ebff8e789c3",
-      "snapshot_sha256": "6cac99636ebc0228791ee6bdacd250e5621fbc0876701917e733ba25e5bbcf2d",
-      "retrieved_at": "2026-08-05T12:04:31.712Z"
+      "content_sha256": "a6cef7e6fbe877f6f1a4d6200a017139a7fecfa56a55b79bc36ff51d99ea7f10",
+      "snapshot_sha256": "a1e303090c8a19247b6d90cf855fb6c87b2434a00168b15a9791e0159481de85",
+      "retrieved_at": "2026-08-09T19:01:43.281Z"
     },
     "openai-codex-docs": {
-      "content_sha256": "ad2b50236b55c7325c08abbdeefbe5b2b949756d6e780affb3820bc067a274cd",
-      "snapshot_sha256": "187d9ab954f55e31555d6b98dc157bbe8e55352c5cfe3b025e1a901b72265080",
-      "retrieved_at": "2026-08-05T12:04:31.835Z"
+      "content_sha256": "4140513051bafe586f7ab893862606fae05f42ca80d61c2d0fc322ca984d495b",
+      "snapshot_sha256": "866ee9e55f831bb26e1363ffc4c4d72dacb9800b08dcf7c9eb017ba8e63063cf",
+      "retrieved_at": "2026-08-09T19:01:43.490Z"
     },
     "next-route-handlers": {
-      "content_sha256": "2aeba6c475be39ebeeac824a3393b0af8ce5723f3207e1215b5ad7b63717aff1",
-      "snapshot_sha256": "c874d855197ccef3d4ff8e793e5f696ed1c692a39085a3652ba5e51326366d4a",
-      "retrieved_at": "2026-08-05T12:04:31.343Z"
+      "content_sha256": "fe5bc10ff4dc6f01f280be12c53b5fdede8773d74d926625b27e1b9a0b1a1852",
+      "snapshot_sha256": "db08db531861912ce92a2c72153efd6b61597abac8e2e4df686961b2318a19c9",
+      "retrieved_at": "2026-08-09T19:01:42.249Z"
     },
     "nextauth-v4": {
       "content_sha256": "07bcf83328253f1a6f72fd768ca5965c86667160dfc1c5a470a3e1181ed8d466",
-      "snapshot_sha256": "002e3ec2189536c2dc1d8d6b423cc3c55af018406d65432167687321b4ee87b3",
-      "retrieved_at": "2026-08-05T12:04:31.589Z"
+      "snapshot_sha256": "722eb21ae95b0407ebadcfee1ff7eb0eb5d0b7a3d913f4cac281c5bea41c5bee",
+      "retrieved_at": "2026-08-09T19:01:42.818Z"
     },
     "postgres-docs": {
       "content_sha256": "54184d2df1073c08a3c9142cb3b8a7cf2a2b128fbe907df9c33bc213d7e94048",
-      "snapshot_sha256": "39f27393d0f79bad899839accffcdd16e00aad4f8eb9192f783d8d96d6754a35",
-      "retrieved_at": "2026-08-05T12:04:33.484Z"
+      "snapshot_sha256": "550749c468c1f5ceadb7f5dc94c8f59808a11d0941f742fcd857b9dc0f8fe9ff",
+      "retrieved_at": "2026-08-09T19:01:44.531Z"
     },
     "prisma-docs": {
       "content_sha256": "2919572f378101cdde13faadb4166827503ccef1075f22c485173c80e55f20c6",
-      "snapshot_sha256": "7640d60e5afe95278469d1ce5bd51cb73503489f7a672afeebe8991a0a8dc1aa",
-      "retrieved_at": "2026-08-05T12:04:33.637Z"
+      "snapshot_sha256": "4de3884070e5cc587871de2332ee3274afec8dde53199d5d73c5727ad8a9d21d",
+      "retrieved_at": "2026-08-09T19:01:44.720Z"
     },
     "govuk-design-system": {
       "content_sha256": "3827b96408959d37a46566754f37d96cff529cbee519770b8da466cf3a0a67c3",
-      "snapshot_sha256": "3c3f0b75273e59eaf4c351dfa0cc1af3a78ec8f43e87140f09dc119fe4c725da",
-      "retrieved_at": "2026-08-05T12:04:28.191Z"
-    },
-    "netflix-hawkins-interview": {
-      "content_sha256": "ffc5cedc32496d4be0cabeea105451208d6f8067a5c938a080328a6c7d376b4b",
-      "snapshot_sha256": "b9ff4f0bc3a57fd71cc3144a72369973cd2b27fb0895c50dae926fdc83ae73d9",
-      "retrieved_at": "2026-08-05T12:04:30.174Z"
+      "snapshot_sha256": "e7609dc27c91915d58af4bf6f96a4fa6e5fc7574a730d0696c265a9654a4c022",
+      "retrieved_at": "2026-08-09T19:01:40.223Z"
     },
     "toss-design-operations": {
       "content_sha256": "1b4d16b9111003edc360ccdf268e3ea2082035d0f9b56874a35061f53621f2f9",
-      "snapshot_sha256": "3e4576dc524da8d1320d564e2df6d972bc769e01a486b89874b253019ee4ad39",
-      "retrieved_at": "2026-08-05T12:04:35.155Z"
+      "snapshot_sha256": "38a57cb556a2f4115173fec70d09e1ead585b02fe9f9c777b0bee8e09181fe69",
+      "retrieved_at": "2026-08-09T19:01:47.071Z"
     },
     "toss-tds": {
       "content_sha256": "ffe41ec22489d11d725527d617e56b0c75e13149e668e48316125230ab07a619",
-      "snapshot_sha256": "e12e0f6d409411aab55a713562270c1906815002613cbc0cf4233dc3ffcb88cd",
-      "retrieved_at": "2026-08-05T12:04:35.478Z"
+      "snapshot_sha256": "d0e8d0f61c30ef876128e53a81ca811b8db3070c50eb3e595a641ecc02ca1184",
+      "retrieved_at": "2026-08-09T19:01:47.842Z"
     },
     "wcag-22": {
       "content_sha256": "64fd73cdb7725d9511488f5de6386081329d365872547b2d5000ef771ac37bd0",
-      "snapshot_sha256": "2d60a9ae49b95e6226ce5495e81344057d95c04164d4e85fdb0e3cbe73c2745f",
-      "retrieved_at": "2026-08-05T12:04:36.665Z"
+      "snapshot_sha256": "1bdc8a5098cb32a13438a5c1af221fd0ba5f44f531c35be909bbb4552c7d7ee0",
+      "retrieved_at": "2026-08-09T19:01:48.580Z"
     },
     "next-app-router": {
-      "content_sha256": "2876f11c0801fc370bc675c097e789ec7a5412f9ae02fb5b54b05825787989dc",
-      "snapshot_sha256": "98c673514fa84e296848acf5ac5f29b4ba18b1df121415edc506e8f6311594d3",
-      "retrieved_at": "2026-08-05T12:04:30.341Z"
+      "content_sha256": "22a57f3ebc117c91998a674eacc7d03a05c2c792a41d6ff2adae2374d3d40b78",
+      "snapshot_sha256": "cb53810dd209006238203eafbc556c8abbf0385bb0762dccdcf2af5c23e0ddfe",
+      "retrieved_at": "2026-08-09T19:01:41.996Z"
     },
     "react-docs": {
       "content_sha256": "233c689eadbd807870479273e314e6e94bd9eaaba2c53c70efc614f8502b86fa",
-      "snapshot_sha256": "12e399d5d4cc632bd52f8a4baba74afdf500d7a0fc7c05f29121cac3e47d6a7e",
-      "retrieved_at": "2026-08-05T12:04:33.803Z"
+      "snapshot_sha256": "32a592f212b0afca8046f646012c29c448a45f57d62ac308e7887e53459fa1e1",
+      "retrieved_at": "2026-08-09T19:01:44.906Z"
     },
     "typescript-docs": {
       "content_sha256": "458e645945f29aad97abe77e7b733e093c546e3372fad763c26e913a4cdc417f",
-      "snapshot_sha256": "3948ca9c09f4c61d7db06d74e4ed3e0df8757fc17bc3590f8f3945eb134ace56",
-      "retrieved_at": "2026-08-05T12:04:35.844Z"
+      "snapshot_sha256": "e56461219c4333f0ca999c07df82427d2543f1a0a1edd1e5892dc41c03342b0a",
+      "retrieved_at": "2026-08-09T19:01:48.092Z"
     },
     "google-seo-starter": {
-      "content_sha256": "621406d40318ab186f3908782683aaa135021a48ac517b72e279bcbafef01068",
-      "snapshot_sha256": "7fc010e0bef5fedc16406471088963319c20ed844ddb6afda7ecc49577e96867",
-      "retrieved_at": "2026-08-05T12:04:27.505Z"
+      "content_sha256": "c24fc2bf6183e03f2c4b7953581eda9f0c387fbe359ba90c466315bcd55249bb",
+      "snapshot_sha256": "9b8d2daa9acd581bf012eb67cc06e15658d0483df957f9584dfc5409ca53add4",
+      "retrieved_at": "2026-08-09T19:01:40.029Z"
     },
     "next-metadata-og": {
-      "content_sha256": "2adca72f14503084586e2f12d58030993988790688852620d1059a61c4cffb83",
-      "snapshot_sha256": "54928594d5d7600517772264364bdbc4ed59d8d2aa214c074a24d6debfa51fb6",
-      "retrieved_at": "2026-08-05T12:04:31.276Z"
+      "content_sha256": "ae85e8991d041ddb5fe7716d5cb1bf477738b352dbc75403971221a316af49c0",
+      "snapshot_sha256": "aeecb3ec93c925eacc906f1edddddde1c27931aceea8098a4a6ec13969d30079",
+      "retrieved_at": "2026-08-09T19:01:42.067Z"
     },
     "github-actions-security": {
       "content_sha256": "c68e5d02e83fa2862963a98a5d8460a435df8e739c6ced371368120a121b4245",
-      "snapshot_sha256": "7bb060706b71cfa4c8608e246c6517f20663a0a12e0108d27168ab48b606c3fa",
-      "retrieved_at": "2026-08-05T12:04:26.230Z"
+      "snapshot_sha256": "378fafb72c3aad0c074aff1703e73bdb89cbb3ac5f659178a576f716cd6bead2",
+      "retrieved_at": "2026-08-09T19:01:39.313Z"
     },
     "vercel-next-production": {
-      "content_sha256": "12d03fbf45afafbeaa914869468056714175b5486a3845d7aca073bce1cd1115",
-      "snapshot_sha256": "c4a5832d8b5b378e795a011d6504ff14878d395457aba98072a86a30947339f1",
-      "retrieved_at": "2026-08-05T12:04:36.549Z"
+      "content_sha256": "031502fcc0b8e5adae779aeab3f721859515700bce29b8e6d1ad3d74a8c22f4d",
+      "snapshot_sha256": "f4eec520cebd0de76a62224ff966c5208f2dbf8ea3535282f39cac2a6518d77e",
+      "retrieved_at": "2026-08-09T19:01:48.326Z"
     },
     "govuk-user-needs": {
       "content_sha256": "7fe3fe95a0dc845c4398ea4332833958e1d4160ebd32bbe0b2140d5ce9078c5f",
-      "snapshot_sha256": "92cb7e364ebc23ad5de7c627ecd77ea1f5fb984824b162cb41565fb2917d1494",
-      "retrieved_at": "2026-08-05T12:04:29.692Z"
+      "snapshot_sha256": "693f495e08b0e04370451159ea0b38281b39983834f3ed4032248fa5f7150653",
+      "retrieved_at": "2026-08-09T19:01:41.204Z"
     },
     "playwright-best-practices": {
       "content_sha256": "511b79b4acdac72f2fa30bcbd4aaea430d4ecaf38d767885363ab77646a8d474",
-      "snapshot_sha256": "aa9352a06e032b542ff63fa08dbe7abb52f7451536ee11193482e9e3a018a7ef",
-      "retrieved_at": "2026-08-05T12:04:32.496Z"
+      "snapshot_sha256": "5056c7478d8312d5869e9206c96dbc624b318df98af632dbd3713cc733f3c550",
+      "retrieved_at": "2026-08-09T19:01:43.952Z"
     },
     "owasp-asvs": {
       "content_sha256": "4c8406d61c8c37fbdef39787a99d2c149a3569ea5699b83c48e663b7928a3d4a",
-      "snapshot_sha256": "9b4f4c801b3bf327553d19ecc433fb5baf3ed599452dd5ffbce90d3d0cf7c0be",
-      "retrieved_at": "2026-08-05T12:04:32.157Z"
+      "snapshot_sha256": "42cd50c83762a554900b6d58d7cf825b8fb24857f5f804ffed8a0d1cf3094559",
+      "retrieved_at": "2026-08-09T19:01:43.743Z"
     },
     "owasp-cheat-sheets": {
       "content_sha256": "0e3cf9082864efd460383f7a06a9f0fca846da017233aa42fdf3585476773159",
-      "snapshot_sha256": "e786f71a665731cb87b47440c4313845a9573333230df5278477ebfd935f0d21",
-      "retrieved_at": "2026-08-05T12:04:32.433Z"
+      "snapshot_sha256": "8f32332bfc3d3389b2b254feb05c546ff85a7f9d695835a07b59a514308aec1e",
+      "retrieved_at": "2026-08-09T19:01:43.884Z"
     }
   }
 }
