@@ -20,5 +20,27 @@
     "license_note": "Use metadata, links, and concise attributed summaries.",
     "allowed_purpose": "PostgreSQL integrity, indexing, and SQL semantics.",
     "enabled": true
+  },
+  {
+    "id": "postgres-explain",
+    "role": "data",
+    "title": "PostgreSQL EXPLAIN documentation",
+    "url": "https://www.postgresql.org/docs/current/using-explain.html",
+    "authority": "primary",
+    "owner": "PostgreSQL Global Development Group",
+    "license_note": "Use metadata, links, and concise attributed summaries.",
+    "allowed_purpose": "Query plan inspection and performance diagnosis guidance.",
+    "enabled": true
+  },
+  {
+    "id": "prisma-query-optimization",
+    "role": "data",
+    "title": "Prisma query optimization documentation",
+    "url": "https://www.prisma.io/docs/orm/prisma-client/queries/advanced/query-optimization-performance",
+    "authority": "primary",
+    "owner": "Prisma Data",
+    "license_note": "Use metadata, links, and concise attributed summaries.",
+    "allowed_purpose": "Prisma query performance and N+1 diagnosis guidance.",
+    "enabled": true
   }
 ]
