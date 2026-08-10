@@ -7,6 +7,8 @@
 - [디자인 시스템 원칙](design/system-principles.md)
 - [React/Next.js 기준](frontend/runtime-baseline.md)
 - [API·데이터 기준](backend/data-baseline.md)
+- [데이터 쿼리 성능 기준](data/query-performance-baseline.md)
 - [보안·품질 기준](security/quality-baseline.md)
 - [품질보증 E2E 테스트 기준](qa/e2e-test-baseline.md)
 - [플랫폼 운영·릴리스 기준](platform/production-release-baseline.md)
+- [검색 노출과 공유 미리보기 기준](marketing/search-preview-baseline.md)

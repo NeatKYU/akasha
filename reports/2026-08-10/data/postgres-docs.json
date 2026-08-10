@@ -1,0 +1,24 @@
+{
+  "source_id": "postgres-docs",
+  "role": "data",
+  "source_url": "https://www.postgresql.org/docs/current/",
+  "final_url": "https://www.postgresql.org/docs/current/",
+  "authority": "primary",
+  "retrieved_at": "2026-08-10T12:35:20.223Z",
+  "content_sha256": "54184d2df1073c08a3c9142cb3b8a7cf2a2b128fbe907df9c33bc213d7e94048",
+  "metadata_sha256": "e77f0c915b38c49fbffaef021bf72eb58ebe3dc728000a71c989cb13e1b80944",
+  "http_status": 200,
+  "title": "PostgreSQL: Documentation: 18: PostgreSQL 18.4 Documentation",
+  "description": "",
+  "headings": [
+    "PostgreSQL 18.4 Documentation",
+    "The PostgreSQL Global Development Group",
+    "Submit correction"
+  ],
+  "redirect_hops": [
+    "https://www.postgresql.org/docs/current/"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}
