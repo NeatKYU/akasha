@@ -5,6 +5,7 @@
 ## Rules
 
 - `catalog/roles/*/sources.json`에 등록되지 않은 URL을 수집하지 않는다.
+- daily workflow에서 기존 지식 문서와 같은 source URL, index 링크, 제목, 주제 후보를 발견하면 먼저 다른 primary 후보를 찾고, 대체 후보가 없거나 근거가 약하면 변경 없이 종료한다.
 - primary 출처는 문서 소유자의 공식 사이트만 사용한다.
 - secondary 출처는 영감·사례에만 사용하고 규범적 결론의 근거로 사용하지 않는다.
 - 원문 전체를 복제하지 않는다. 제목, 설명, 헤딩, 해시, 짧은 검토 메모만 저장한다.
@@ -21,3 +22,4 @@
 ## Validation
 
 변경 후 `npm run validate`와 `git diff --check`를 실행한다.
+`npm run validate`는 source id/URL, 지식 문서 H1, `knowledge/INDEX.md` 링크/라벨의 정확 중복을 차단한다.

@@ -123,6 +123,77 @@ async function validateReports(sourcesById) {
   }
 }
 
+async function validateKnowledgeDocuments() {
+  const knowledgeRoot = resolveContained(ROOT, 'knowledge');
+  const indexPath = resolveContained(knowledgeRoot, 'INDEX.md');
+  const indexText = await readFile(indexPath, 'utf8');
+  const indexLinks = [...indexText.matchAll(/\[([^\]]+)\]\(([^)]+)\)/g)].map((match) => ({
+    label: match[1],
+    href: match[2]
+  }));
+
+  const seenIndexLabels = new Map();
+  const seenIndexTargets = new Map();
+  const indexTargets = new Set();
+
+  for (const link of indexLinks) {
+    assertRelativePath(link.href, `knowledge index link ${link.label}`);
+    assert(!link.href.includes('#'), `knowledge index link must not include a fragment: ${link.href}`);
+    const targetPath = resolveContained(knowledgeRoot, link.href);
+    assert(targetPath.endsWith('.md'), `knowledge index link must target a Markdown file: ${link.href}`);
+    await access(targetPath);
+
+    const normalizedLabel = normalizeComparable(link.label);
+    const duplicateLabel = seenIndexLabels.get(normalizedLabel);
+    assert(
+      !duplicateLabel,
+      `Duplicate knowledge index label: ${duplicateLabel} and ${link.label}`
+    );
+    seenIndexLabels.set(normalizedLabel, link.label);
+
+    const relativeTarget = normalizeRelativePath(path.relative(knowledgeRoot, targetPath));
+    const duplicateTarget = seenIndexTargets.get(relativeTarget);
+    assert(
+      !duplicateTarget,
+      `Duplicate knowledge index target: ${duplicateTarget} and ${link.href}`
+    );
+    seenIndexTargets.set(relativeTarget, link.href);
+    indexTargets.add(relativeTarget);
+  }
+
+  const documents = await collectKnowledgeDocuments(knowledgeRoot);
+  const seenHeadings = new Map();
+  const documentPaths = new Set();
+
+  for (const documentPath of documents) {
+    const relativePath = normalizeRelativePath(path.relative(knowledgeRoot, documentPath));
+    documentPaths.add(relativePath);
+    const text = await readFile(documentPath, 'utf8');
+    const heading = text.split(/\r?\n/).find((line) => line.startsWith('# '))?.slice(2).trim();
+    assert(heading, `Knowledge document must have an H1 heading: knowledge/${relativePath}`);
+
+    const normalizedHeading = normalizeComparable(heading);
+    const duplicateHeading = seenHeadings.get(normalizedHeading);
+    assert(
+      !duplicateHeading,
+      `Duplicate knowledge document H1: ${duplicateHeading} and knowledge/${relativePath}`
+    );
+    seenHeadings.set(normalizedHeading, `knowledge/${relativePath}`);
+
+    assert(
+      indexTargets.has(relativePath),
+      `Knowledge document is not listed in knowledge/INDEX.md: knowledge/${relativePath}`
+    );
+  }
+
+  for (const indexTarget of indexTargets) {
+    assert(
+      documentPaths.has(indexTarget),
+      `knowledge/INDEX.md points outside approved knowledge documents: ${indexTarget}`
+    );
+  }
+}
+
 async function validateFixtures() {
   const malicious = JSON.parse(
     await readFile(path.join(ROOT, 'fixtures', 'malicious-source.json'), 'utf8')
@@ -219,8 +290,34 @@ async function collectFiles(dir) {
   return files;
 }
 
+async function collectKnowledgeDocuments(dir) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    const resolved = resolveContained(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await collectKnowledgeDocuments(resolved)));
+    } else if (entry.name.endsWith('.md') && path.basename(resolved) !== 'INDEX.md') {
+      files.push(resolved);
+    }
+  }
+  return files.sort();
+}
+
+function normalizeComparable(value) {
+  return value
+    .normalize('NFKC')
+    .toLocaleLowerCase('en-US')
+    .replace(/[^\p{Letter}\p{Number}]+/gu, '');
+}
+
+function normalizeRelativePath(value) {
+  return value.split(path.sep).join('/');
+}
+
 const sources = await loadSources();
 await validateManifest();
+await validateKnowledgeDocuments();
 await validateReports(new Map(sources.map((source) => [source.id, source])));
 await validateRepoSecretScan();
 if (process.argv.includes('--fixtures')) await validateFixtures();

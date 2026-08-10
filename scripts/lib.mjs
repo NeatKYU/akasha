@@ -196,6 +196,7 @@ export async function loadSources() {
   const roleEntries = await readdir(rolesRoot, { withFileTypes: true });
   const sources = [];
   const seenIds = new Set();
+  const seenUrls = new Map();
 
   for (const roleEntry of roleEntries.filter((entry) => entry.isDirectory())) {
     const file = path.join(rolesRoot, roleEntry.name, 'sources.json');
@@ -210,11 +211,25 @@ export async function loadSources() {
         throw new Error(`Duplicate source id: ${source.id}`);
       }
       seenIds.add(source.id);
+      const sourceUrl = canonicalSourceUrl(source.url);
+      const duplicateUrlSource = seenUrls.get(sourceUrl);
+      if (duplicateUrlSource) {
+        throw new Error(
+          `Duplicate source URL: ${source.url} used by ${duplicateUrlSource} and ${source.id}`
+        );
+      }
+      seenUrls.set(sourceUrl, source.id);
       sources.push(source);
     }
   }
 
   return sources.sort((left, right) => left.id.localeCompare(right.id));
+}
+
+function canonicalSourceUrl(value) {
+  const url = assertAllowlistedUrl(value, 'Source URL');
+  url.hash = '';
+  return url.href.replace(/\/$/, '');
 }
 
 export async function fetchAllowlistedHtml(startUrl, options = {}) {
