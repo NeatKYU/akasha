@@ -37,6 +37,27 @@ async function validateManifest() {
   if (manifest.approved_commit !== null && manifest.approved_commit !== undefined) {
     assert(/^[a-f0-9]{40}$/.test(manifest.approved_commit), 'manifest.approved_commit is invalid');
   }
+  if (manifest.unavailable_sources !== undefined) {
+    assert(
+      Array.isArray(manifest.unavailable_sources),
+      'manifest.unavailable_sources must be an array'
+    );
+    for (const entry of manifest.unavailable_sources) {
+      assert(
+        entry && /^[a-z0-9-]+$/.test(entry.source_id),
+        'manifest unavailable source id is invalid'
+      );
+      // 승인된 스냅샷은 secondary 출처만 누락할 수 있다. primary 누락은 승격 자체가 막혀야 한다.
+      assert(
+        entry.authority === 'secondary',
+        `manifest unavailable source ${entry.source_id} must be secondary`
+      );
+      assert(
+        !Object.hasOwn(manifest.source_hashes ?? {}, entry.source_id),
+        `manifest unavailable source ${entry.source_id} must not carry a hash`
+      );
+    }
+  }
   assert(
     manifest.source_hashes && typeof manifest.source_hashes === 'object' && !Array.isArray(manifest.source_hashes),
     'manifest.source_hashes must be an object'
