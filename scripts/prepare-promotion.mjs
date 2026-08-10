@@ -15,15 +15,31 @@ if (dates.length === 0) throw new Error('No quarantine report is available for p
 const reportDate = dates.at(-1);
 const reportRoot = resolveContained(reportsRoot, reportDate);
 const collection = JSON.parse(await readFile(resolveContained(reportRoot, '_collection.json'), 'utf8'));
-const expectedSources = (await loadSources()).filter((source) => source.enabled).length;
+const enabledSources = (await loadSources()).filter((source) => source.enabled);
+const expectedSources = enabledSources.length;
+const authorityById = new Map(enabledSources.map((source) => [source.id, source.authority]));
 if (!collection.complete || collection.attempted !== expectedSources) {
   throw new Error(
     `Cannot promote ${reportDate}: report covers ${collection.attempted}/${expectedSources} sources.`
   );
 }
-if (collection.failures.length > 0) {
-  throw new Error(`Cannot promote ${reportDate}: ${collection.failures.length} source fetches failed.`);
+
+// primary 출처는 규범적 결론의 근거이므로 한 건이라도 실패하면 승격을 막는다. secondary 출처는
+// 영감·사례 용도라 한 곳의 장애가 주간 승격 전체를 영구히 막지 않도록 기록만 남기고 통과시킨다.
+// catalog에 없는 source_id는 판단 근거가 없으므로 차단 쪽으로 처리한다.
+const blockingFailures = collection.failures.filter(
+  (failure) => authorityById.get(failure.source_id) !== 'secondary'
+);
+if (blockingFailures.length > 0) {
+  throw new Error(
+    `Cannot promote ${reportDate}: ${blockingFailures.length} primary source fetches failed.`
+  );
 }
+// blockingFailures 검사를 통과했으므로 남은 실패는 모두 secondary 출처다.
+const unavailableSources = collection.failures.map((failure) => ({
+  source_id: failure.source_id,
+  authority: authorityById.get(failure.source_id)
+}));
 
 const sourceHashes = {};
 for (const roleEntry of await readdir(reportRoot, { withFileTypes: true })) {
@@ -51,6 +67,7 @@ const manifest = {
   approved_commit: null,
   trust: 'human-reviewed-main-only',
   knowledge_index: 'knowledge/INDEX.md',
+  unavailable_sources: unavailableSources,
   source_hashes: sourceHashes
 };
 await writeFile(resolveContained(ROOT, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);

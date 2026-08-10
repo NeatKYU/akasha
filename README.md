@@ -24,14 +24,20 @@ npm run prepare-promotion
 ```
 
 - `refresh-quarantine.yml`: 매일 출처의 메타데이터와 내용 해시를 날짜별 격리 브랜치에 기록
-- `prepare-weekly-promotion.yml`: 최신 격리 결과로 사람이 PR을 열 수 있는 주간 승격 브랜치 생성
+- `prepare-weekly-promotion.yml`: 최신 격리 결과로 주간 승격 브랜치를 만들고 검토용 PR까지 생성
 - `tag-approved-snapshot.yml`: 저장소 소유자가 `workflow_dispatch`로 promotion PR 번호와 merge
   commit SHA를 입력했을 때만 불변 `kb-*` annotated tag 생성
 
 저장소의 기본 Actions 권한은 read-only로 운영하고, 쓰기가 필요한 workflow만 파일 단위
-`permissions`로 `contents: write`를 요청합니다. Actions의 PR 생성·승인 권한은 비활성화되어
-있으므로 workflow는 브랜치와 job summary만 만들고, 저장소 소유자가 promotion PR을 직접 열어
-검토·병합합니다. 자동화 토큰은 main에 직접 커밋하지 않습니다.
+`permissions`로 필요한 범위를 요청합니다. `prepare-weekly-promotion.yml`만 `pull-requests: write`를
+추가로 요청해 promotion PR을 열고, 나머지 workflow는 브랜치와 job summary만 만듭니다. 자동화는
+PR 생성까지이며 승인과 병합은 CODEOWNER가 직접 수행합니다. 어떤 workflow도 review approve API나
+merge API를 호출하지 않고, 자동화 토큰은 main에 직접 커밋하지 않습니다.
+
+주간 승격은 primary 출처가 하나라도 수집에 실패하면 중단합니다. secondary 출처 실패는 승격을
+막지 않고 `manifest.json`의 `unavailable_sources`와 PR 본문에 누락 사실로 남깁니다. 한 곳의
+장애가 주간 검토 흐름 전체를 무기한 막지 않도록 하되, 빠진 출처가 조용히 사라지지는 않게 하는
+경계입니다.
 태그 생성은 push trigger가 아니라 수동 owner-gated workflow이며, actor가 `NeatKYU`인지,
 promotion PR이 main에 병합되었는지, 입력한 merge SHA가 PR의 merge commit인지, `NeatKYU`의
 approving review가 있는지 확인한 뒤 annotated tag만 생성합니다.

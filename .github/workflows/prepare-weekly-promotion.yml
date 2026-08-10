@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: knowledge-promotion
@@ -37,7 +38,9 @@ jobs:
           npm run prepare-promotion
           npm run validate
       - name: Push human-review promotion branch
+        id: push
         run: |
+          set -euo pipefail
           branch="promotion/$(date -u +%G-W%V)-${GITHUB_RUN_ID}"
           git switch -c "$branch"
           git config user.name "github-actions[bot]"
@@ -45,8 +48,36 @@ jobs:
           git add reports/ manifest.json
           git commit -m "📝 지식 승격: $(date -u +%G-W%V) 검토 스냅샷 준비"
           git push origin "$branch"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+
+      # workflow는 PR 생성까지만 한다. 승인과 병합은 CODEOWNER가 직접 수행하며,
+      # GITHUB_TOKEN에는 review approve를 호출하는 단계를 두지 않는다.
+      - name: Open human-review promotion PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.push.outputs.branch }}
+        run: |
+          set -euo pipefail
+          body="${RUNNER_TEMP}/promotion-pr-body.md"
           {
-            echo "### Promotion branch ready"
+            echo "격리 리포트 \`$(jq -r '.approved_report_date' manifest.json)\`를 main 승격 후보로 준비했습니다."
             echo
-            echo "Open a PR from \`$branch\` to \`main\`, then require owner review before merge."
+            echo "- 이 PR은 \`prepare-weekly-promotion\` workflow가 자동으로 열었습니다."
+            echo "- 승인과 병합은 CODEOWNER가 직접 수행합니다. 자동 승인·자동 병합은 없습니다."
+            echo "- 병합 후 \`Tag approved snapshot\` workflow에 이 PR 번호와 merge commit SHA를 입력해 \`kb-*\` 태그를 만듭니다."
+            unavailable="$(jq -r '.unavailable_sources // [] | .[] | "- `\(.source_id)` (\(.authority)) 수집 실패로 이번 스냅샷에서 제외"' manifest.json)"
+            if [ -n "$unavailable" ]; then
+              echo
+              echo "#### 이번 스냅샷에서 빠진 출처"
+              echo
+              echo "$unavailable"
+            fi
+          } > "$body"
+          url="$(gh pr create --base main --head "$BRANCH" \
+            --title "📝 지식 승격: $(date -u +%G-W%V) 승인 요청" \
+            --body-file "$body")"
+          {
+            echo "### Promotion PR ready for owner review"
+            echo
+            echo "$url"
           } >> "$GITHUB_STEP_SUMMARY"
