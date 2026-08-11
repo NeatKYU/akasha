@@ -23,7 +23,7 @@ URL 구조, Open Graph 미리보기를 확인해야 한다. Google 공식 SEO �
 콘텐츠를 검토하는 기준을 주고, Next.js 공식 문서는 App Router에서 metadata와 OG 이미지를 구현하는
 프로젝트 경계를 제공한다.
 
-## ERD System에서 적용할 기준
+## 프로젝트에 적용할 기준
 
 - 공개 페이지는 페이지 목적과 사용자 의도를 반영한 `title`과 `description`을 라우트 단위로 가진다.
 - 랜딩, 템플릿, 공개 다이어그램, 문서성 페이지는 공유 시 보일 Open Graph 제목, 설명, 이미지를 검토한다.

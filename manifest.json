@@ -1,132 +1,132 @@
 {
   "schema_version": 1,
   "snapshot_status": "approved-main",
-  "approved_report_date": "2026-08-10",
-  "approved_at": "2026-08-10T12:35:32.604Z",
+  "approved_report_date": "2026-08-11",
+  "approved_at": "2026-08-11T12:14:55.832Z",
   "approved_commit": null,
   "trust": "human-reviewed-main-only",
   "knowledge_index": "knowledge/INDEX.md",
   "unavailable_sources": [],
   "source_hashes": {
     "openai-api-docs": {
-      "content_sha256": "a6cef7e6fbe877f6f1a4d6200a017139a7fecfa56a55b79bc36ff51d99ea7f10",
-      "snapshot_sha256": "838deee13a4c329113f10de411e79da3a9d9232b5c56705469232da079d6c669",
-      "retrieved_at": "2026-08-10T12:35:17.190Z"
+      "content_sha256": "1d73f4b389e8470aaaa8a32600609d8050e49e60e0ade5ed11b82f9ccc1d3236",
+      "snapshot_sha256": "2aa6518d10de67a37ca10d7d83328411ee205ad3866d0e51e6a1fcdcc8b367dd",
+      "retrieved_at": "2026-08-11T12:14:44.076Z"
     },
     "openai-codex-docs": {
-      "content_sha256": "4140513051bafe586f7ab893862606fae05f42ca80d61c2d0fc322ca984d495b",
-      "snapshot_sha256": "50a09536eb3f71064be8b8423a6a3eff4131f312d44d881092c6c3e05d145a3b",
-      "retrieved_at": "2026-08-10T12:35:17.501Z"
+      "content_sha256": "6ad3d69a9137901d58a87211586ee4ebfdf14a992f01f7f28ab15c89b99fbc9e",
+      "snapshot_sha256": "7e6d46f95898a46687e0411289f23f825eaa30f6b568d5ce9d0178040b1c057b",
+      "retrieved_at": "2026-08-11T12:14:44.210Z"
     },
     "next-route-handlers": {
-      "content_sha256": "fe5bc10ff4dc6f01f280be12c53b5fdede8773d74d926625b27e1b9a0b1a1852",
-      "snapshot_sha256": "c2291f11180938a387f6cf1da0b8fbfca764eda99b399b14b95b78bd00fa7e07",
-      "retrieved_at": "2026-08-10T12:35:16.826Z"
+      "content_sha256": "2e55e2b2215cb4208625f1de231c09f5ad461d7af159b7685bab05a0d62b1a46",
+      "snapshot_sha256": "cbe6bd35b10a78cdf3286722dca7a1807359ce3ad3abf7ab4ab3d17666ce19a2",
+      "retrieved_at": "2026-08-11T12:14:43.680Z"
     },
     "nextauth-v4": {
       "content_sha256": "07bcf83328253f1a6f72fd768ca5965c86667160dfc1c5a470a3e1181ed8d466",
-      "snapshot_sha256": "ea82898dd0ee3323674474d31b5341f5f5d99caa8671dfdbaf7bee780e9be942",
-      "retrieved_at": "2026-08-10T12:35:17.039Z"
+      "snapshot_sha256": "b125cfeb261beeba2ca568c8082d5c1825b5bb8b4542ecb54e563a2a29ae6259",
+      "retrieved_at": "2026-08-11T12:14:43.944Z"
     },
     "postgres-docs": {
       "content_sha256": "54184d2df1073c08a3c9142cb3b8a7cf2a2b128fbe907df9c33bc213d7e94048",
-      "snapshot_sha256": "0f762a19a70e882e5a80260737cc5dc3879354297938b37e570cc0e6a024df73",
-      "retrieved_at": "2026-08-10T12:35:20.223Z"
+      "snapshot_sha256": "26ed1c5aa2200291fe3650457087a5fbc1b90971d1e235d7525b64d6d931180d",
+      "retrieved_at": "2026-08-11T12:14:46.896Z"
     },
     "postgres-explain": {
       "content_sha256": "47fc0e3c0c7ea7e340553f8ed9ffb56af961b044014a866acab8da9e41248a41",
-      "snapshot_sha256": "20917bc55c01063ee438ba232539273e714a5d1893f515923a57d8f04e42b6fb",
-      "retrieved_at": "2026-08-10T12:35:20.409Z"
+      "snapshot_sha256": "1fa1d8043ac4beecc4c5e97c77185511e450f2d6a266d1e3bf954e86405314dd",
+      "retrieved_at": "2026-08-11T12:14:47.118Z"
     },
     "prisma-docs": {
       "content_sha256": "2919572f378101cdde13faadb4166827503ccef1075f22c485173c80e55f20c6",
-      "snapshot_sha256": "4587876e2888cf07783d1d631b684d9bdb702ddbd155199c578d55f626f7d55d",
-      "retrieved_at": "2026-08-10T12:35:21.712Z"
+      "snapshot_sha256": "f05a133c325d0db14ce20d8ac069bad94e959aa0b54dccc086e45427e09057e0",
+      "retrieved_at": "2026-08-11T12:14:47.414Z"
     },
     "prisma-query-optimization": {
       "content_sha256": "b16a07eee7441e11ac5d6a2a512a87745a195e2ae905f2fc625b30f69b84b54d",
-      "snapshot_sha256": "0673c2d1b43e5969f6be4c6c397375da8d37bd6b411584e9e8783a5c9a5fc088",
-      "retrieved_at": "2026-08-10T12:35:22.536Z"
+      "snapshot_sha256": "68514ef08da15876487c8b40470df8b2def716f3b596ba066869432b9d5ea989",
+      "retrieved_at": "2026-08-11T12:14:48.472Z"
     },
     "govuk-design-system": {
       "content_sha256": "3827b96408959d37a46566754f37d96cff529cbee519770b8da466cf3a0a67c3",
-      "snapshot_sha256": "9404f8399b605a7c8604ffaf65345ff8f17a4dc6752f39859c08c00a99b105e5",
-      "retrieved_at": "2026-08-10T12:35:12.768Z"
+      "snapshot_sha256": "a80469f3b8aa733b582e6f24aee621cbf0e2671ab28e0343b415549c49b456a7",
+      "retrieved_at": "2026-08-11T12:14:38.457Z"
     },
     "netflix-hawkins-interview": {
       "content_sha256": "ffc5cedc32496d4be0cabeea105451208d6f8067a5c938a080328a6c7d376b4b",
-      "snapshot_sha256": "99ee11c5c082b9bf3205733c64c87dce7d44484849b57396f1d7878c4c47a0e9",
-      "retrieved_at": "2026-08-10T12:35:15.180Z"
+      "snapshot_sha256": "3fa2c9667ced809731bd98f49ddd0ef4646314231a30f20f3f3ac096c03174c3",
+      "retrieved_at": "2026-08-11T12:14:41.011Z"
     },
     "toss-design-operations": {
       "content_sha256": "1b4d16b9111003edc360ccdf268e3ea2082035d0f9b56874a35061f53621f2f9",
-      "snapshot_sha256": "4c1e160fd338ddcb91e567a9db189c4e72a0a3a66cb571221a03de55de398897",
-      "retrieved_at": "2026-08-10T12:35:24.271Z"
+      "snapshot_sha256": "a5a34f84c032ca5830e3378c437d0494b0412a16009e04f0622422f44a6910ba",
+      "retrieved_at": "2026-08-11T12:14:50.990Z"
     },
     "toss-tds": {
-      "content_sha256": "ffe41ec22489d11d725527d617e56b0c75e13149e668e48316125230ab07a619",
-      "snapshot_sha256": "0d7a1920b59af4f4cc41ebdb3c286a8350ee61bbbbeef102a70b4fccdeb67bcc",
-      "retrieved_at": "2026-08-10T12:35:26.143Z"
+      "content_sha256": "19069d26762518d99132f0764819ee8ead550e1fc0a2a0977172a697eedf5c98",
+      "snapshot_sha256": "f8290af7f3bf856b4595e88597cb3f7c1d6c683e9aa6dd7ebf7025d862100849",
+      "retrieved_at": "2026-08-11T12:14:51.290Z"
     },
     "wcag-22": {
       "content_sha256": "64fd73cdb7725d9511488f5de6386081329d365872547b2d5000ef771ac37bd0",
-      "snapshot_sha256": "90a46108467c04fa02605f713bf04f4e4630869eda181aa8b281d8001d32d728",
-      "retrieved_at": "2026-08-10T12:35:27.950Z"
+      "snapshot_sha256": "cbba9f70efc1b7918429129cbd1043c5ace95f9a393cf0de9c26d9f5fea51a97",
+      "retrieved_at": "2026-08-11T12:14:52.373Z"
     },
     "next-app-router": {
-      "content_sha256": "22a57f3ebc117c91998a674eacc7d03a05c2c792a41d6ff2adae2374d3d40b78",
-      "snapshot_sha256": "57174b23cd20e2ac18509a1a784c0a4dba46969d43f6f85ac9592b13f8e2d6d9",
-      "retrieved_at": "2026-08-10T12:35:16.160Z"
+      "content_sha256": "38d224df8fa095206f857c216844820ec8c1e6614686598b6a074f56d7bef6ba",
+      "snapshot_sha256": "6b16041b24cca9b9dd9f33f29ae20045628c5db53e0e9fe226f69df01f75897a",
+      "retrieved_at": "2026-08-11T12:14:41.743Z"
     },
     "react-docs": {
       "content_sha256": "233c689eadbd807870479273e314e6e94bd9eaaba2c53c70efc614f8502b86fa",
-      "snapshot_sha256": "79e098dca2ba39c86f10996d7730289b0fe1d2f9c6ba9f52ce0c59cb09352224",
-      "retrieved_at": "2026-08-10T12:35:22.681Z"
+      "snapshot_sha256": "7ff2742345f72fa01c78af8b5c82ac7d3d996bc05f0edc2c27bf31fd2bd7af7c",
+      "retrieved_at": "2026-08-11T12:14:48.795Z"
     },
     "typescript-docs": {
       "content_sha256": "458e645945f29aad97abe77e7b733e093c546e3372fad763c26e913a4cdc417f",
-      "snapshot_sha256": "afc5f4cf97d61903bdb248ec0ac81a2a1d1a58bbdade624a3896e6673c4fc345",
-      "retrieved_at": "2026-08-10T12:35:26.450Z"
+      "snapshot_sha256": "967501c1eb8b18498b348a72f1cfe942e8fb7ead9ff6aad5a111944c4fb4080d",
+      "retrieved_at": "2026-08-11T12:14:51.441Z"
     },
     "google-seo-starter": {
-      "content_sha256": "ad029ebc4b95310010664b6d447bfe9573db20bd54a6292e7773bd2040a41165",
-      "snapshot_sha256": "45b76aba5476ee2a6dc2605709c7c9e001b886fb75fbeadcdbb1b622a4a89642",
-      "retrieved_at": "2026-08-10T12:35:12.405Z"
+      "content_sha256": "89769664bebf95629058c61f8072017dd5568cc837f1e59615d2360afd52fc39",
+      "snapshot_sha256": "c77bd4d77cad9d1c6431f74ce1d857192ace7ae2fb4f4ab5b1910e9675f50ff1",
+      "retrieved_at": "2026-08-11T12:14:37.875Z"
     },
     "next-metadata-og": {
-      "content_sha256": "ae85e8991d041ddb5fe7716d5cb1bf477738b352dbc75403971221a316af49c0",
-      "snapshot_sha256": "811065b9395555a7d44704384663b7bdd2c80bfb4500647f11b2a365ab831fe1",
-      "retrieved_at": "2026-08-10T12:35:16.750Z"
+      "content_sha256": "6abe28683108beb1f30094f51d941b8b3c731d800027a3a2ea6580e19df279d8",
+      "snapshot_sha256": "2e2971639d8d4d775751dd912811a0aaef4db572479f2bba85f556669c221c7c",
+      "retrieved_at": "2026-08-11T12:14:42.547Z"
     },
     "github-actions-security": {
       "content_sha256": "66741fec3093ed843faef89cedbf26803184045b782b1154e464c62ca22c3c50",
-      "snapshot_sha256": "67ce9562df92074b14811027af2d05f385d834426e6cccec6cca1609cbd21dd8",
-      "retrieved_at": "2026-08-10T12:35:11.277Z"
+      "snapshot_sha256": "3234cd64b3e3910307e58419636712e73bf75be4e9346c08ad0a4c5f0c9ed928",
+      "retrieved_at": "2026-08-11T12:14:36.423Z"
     },
     "vercel-next-production": {
-      "content_sha256": "031502fcc0b8e5adae779aeab3f721859515700bce29b8e6d1ad3d74a8c22f4d",
-      "snapshot_sha256": "ddd2e0389423ec9b113b21063d7b25db592e388ed7dc532ef91696726169972a",
-      "retrieved_at": "2026-08-10T12:35:27.836Z"
+      "content_sha256": "bf25268191c03bc841a9bfd927f3797900ae319e0aab8a0a191917f7bb935781",
+      "snapshot_sha256": "24ee9afb351f4cdeae856aac7bf5267e0a4f18cd72a5172f9e35f1dc0dff5959",
+      "retrieved_at": "2026-08-11T12:14:52.265Z"
     },
     "govuk-user-needs": {
       "content_sha256": "7fe3fe95a0dc845c4398ea4332833958e1d4160ebd32bbe0b2140d5ce9078c5f",
-      "snapshot_sha256": "f5c372c9c1467f5fd2fb1196dfd9cacf5bbe3d4c4f7229039a969ce301c21bae",
-      "retrieved_at": "2026-08-10T12:35:14.551Z"
+      "snapshot_sha256": "0d2e0b0289420f70be2f4ef9b2d23a8170312a3e55dcf0f4879db9ae3ea246d8",
+      "retrieved_at": "2026-08-11T12:14:40.270Z"
     },
     "playwright-best-practices": {
       "content_sha256": "511b79b4acdac72f2fa30bcbd4aaea430d4ecaf38d767885363ab77646a8d474",
-      "snapshot_sha256": "60f19c065c396af2d1e04068e2442b8a741f0860a6240dc5d1384a21bb55ae76",
-      "retrieved_at": "2026-08-10T12:35:18.833Z"
+      "snapshot_sha256": "ea4ee564884c9fd704b6f52fe9fe908d5a66e11b91c8f018faaafd15ff14d2fd",
+      "retrieved_at": "2026-08-11T12:14:45.421Z"
     },
     "owasp-asvs": {
       "content_sha256": "4c8406d61c8c37fbdef39787a99d2c149a3569ea5699b83c48e663b7928a3d4a",
-      "snapshot_sha256": "bbc32cd5fb1739654babe826364a513028499ad2fb79f7e57a67cd79309fd236",
-      "retrieved_at": "2026-08-10T12:35:18.060Z"
+      "snapshot_sha256": "a63074c45af78ba1a562f10f5300ecff843e45a8b7da43206689a56632407a2e",
+      "retrieved_at": "2026-08-11T12:14:44.762Z"
     },
     "owasp-cheat-sheets": {
       "content_sha256": "0e3cf9082864efd460383f7a06a9f0fca846da017233aa42fdf3585476773159",
-      "snapshot_sha256": "a1ff521054712556e2de3e0ed82ad2e2891c2129b6f2a608848d9fa8d3d13074",
-      "retrieved_at": "2026-08-10T12:35:18.525Z"
+      "snapshot_sha256": "36d99cc91515a9e8d353f03a0710f82c33c30357fe08a4cfeee583bb059e43a4",
+      "retrieved_at": "2026-08-11T12:14:45.062Z"
     }
   }
 }

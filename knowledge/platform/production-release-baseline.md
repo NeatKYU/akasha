@@ -20,10 +20,10 @@
 
 플랫폼 에이전트는 배포가 되는지만 보지 않고, production build, 런타임 캐싱, 보안 경계,
 워크플로우 권한, secret 노출 가능성까지 같이 확인해야 한다. Next.js 공식 production checklist와
-GitHub Actions 보안 기준을 함께 보면 ERD System의 릴리스 PR에서 성능·접근성·보안·공급망
+GitHub Actions 보안 기준을 함께 보면 프로젝트 릴리스 PR에서 성능·접근성·보안·공급망
 검토를 한 번에 빠뜨리지 않도록 만들 수 있다.
 
-## ERD System에서 적용할 기준
+## 프로젝트에 적용할 기준
 
 - production 전에는 `next build`와 production-like 실행으로 build error, runtime error, 번들 크기를 확인한다.
 - Server Component, caching, streaming, image/font/script 최적화는 기본값을 이해한 뒤 opt-out 여부를 명시한다.
