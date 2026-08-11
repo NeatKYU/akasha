@@ -23,7 +23,7 @@
 PostgreSQL 공식 문서는 planner가 선택한 scan, join, sort, row estimate를 근거로 병목을 읽는 방법을
 제공한다.
 
-## ERD System에서 적용할 기준
+## 프로젝트에 적용할 기준
 
 - 성능 변경 PR은 영향을 받는 API, Prisma 호출, SQL 조건, 예상 데이터 규모를 함께 적는다.
 - 느린 쿼리는 먼저 대표 입력과 실제 조건을 고정한 뒤 `EXPLAIN` 또는 `EXPLAIN ANALYZE` 근거로 판단한다.

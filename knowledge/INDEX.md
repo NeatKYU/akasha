@@ -12,3 +12,4 @@
 - [품질보증 E2E 테스트 기준](qa/e2e-test-baseline.md)
 - [플랫폼 운영·릴리스 기준](platform/production-release-baseline.md)
 - [검색 노출과 공유 미리보기 기준](marketing/search-preview-baseline.md)
+- [Codex 에이전트 운영 기준](ai/codex-agent-operations.md)
