@@ -15,7 +15,8 @@
 - 지식 문서는 Codex 전용 지시 파일명인 `AGENTS.md`를 직접 규범으로 명시하지 않는다. Claude Code, Grok 등 다른 LLM도 참고할 수 있도록 `프로젝트 지시 파일`, `로컬 운영 지침`, `저장소 규칙`처럼 도구 중립 표현을 쓴다.
 - daily workflow는 quarantine 브랜치만 쓴다.
 - main 반영은 사람이 승인한 promotion PR로만 수행한다.
-- workflow는 promotion PR 생성까지만 하고, review approve와 merge는 CODEOWNER가 직접 한다.
+- workflow는 promotion PR과 marketplace 핀 PR 생성까지만 하고, review approve와 merge는 CODEOWNER가 직접 한다.
+- marketplace 카탈로그의 plugin source는 `akasha/`를 포함한 첫 `kb-*` 태그가 생기면 태그 핀으로 전환하고, 이후 main 추적 소스로 되돌리지 않는다. 핀 갱신은 tag workflow가 여는 PR로만 한다.
 - 주간 승격은 primary 출처 수집 실패에서 중단하고, secondary 출처 실패는 `unavailable_sources`에 기록만 한다.
 - `kb-*` tag는 push trigger가 아니라 `NeatKYU` owner-gated `workflow_dispatch`에서만 생성한다.
 - 현재 signing key가 없으므로 cryptographic signed tag라고 주장하지 않는다.
