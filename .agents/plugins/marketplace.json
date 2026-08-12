@@ -8,7 +8,7 @@
       "name": "akasha",
       "source": {
         "source": "local",
-        "path": "./kb"
+        "path": "./akasha"
       },
       "category": "Productivity"
     }

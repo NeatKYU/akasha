@@ -25,4 +25,4 @@
 ## Validation
 
 변경 후 `npm run validate`와 `git diff --check`를 실행한다.
-`npm run validate`는 source id/URL, 지식 문서 H1, `kb/knowledge/INDEX.md` 링크/라벨의 정확 중복을 차단한다.
+`npm run validate`는 source id/URL, 지식 문서 H1, `akasha/knowledge/INDEX.md` 링크/라벨의 정확 중복을 차단한다.
