@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/NeatKYU/agent-knowledge-base/schema/snapshot.schema.json",
+  "$id": "https://github.com/NeatKYU/akasha/schema/snapshot.schema.json",
   "title": "Quarantined source snapshot",
   "type": "object",
   "required": [

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/NeatKYU/agent-knowledge-base/schema/source.schema.json",
+  "$id": "https://github.com/NeatKYU/akasha/schema/source.schema.json",
   "title": "Agent knowledge source",
   "type": "object",
   "required": [

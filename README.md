@@ -92,14 +92,14 @@ flowchart TD
 Claude Code:
 
 ```
-/plugin marketplace add NeatKYU/agent-knowledge-base
+/plugin marketplace add NeatKYU/akasha
 /plugin install akasha@neatkyu-kb
 ```
 
 Codex:
 
 ```bash
-codex plugin marketplace add https://github.com/NeatKYU/agent-knowledge-base.git
+codex plugin marketplace add https://github.com/NeatKYU/akasha.git
 codex plugin add akasha@neatkyu-kb
 ```
 
