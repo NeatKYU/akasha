@@ -110,9 +110,7 @@ claude plugin marketplace add ./   # 저장소 루트에서
 codex plugin marketplace add .
 ```
 
-private 저장소이므로 git 자격 증명이 필요합니다. GitHub HTTPS는 `gh auth setup-git`
-한 번으로 해결되고, 자동 업데이트까지 안정적으로 받으려면 SSH 리모트(ssh-agent에 키
-로드)를 권장합니다.
+public 저장소라 별도 자격 증명 없이 설치와 자동 업데이트가 동작합니다.
 
 ### 사용
 
@@ -197,6 +195,8 @@ approving review가 있는지 확인한 뒤 annotated tag만 생성합니다.
 태그가 아닙니다. provenance는 promotion PR 번호, merge SHA, approving reviewer를 tag message와
 manifest 검증으로 남기는 수준입니다.
 
-현재 private 저장소 플랜에서는 GitHub ruleset의 required review를 강제할 수 없습니다. 따라서
-workflow에는 자동 병합 권한을 주지 않고 CODEOWNERS와 수동 병합을 운영 경계로 사용합니다.
-향후 GitHub Pro 이상으로 전환하면 main ruleset에 code-owner 승인 1명을 필수로 설정합니다.
+main에는 `main-protection` ruleset이 활성화되어 있습니다: 브랜치 삭제·force push 차단,
+PR 필수, code-owner 승인 1명 필수. 저장소 admin은 bypass 대상이라 소유자의 솔로 운영
+흐름은 막히지 않고, 외부 기여 PR은 code-owner 승인 없이 병합될 수 없습니다.
+fork에서 온 PR의 workflow는 GitHub 기본 정책대로 secrets 없이 read-only 토큰으로 돌고,
+첫 기여자의 workflow 실행은 승인이 필요합니다.
