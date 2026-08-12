@@ -66,7 +66,7 @@ const manifest = {
   approved_at: new Date().toISOString(),
   approved_commit: null,
   trust: 'human-reviewed-main-only',
-  knowledge_index: 'knowledge/INDEX.md',
+  knowledge_index: 'kb/knowledge/INDEX.md',
   unavailable_sources: unavailableSources,
   source_hashes: sourceHashes
 };
