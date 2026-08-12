@@ -1,3 +1,21 @@
+<div align="center">
+
+<img src="docs/assets/akasha-banner.svg" alt="AKASHA — 역할 기반 승인 지식베이스" width="100%"/>
+
+<img src="https://img.shields.io/badge/Claude_Code-plugin-D97757?style=flat-square&logo=claude&logoColor=white" alt="Claude Code plugin"/>
+<img src="https://img.shields.io/badge/Codex-plugin-000000?style=flat-square&logo=openai&logoColor=white" alt="Codex plugin"/>
+<img src="https://img.shields.io/badge/roles-10-7c3aed?style=flat-square" alt="10 roles"/>
+<img src="https://img.shields.io/badge/trust-human--reviewed-16a34a?style=flat-square" alt="human reviewed"/>
+
+**사람이 승인한 지식만, 어디서든 같은 명령으로.**
+`/akasha` 하나로 역할 에이전트 팀이 알아서 구성됩니다.
+
+[**설치**](#설치) · [**사용**](#사용) · [**구조**](#구조) · [**신뢰 경계**](#신뢰-경계) · [**자동화**](#자동화)
+
+</div>
+
+---
+
 # Agent Knowledge Base
 
 역할 기반 개발 에이전트가 사용하는 외부 공개 문서의 출처 목록과 승인된 요약을 관리하는
@@ -5,6 +23,24 @@ private 저장소입니다. 외부 페이지는 신뢰할 수 없는 데이터�
 에이전트 지침이 되지 않도록 `quarantine -> promotion PR -> immutable tag` 흐름을 사용합니다.
 
 ## 신뢰 경계
+
+```mermaid
+flowchart LR
+    E["외부 공식 문서<br/>(신뢰하지 않음)"] -->|daily refresh| Q["reports/<br/>격리 보고서"]
+    Q -->|주간 승격 PR| R{"사람 검토<br/>CODEOWNER"}
+    R -->|병합| M["akasha/knowledge/<br/>승인 지식"]
+    M -->|owner-gated workflow| T["kb-* 불변 태그"]
+    T -->|marketplace 핀| I["플러그인 설치"]
+    I --> A["Claude Code · Codex<br/>/akasha 에이전트 팀"]
+
+    style E fill:#7f1d1d,stroke:#ef4444,color:#fecaca
+    style Q fill:#78350f,stroke:#f59e0b,color:#fde68a
+    style R fill:#1e3a8a,stroke:#60a5fa,color:#dbeafe
+    style M fill:#14532d,stroke:#22c55e,color:#dcfce7
+    style T fill:#312e81,stroke:#a78bfa,color:#e0e7ff
+    style I fill:#312e81,stroke:#a78bfa,color:#e0e7ff
+    style A fill:#4c1d95,stroke:#f0abfc,color:#fae8ff
+```
 
 - `catalog/roles/*/sources.json`: 허용된 출처와 사용 목적
 - `reports/`: 일일 수집이 만든 격리 보고서. 에이전트가 직접 읽지 않음
