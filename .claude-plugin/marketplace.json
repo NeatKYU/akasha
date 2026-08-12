@@ -1,0 +1,13 @@
+{
+  "name": "neatkyu-kb",
+  "owner": {
+    "name": "NeatKYU"
+  },
+  "plugins": [
+    {
+      "name": "kb",
+      "source": "./kb",
+      "description": "역할 기반 승인 지식베이스 자문 플러그인"
+    }
+  ]
+}
