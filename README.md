@@ -95,8 +95,20 @@ akasha/
 역할을 추가하려면 `akasha/roles/<역할>.md` 하나를 추가하면 됩니다. 스킬이 실행 시점에
 역할 문서를 읽으므로 별도 등록 절차가 없습니다.
 
-현재 마켓플레이스는 저장소 기본 브랜치를 추적합니다. 승인 태그(`kb-*`)에 `ref`/`sha`로
-핀 고정하는 배포는 태그 workflow 연동과 함께 추가할 예정입니다.
+### 배포 버전
+
+마켓플레이스 카탈로그는 항상 **마지막으로 승인된 스냅샷**을 가리킵니다.
+`tag-approved-snapshot.yml`이 `kb-*` 태그를 만들면 곧바로
+`scripts/pin-marketplace.mjs`로 카탈로그를 그 태그에 핀 고정하는 PR을 열고,
+CODEOWNER가 병합하면 배포가 갱신됩니다:
+
+- Claude Code 카탈로그: `git-subdir` 소스에 `ref`(태그)+`sha` 핀, `version`을 승인
+  날짜로 갱신 — 이 문자열이 바뀌어야 설치된 플러그인에 업데이트가 전파됩니다
+- Codex 카탈로그: `git-subdir` 소스에 `ref`(태그) 핀
+
+로컬에서 스킬·역할을 개발할 때는 카탈로그의 `source`를 커밋하지 말고 임시로
+`"./akasha"`(Claude Code) / `{"source": "local", "path": "./akasha"}`(Codex)로
+되돌려 설치하면 워킹트리가 바로 반영됩니다.
 
 ## 자동화
 
@@ -109,11 +121,13 @@ npm run prepare-promotion
 - `refresh-quarantine.yml`: 매일 출처의 메타데이터와 내용 해시를 날짜별 격리 브랜치에 기록
 - `prepare-weekly-promotion.yml`: 최신 격리 결과로 주간 승격 브랜치를 만들고 검토용 PR까지 생성
 - `tag-approved-snapshot.yml`: 저장소 소유자가 `workflow_dispatch`로 promotion PR 번호와 merge
-  commit SHA를 입력했을 때만 불변 `kb-*` annotated tag 생성
+  commit SHA를 입력했을 때만 불변 `kb-*` annotated tag를 생성하고, 이어서 마켓플레이스
+  카탈로그를 그 태그에 핀 고정하는 PR을 연다 (병합은 CODEOWNER가 직접)
 
 저장소의 기본 Actions 권한은 read-only로 운영하고, 쓰기가 필요한 workflow만 파일 단위
-`permissions`로 필요한 범위를 요청합니다. `prepare-weekly-promotion.yml`만 `pull-requests: write`를
-추가로 요청해 promotion PR을 열고, 나머지 workflow는 브랜치와 job summary만 만듭니다. 자동화는
+`permissions`로 필요한 범위를 요청합니다. `prepare-weekly-promotion.yml`은 promotion PR을,
+`tag-approved-snapshot.yml`은 marketplace 핀 PR을 열기 위해 `pull-requests: write`를 요청하고,
+나머지 workflow는 브랜치와 job summary만 만듭니다. 자동화는
 PR 생성까지이며 승인과 병합은 CODEOWNER가 직접 수행합니다. 어떤 workflow도 review approve API나
 merge API를 호출하지 않고, 자동화 토큰은 main에 직접 커밋하지 않습니다.
 
