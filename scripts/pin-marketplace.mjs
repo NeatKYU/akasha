@@ -4,7 +4,7 @@ import { ROOT, resolveContained } from './lib.mjs';
 // 승인 태그가 만들어진 뒤 마켓플레이스 카탈로그를 그 태그에 핀 고정한다.
 // main의 카탈로그는 항상 "마지막으로 승인된 스냅샷"만 가리키고, 에이전트가
 // 승인 전 내용을 설치할 경로를 남기지 않는 것이 목적이다.
-const REPO_URL = 'https://github.com/NeatKYU/agent-knowledge-base.git';
+const REPO_URL = 'https://github.com/NeatKYU/akasha.git';
 
 const [tag, sha] = process.argv.slice(2);
 if (!/^kb-\d{4}-W\d{2}-[a-f0-9]{7}$/.test(tag ?? '')) {

@@ -42,7 +42,7 @@ for (const source of sources) {
   try {
     const result = await fetchAllowlistedHtml(source.url, {
       headers: {
-        'user-agent': 'NeatKYU-agent-knowledge-refresh/1.0 (+https://github.com/NeatKYU/agent-knowledge-base)'
+        'user-agent': 'NeatKYU-agent-knowledge-refresh/1.0 (+https://github.com/NeatKYU/akasha)'
       },
       maxRedirects: MAX_REDIRECTS,
       maxBytes: MAX_RESPONSE_BYTES,
