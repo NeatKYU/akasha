@@ -16,9 +16,11 @@ on:
         required: false
         type: string
 
+# pull-requests: write는 태그 생성 뒤 마켓플레이스 핀 갱신 PR을 열 때만 쓴다.
+# 이 workflow도 PR 생성까지만 하며, 병합은 CODEOWNER가 직접 한다.
 permissions:
   contents: write
-  pull-requests: read
+  pull-requests: write
 
 jobs:
   tag:
@@ -68,6 +70,7 @@ jobs:
       - name: Validate approved snapshot
         run: npm run validate
       - name: Create annotated immutable snapshot tag
+        id: create_tag
         env:
           PROMOTION_PR: ${{ inputs.promotion_pr }}
           MERGE_SHA: ${{ inputs.merge_sha }}
@@ -94,3 +97,33 @@ jobs:
             -m "merge_sha=${MERGE_SHA}" \
             -m "approved_by=NeatKYU"
           git push origin "$tag"
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+
+      # 카탈로그가 main을 추적하면 승인 전 내용이 설치될 수 있으므로, 태그 생성 직후
+      # 마켓플레이스를 그 태그에 핀 고정하는 PR을 연다. 병합은 CODEOWNER가 직접 한다.
+      - name: Open marketplace pin PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MERGE_SHA: ${{ inputs.merge_sha }}
+          TAG: ${{ steps.create_tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+
+          git fetch origin main
+          branch="pin/${TAG}"
+          git checkout -B "$branch" origin/main
+          node scripts/pin-marketplace.mjs "$TAG" "$MERGE_SHA"
+          npm run validate
+          if git diff --quiet; then
+            echo "Marketplace is already pinned to ${TAG}; skipping PR." >&2
+            exit 0
+          fi
+          git add .claude-plugin/marketplace.json .agents/plugins/marketplace.json \
+            akasha/.claude-plugin/plugin.json akasha/.codex-plugin/plugin.json
+          git commit -m "📌 플러그인: 마켓플레이스를 ${TAG}에 핀 고정"
+          git push origin "$branch"
+          gh pr create \
+            --base main \
+            --head "$branch" \
+            --title "📌 플러그인: 마켓플레이스를 ${TAG}에 핀 고정" \
+            --body "$(printf '승인 태그 %s (%s)에 마켓플레이스 카탈로그를 핀 고정합니다.\n\n- Claude Code: git-subdir ref/sha 핀, version 갱신\n- Codex: git-subdir ref 핀\n- akasha plugin.json version 갱신 (다음 태그 스냅샷에 반영)\n\n자동 생성: tag-approved-snapshot workflow' "$TAG" "$MERGE_SHA")"
