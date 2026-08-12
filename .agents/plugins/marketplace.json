@@ -5,7 +5,7 @@
   },
   "plugins": [
     {
-      "name": "kb",
+      "name": "akasha",
       "source": {
         "source": "local",
         "path": "./kb"
