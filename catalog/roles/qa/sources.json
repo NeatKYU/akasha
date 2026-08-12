@@ -9,5 +9,16 @@
     "license_note": "Use metadata, links, and concise attributed summaries.",
     "allowed_purpose": "Browser-test design and flaky-test prevention.",
     "enabled": true
+  },
+  {
+    "id": "playwright-accessibility-testing",
+    "role": "qa",
+    "title": "Accessibility testing",
+    "url": "https://playwright.dev/docs/accessibility-testing",
+    "authority": "primary",
+    "owner": "Microsoft",
+    "license_note": "Use metadata, links, and concise attributed summaries.",
+    "allowed_purpose": "Accessibility regression triage and browser-test scoping.",
+    "enabled": true
   }
 ]
