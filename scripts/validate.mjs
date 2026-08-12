@@ -29,8 +29,8 @@ async function validateManifest() {
   assert(manifest.trust === 'human-reviewed-main-only', 'manifest trust boundary is invalid');
   assertRelativePath(manifest.knowledge_index, 'manifest.knowledge_index');
   assert(
-    manifest.knowledge_index === 'knowledge/INDEX.md',
-    'manifest.knowledge_index must point to knowledge/INDEX.md'
+    manifest.knowledge_index === 'akasha/knowledge/INDEX.md',
+    'manifest.knowledge_index must point to akasha/knowledge/INDEX.md'
   );
   await access(resolveContained(ROOT, manifest.knowledge_index));
   if (manifest.approved_report_date !== undefined) assertDate(manifest.approved_report_date);
@@ -124,7 +124,7 @@ async function validateReports(sourcesById) {
 }
 
 async function validateKnowledgeDocuments() {
-  const knowledgeRoot = resolveContained(ROOT, 'knowledge');
+  const knowledgeRoot = resolveContained(ROOT, 'akasha', 'knowledge');
   const indexPath = resolveContained(knowledgeRoot, 'INDEX.md');
   const indexText = await readFile(indexPath, 'utf8');
   const indexLinks = [...indexText.matchAll(/\[([^\]]+)\]\(([^)]+)\)/g)].map((match) => ({
@@ -170,26 +170,26 @@ async function validateKnowledgeDocuments() {
     documentPaths.add(relativePath);
     const text = await readFile(documentPath, 'utf8');
     const heading = text.split(/\r?\n/).find((line) => line.startsWith('# '))?.slice(2).trim();
-    assert(heading, `Knowledge document must have an H1 heading: knowledge/${relativePath}`);
+    assert(heading, `Knowledge document must have an H1 heading: akasha/knowledge/${relativePath}`);
 
     const normalizedHeading = normalizeComparable(heading);
     const duplicateHeading = seenHeadings.get(normalizedHeading);
     assert(
       !duplicateHeading,
-      `Duplicate knowledge document H1: ${duplicateHeading} and knowledge/${relativePath}`
+      `Duplicate knowledge document H1: ${duplicateHeading} and akasha/knowledge/${relativePath}`
     );
-    seenHeadings.set(normalizedHeading, `knowledge/${relativePath}`);
+    seenHeadings.set(normalizedHeading, `akasha/knowledge/${relativePath}`);
 
     assert(
       indexTargets.has(relativePath),
-      `Knowledge document is not listed in knowledge/INDEX.md: knowledge/${relativePath}`
+      `Knowledge document is not listed in akasha/knowledge/INDEX.md: akasha/knowledge/${relativePath}`
     );
   }
 
   for (const indexTarget of indexTargets) {
     assert(
       documentPaths.has(indexTarget),
-      `knowledge/INDEX.md points outside approved knowledge documents: ${indexTarget}`
+      `akasha/knowledge/INDEX.md points outside approved knowledge documents: ${indexTarget}`
     );
   }
 }

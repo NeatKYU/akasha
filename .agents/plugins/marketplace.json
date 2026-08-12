@@ -1,0 +1,16 @@
+{
+  "name": "neatkyu-kb",
+  "interface": {
+    "displayName": "NeatKYU Knowledge Base"
+  },
+  "plugins": [
+    {
+      "name": "akasha",
+      "source": {
+        "source": "local",
+        "path": "./akasha"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
