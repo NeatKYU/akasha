@@ -41,8 +41,10 @@ flowchart TD
         T["kb-* 불변 태그"] -->|marketplace 핀| I["플러그인 설치"] --> A["Claude Code · Codex<br/>/akasha 에이전트 팀"]
     end
 
-    Q -->|주간 승격 PR| R
-    M -->|owner-gated workflow| T
+    Q --> G1(["주간 승격 PR"])
+    G1 --> R
+    M --> G2(["owner-gated workflow"])
+    G2 --> T
 
     style E fill:#7f1d1d,stroke:#ef4444,color:#fecaca
     style Q fill:#78350f,stroke:#f59e0b,color:#fde68a
@@ -51,6 +53,8 @@ flowchart TD
     style T fill:#312e81,stroke:#a78bfa,color:#e0e7ff
     style I fill:#312e81,stroke:#a78bfa,color:#e0e7ff
     style A fill:#4c1d95,stroke:#f0abfc,color:#fae8ff
+    style G1 fill:#111827,stroke:#9ca3af,stroke-dasharray:3 3,color:#d1d5db
+    style G2 fill:#111827,stroke:#9ca3af,stroke-dasharray:3 3,color:#d1d5db
     style S1 fill:transparent,stroke:#f59e0b,stroke-dasharray:4 4,color:#f59e0b
     style S2 fill:transparent,stroke:#60a5fa,stroke-dasharray:4 4,color:#60a5fa
     style S3 fill:transparent,stroke:#a78bfa,stroke-dasharray:4 4,color:#a78bfa
