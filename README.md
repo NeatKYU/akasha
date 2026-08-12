@@ -39,14 +39,14 @@ Claude Code:
 
 ```
 /plugin marketplace add NeatKYU/agent-knowledge-base
-/plugin install kb@neatkyu-kb
+/plugin install akasha@neatkyu-kb
 ```
 
 Codex:
 
 ```bash
 codex plugin marketplace add https://github.com/NeatKYU/agent-knowledge-base.git
-codex plugin add kb@neatkyu-kb
+codex plugin add akasha@neatkyu-kb
 ```
 
 로컬 클론에서 개발·테스트할 때는 저장소 루트 경로를 등록합니다:
@@ -62,11 +62,13 @@ private 저장소이므로 git 자격 증명이 필요합니다. GitHub HTTPS는
 
 ### 사용
 
-진입점은 하나입니다. 요청 종류를 구분할 필요 없이 프롬프트를 그대로 쓰면 됩니다:
+진입점은 하나, **아카샤**(akasha)입니다 — 모든 지식이 기록된 신화 속 기록고
+'아카식 레코드'에서 따온 이름입니다. 요청 종류를 구분할 필요 없이 프롬프트를
+그대로 쓰면 됩니다:
 
 ```
-/kb:kb 이 PR의 인증 처리와 쿼리 성능 검토해줘        (Claude Code)
-$kb 컴포넌트 상태 설계 기준이 뭐야                    (Codex)
+/akasha 이 PR의 인증 처리와 쿼리 성능 검토해줘       (Claude Code)
+$akasha 컴포넌트 상태 설계 기준이 뭐야                (Codex)
 ```
 
 스킬이 요청을 분석해 `kb/roles/*.md`에서 필요한 역할을 골라 팀을 구성합니다 —
@@ -85,7 +87,7 @@ $kb 컴포넌트 상태 설계 기준이 뭐야                    (Codex)
 kb/
   .claude-plugin/plugin.json   Claude Code 매니페스트
   .codex-plugin/plugin.json    Codex 매니페스트
-  skills/kb/SKILL.md           단일 진입점 오케스트레이터 (양쪽 공용)
+  skills/akasha/SKILL.md       단일 진입점 오케스트레이터 (양쪽 공용)
   roles/                       역할별 자문 지시문 (라우팅 글롭, 담당 지식, 상충 역할)
   knowledge/                   사람이 검토한 지식 요약 (INDEX.md 포함)
 ```
