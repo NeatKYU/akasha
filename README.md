@@ -93,14 +93,14 @@ Claude Code:
 
 ```
 /plugin marketplace add NeatKYU/akasha
-/plugin install akasha@neatkyu-kb
+/plugin install akasha@neatkyu
 ```
 
 Codex:
 
 ```bash
 codex plugin marketplace add https://github.com/NeatKYU/akasha.git
-codex plugin add akasha@neatkyu-kb
+codex plugin add akasha@neatkyu
 ```
 
 로컬 클론에서 개발·테스트할 때는 저장소 루트 경로를 등록합니다:
