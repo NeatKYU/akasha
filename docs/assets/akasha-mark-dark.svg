@@ -1,0 +1,10 @@
+<svg width="512" height="512" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AKASHA mark">
+  <g fill="none" stroke-linecap="round">
+    <path d="M26 104 L26 56 A34 34 0 0 1 94 56 L94 104" stroke="#EFE8DA" stroke-width="3.2"></path>
+    <line x1="16" y1="104" x2="104" y2="104" stroke="#EFE8DA" stroke-width="3.2"></line>
+    <line x1="42" y1="104" x2="42" y2="62" stroke="#EFE8DA" stroke-width="2.4" opacity="0.45"></line>
+    <line x1="78" y1="104" x2="78" y2="62" stroke="#EFE8DA" stroke-width="2.4" opacity="0.45"></line>
+    <line x1="53" y1="104" x2="53" y2="74" stroke="#D3A257" stroke-width="2.4"></line>
+    <line x1="67" y1="104" x2="67" y2="74" stroke="#D3A257" stroke-width="2.4"></line>
+  </g>
+</svg>
