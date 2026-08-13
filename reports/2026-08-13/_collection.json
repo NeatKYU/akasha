@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-13",
+  "attempted": 26,
+  "expected": 26,
+  "complete": true,
+  "succeeded": 25,
+  "failures": [
+    {
+      "source_id": "netflix-hawkins-interview",
+      "url": "https://learn.thedesignsystem.guide/p/how-netflix-builds-design-systems",
+      "error": "secret-like pattern detected: (?:api[_-]?key|secret|token|password|credential)\\s*[:=]\\s*[\"']?[A-Za-z0-9_./+=-]{32,}"
+    }
+  ],
+  "max_response_bytes": 1000000,
+  "max_redirects": 5,
+  "trust": "quarantine-only"
+}
