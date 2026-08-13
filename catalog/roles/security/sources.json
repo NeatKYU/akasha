@@ -20,5 +20,16 @@
     "license_note": "Follow the source license; store links and concise mappings.",
     "allowed_purpose": "Auth, input, session, and secret-handling review.",
     "enabled": true
+  },
+  {
+    "id": "github-actions-secrets",
+    "role": "security",
+    "title": "Using secrets in GitHub Actions",
+    "url": "https://docs.github.com/actions/security-guides/using-secrets-in-github-actions",
+    "authority": "primary",
+    "owner": "GitHub",
+    "license_note": "Use metadata, links, and concise attributed summaries.",
+    "allowed_purpose": "Repository, environment, organization, workflow, and log-handling secret review for GitHub Actions.",
+    "enabled": true
   }
 ]

@@ -1,0 +1,35 @@
+{
+  "source_id": "playwright-accessibility-testing",
+  "role": "qa",
+  "source_url": "https://playwright.dev/docs/accessibility-testing",
+  "final_url": "https://playwright.dev/docs/accessibility-testing",
+  "authority": "primary",
+  "retrieved_at": "2026-08-13T12:07:16.181Z",
+  "content_sha256": "ac8dfc82e7d2dfcb3cce8f4b1fe3e551ed88fbc1489027a39e11ccdde5148356",
+  "metadata_sha256": "1d178a574f7bac7680d524b1e73dc1278fa48c997a4b38adda0a994d297e44f1",
+  "http_status": 200,
+  "title": "Accessibility testing | Playwright",
+  "description": "",
+  "headings": [
+    "Accessibility testing",
+    "Introduction ​",
+    "Example accessibility tests ​",
+    "Scanning an entire page ​",
+    "Configuring axe to scan a specific part of a page ​",
+    "Scanning for WCAG violations ​",
+    "Handling known issues ​",
+    "Excluding individual elements from a scan ​",
+    "Disabling individual scan rules ​",
+    "Using snapshots to allow specific known issues ​",
+    "Exporting scan results as a test attachment ​",
+    "Using a test fixture for common axe configuration ​",
+    "Creating a fixture ​",
+    "Using a fixture ​"
+  ],
+  "redirect_hops": [
+    "https://playwright.dev/docs/accessibility-testing"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}
