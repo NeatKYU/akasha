@@ -9,5 +9,16 @@
     "license_note": "Use metadata and concise attributed summaries only.",
     "allowed_purpose": "User-needs discovery and acceptance-criteria framing.",
     "enabled": true
+  },
+  {
+    "id": "govuk-user-stories",
+    "role": "product",
+    "title": "Writing user stories",
+    "url": "https://www.gov.uk/service-manual/agile-delivery/writing-user-stories",
+    "authority": "primary",
+    "owner": "UK Government Digital Service",
+    "license_note": "Use metadata and concise attributed summaries only.",
+    "allowed_purpose": "Product backlog slicing and acceptance criteria review.",
+    "enabled": true
   }
 ]
