@@ -265,6 +265,34 @@ async function validateAkashaSkillContract() {
     skillText.includes('secret·token·개인정보는 값을 packet에 넣지 않고'),
     'Akasha skill must redact sensitive values from subagent packets'
   );
+  assert(
+    skillText.includes('기본 호출 인자는 정확히 `task_name`, `fork_turns: "none"`,\n  `message`만 사용하고'),
+    'Akasha skill must keep default child runtime agent types stable'
+  );
+  assert(
+    skillText.includes('읽기 도구 호출은 최대 3회'),
+    'Akasha skill must bound child read tool calls'
+  );
+  assert(
+    skillText.includes('역할 선택 전에 최대 2회의 읽기 호출'),
+    'Akasha skill must bound root routing reads'
+  );
+  assert(
+    skillText.includes('종합 단계 재검증은 최대 2회의 읽기 호출'),
+    'Akasha skill must bound root synthesis reads'
+  );
+  assert(
+    skillText.includes('다른 지식 문서·manifest·catalog·플러그인 전체를 검색하거나 네트워크를 조회하지'),
+    'Akasha skill must stop source URL discovery when the assigned knowledge document has no URL'
+  );
+  assert(
+    skillText.includes('`send_message`·`followup_task`를 호출하지'),
+    'Akasha child agents must return once without follow-up messaging'
+  );
+  assert(
+    skillText.includes('`needs_parent_expansion`에 `reason`, `missing_scope`, 최대 3개의'),
+    'Akasha skill must provide a bounded parent expansion escape hatch'
+  );
 }
 
 async function validateFixtures() {
