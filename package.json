@@ -1,10 +1,16 @@
 {
   "name": "akasha",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "scripts": {
     "validate": "node scripts/validate.mjs --fixtures",
+    "eval:model-routing:test": "node scripts/model-routing-eval.test.mjs",
+    "eval:model-routing:smoke": "node scripts/run-model-routing-eval.mjs --phase smoke",
+    "eval:model-routing:screen": "node scripts/run-model-routing-eval.mjs --phase screen",
+    "eval:model-routing:blind": "node scripts/export-model-routing-blind.mjs",
+    "eval:model-routing:integration": "node scripts/run-akasha-routing-ab.mjs",
+    "eval:model-routing:integration:analyze": "node scripts/analyze-akasha-routing-ab.mjs",
     "version:set": "node scripts/set-version.mjs",
     "refresh": "node scripts/refresh.mjs",
     "prepare-promotion": "node scripts/prepare-promotion.mjs"

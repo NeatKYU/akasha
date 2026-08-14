@@ -2,6 +2,24 @@
 
 이 프로젝트는 [Semantic Versioning](https://semver.org/)을 따릅니다.
 
+## [0.4.0] - 2026-08-14
+
+### 추가
+
+- Luna, Terra, Sol, GPT-5.5, GPT-5.4를 같은 fixture에서 비교하는 모델 라우팅 평가 하네스
+- 요청/관찰 model·effort 검증, 토큰·시간·API 등가 비용, 역할 정확도, 오류 taxonomy를 남기는 append-only 실행 기록
+- 모델명을 가린 블라인드 채점 export와 실제 Akasha R2/R3 통합 A/B 분석기
+
+### 변경
+
+- 외부 사용량 한도와 서비스 장애를 품질 실패에서 분리하고 후속 실행을 중단하도록 개선
+- task/condition별 유효 3회, 역할·모델 정확도 100%, 내부 오류 0, 기준 품질 98% 및 효율 15%를 production 승격 gate로 명시
+- 이번 통합 실험은 사용량 한도로 반복 수가 부족하고 후보의 효율이 악화되어 부모 model·effort 상속을 유지
+
+### 검증
+
+- 66회 screen, 두 명의 blind grader, 실제 R2/R3 통합 A/B 및 deterministic analyzer 회귀 검사
+
 ## [0.3.0] - 2026-08-14
 
 ### 추가

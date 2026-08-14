@@ -182,12 +182,22 @@ kb-* git tag                   소비 프로젝트가 고정하는 불변 버전
 
 ```bash
 npm run validate
+npm run eval:model-routing:test
+npm run eval:model-routing:smoke -- --output /tmp/akasha-model-smoke
+npm run eval:model-routing:screen -- --output /tmp/akasha-model-screen
+npm run eval:model-routing:integration -- --output /tmp/akasha-model-integration
+npm run eval:model-routing:integration:analyze -- --input /tmp/akasha-model-integration/raw.jsonl
 npm run version:set -- 0.2.1
 npm run refresh -- --date 2026-08-04
 npm run prepare-promotion
 ```
 
 ### 버전 관리
+
+모델 라우팅은 smoke → screen → blind grading → 실제 Akasha integration 순서로 평가합니다.
+각 실행은 요청 model/effort와 세션에서 관찰한 값을 대조하고, raw JSONL을 append-only로 남깁니다.
+사용량 한도·외부 장애는 품질 분모에서 제외하되 별도 집계하며, 통합 반복이 task/condition별 3회보다
+적으면 자동 라우팅을 배포하지 않습니다. 가격 표는 API 등가 추정치이므로 실제 구독 청구액과 구분합니다.
 
 플러그인 릴리스는 [Semantic Versioning](https://semver.org/)을 사용합니다.
 

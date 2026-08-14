@@ -83,6 +83,11 @@ Codex의 `spawn_agent`를 사용할 때는 각 역할에 필요한 내용을 `me
 모델은 보안 경계가 아니며, 어떤 model을 사용해도 같은 sandbox·approval·검증 계약을 유지한다.
 역할 이름만으로 model이나 reasoning effort를 자동 변경하지 않는다. 검증되지 않은 tiering은
 토큰·시간·탐색 횟수를 오히려 늘릴 수 있으므로 production 기본값은 부모 model·effort 상속이다.
+모델 후보는 `benchmarks/model-routing/`의 고정 fixture에서 스크리닝한 뒤, 실제 Akasha 통합 실행을
+task·condition별 최소 3회 반복해 승격한다. 요청값과 관찰값 일치, 역할 정확도 100%, 내부 오류 0,
+기준 품질의 98% 이상을 모두 만족하고 토큰·비용·시간 중 하나가 15% 이상 개선될 때만 자동 라우팅
+후보로 인정한다. 외부 사용량 한도나 서비스 장애 행은 원본을 보존한 채 `infra_invalid`로 제외하고
+발생률은 별도 보고한다. 반복 수가 부족하면 결과가 좋아 보여도 production 상속 정책을 유지한다.
 
 다음 high-risk 신호는 모델 자동 승격 조건이 아니라 최종 보고에 남길 검토 위험 신호다.
 
