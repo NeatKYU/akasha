@@ -1,7 +1,26 @@
 {
   "name": "akasha",
-  "version": "0.1.0",
+  "version": "0.2.0+codex.20260814002206",
   "description": "역할 기반 승인 지식베이스 자문 플러그인. 변경 코드와 질문을 역할별 서브에이전트가 승인된 지식 문서 기준으로 검토한다.",
-  "author": "NeatKYU",
-  "skills": "./skills/"
+  "author": {
+    "name": "NeatKYU",
+    "url": "https://github.com/NeatKYU"
+  },
+  "repository": "https://github.com/NeatKYU/akasha",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Akasha",
+    "shortDescription": "승인된 지식베이스로 역할별 코드와 설계를 검토합니다.",
+    "longDescription": "요청과 변경 파일을 분석해 필요한 역할 에이전트를 구성하고, 승인된 지식 문서를 근거로 판정을 종합합니다.",
+    "developerName": "NeatKYU",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Multi-agent"
+    ],
+    "defaultPrompt": [
+      "이 변경을 필요한 역할별로 검토해줘.",
+      "이 설계가 지식베이스 기준에 맞는지 확인해줘."
+    ]
+  }
 }

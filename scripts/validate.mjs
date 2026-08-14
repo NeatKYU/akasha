@@ -194,6 +194,56 @@ async function validateKnowledgeDocuments() {
   }
 }
 
+async function validateAkashaSkillContract() {
+  const skillPath = resolveContained(ROOT, 'akasha', 'skills', 'akasha', 'SKILL.md');
+  const skillText = await readFile(skillPath, 'utf8');
+
+  assert(
+    skillText.includes('`fork_turns: "none"`으로 실행한다'),
+    'Akasha skill must isolate Codex subagents with fork_turns: "none"'
+  );
+  assert(
+    skillText.includes('`fork_turns: "all"`을 사용할 때는 `agent_type`, `model`, `reasoning_effort`를 함께'),
+    'Akasha skill must prohibit incompatible full-history agent overrides'
+  );
+  assert(
+    skillText.includes('`timeout_ms`는 최소 `10000`이어야 한다'),
+    'Akasha skill must document the wait_agent minimum timeout'
+  );
+  assert(
+    skillText.includes('기본값은 `30000` 이상'),
+    'Akasha skill must use a non-polling wait_agent default'
+  );
+  assert(
+    skillText.includes('역할 context packet'),
+    'Akasha skill must define a bounded role context packet'
+  );
+  assert(
+    skillText.includes('diff 본문은 메시지에 넣지 않고'),
+    'Akasha skill must not inline full diffs in subagent messages'
+  );
+  assert(
+    skillText.includes('사용자 요청 원문이나\n  부모 대화 전문을 다시 복사하지 않는다'),
+    'Akasha skill must not duplicate the user request or parent history'
+  );
+  assert(
+    skillText.includes('판정을 최대 5개, 지식 공백을 최대 3개'),
+    'Akasha skill must bound subagent output'
+  );
+  assert(
+    skillText.includes('성공한 `spawn_agent` 호출이 정확히 하나'),
+    'Akasha skill must spawn every selected role exactly once'
+  );
+  assert(
+    skillText.includes('`content+path`, `path-only`, `content-only`, `advisory-no-diff`'),
+    'Akasha skill must preserve content-only and path-based selection reasons'
+  );
+  assert(
+    skillText.includes('secret·token·개인정보는 값을 packet에 넣지 않고'),
+    'Akasha skill must redact sensitive values from subagent packets'
+  );
+}
+
 async function validateFixtures() {
   const malicious = JSON.parse(
     await readFile(path.join(ROOT, 'fixtures', 'malicious-source.json'), 'utf8')
@@ -318,6 +368,7 @@ function normalizeRelativePath(value) {
 const sources = await loadSources();
 await validateManifest();
 await validateKnowledgeDocuments();
+await validateAkashaSkillContract();
 await validateReports(new Map(sources.map((source) => [source.id, source])));
 await validateRepoSecretScan();
 if (process.argv.includes('--fixtures')) await validateFixtures();
