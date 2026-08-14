@@ -2,6 +2,23 @@
 
 이 프로젝트는 [Semantic Versioning](https://semver.org/)을 따릅니다.
 
+## [0.3.0] - 2026-08-14
+
+### 추가
+
+- 부모 모델 상속과 사용자 지정 override를 구분하는 model routing 계약
+- 실제 routing mode·reasoning effort·선택 이유·fallback을 남기는 감사용 보고 필드
+
+### 변경
+
+- 역할 이름에 따른 자동 model tiering은 production 기본값에서 비활성화
+- 사용자 지정 model 실패 시 같은 model에서 effort만 제거해 한 번 재시도
+- `wait_agent` timeout을 정확히 30초로 고정해 짧은 polling 오류 재발 방지
+
+### 검증
+
+- 상속 기본값, 자동 승격 금지, 사용자 override 보존, fallback, 모델 감사 기록의 계약 회귀 검사 추가
+
 ## [0.2.1] - 2026-08-14
 
 ### 변경

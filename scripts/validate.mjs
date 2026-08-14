@@ -230,12 +230,12 @@ async function validateAkashaSkillContract() {
     'Akasha skill must prohibit incompatible full-history agent overrides'
   );
   assert(
-    skillText.includes('`timeout_ms`는 최소 `10000`이어야 한다'),
-    'Akasha skill must document the wait_agent minimum timeout'
+    skillText.includes('항상 `timeout_ms: 30000`을 사용한다'),
+    'Akasha skill must use one deterministic wait_agent timeout'
   );
   assert(
-    skillText.includes('기본값은 `30000` 이상'),
-    'Akasha skill must use a non-polling wait_agent default'
+    skillText.includes('`30000`보다 짧거나 긴 값을 임의로 쓰지 않고'),
+    'Akasha skill must prohibit wait timeout drift'
   );
   assert(
     skillText.includes('역할 context packet'),
@@ -266,8 +266,28 @@ async function validateAkashaSkillContract() {
     'Akasha skill must redact sensitive values from subagent packets'
   );
   assert(
-    skillText.includes('기본 호출 인자는 정확히 `task_name`, `fork_turns: "none"`,\n  `message`만 사용하고'),
-    'Akasha skill must keep default child runtime agent types stable'
+    skillText.includes('기본 호출 인자는 정확히 `task_name`, `fork_turns: "none"`,\n  `message`만 사용한다'),
+    'Akasha skill must keep the bounded child invocation contract'
+  );
+  assert(
+    skillText.includes('production 기본값은 부모 model·effort 상속'),
+    'Akasha skill must keep unproven automatic tiering out of the production default'
+  );
+  assert(
+    skillText.includes('역할 이름만으로 model이나 reasoning effort를 자동 변경하지 않는다'),
+    'Akasha skill must prohibit role-name-only model escalation'
+  );
+  assert(
+    skillText.includes('모델은 보안 경계가 아니며'),
+    'Akasha skill must not treat model tiering as a security boundary'
+  );
+  assert(
+    skillText.includes('`model_routes` 배열') && skillText.includes('`fallbacks`를 빈 배열'),
+    'Akasha skill must report auditable model routes and fallbacks'
+  );
+  assert(
+    skillText.includes('`reasoning_effort`만 생략하고 같은 model로 한 번만\n재시도한다'),
+    'Akasha skill must preserve user-selected models while bounding fallback retries'
   );
   assert(
     skillText.includes('읽기 도구 호출은 최대 3회'),

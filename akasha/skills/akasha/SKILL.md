@@ -46,6 +46,8 @@ description: 요청을 분석해 지식베이스의 역할 에이전트 팀을 �
   최대 3개까지 보존한다.
 - 역할 선택 이유를 `content_signal`과 `path_signal`로 나누고, packet의 `mode`를
   `content+path`, `path-only`, `content-only`, `advisory-no-diff` 중 하나로 명시한다.
+- 아래 「모델 라우팅 계약」으로 정한 mode, 선택 이유와 감지한 `risk_signals`를 packet의
+  `model_route`에 넣는다.
 - 코드 검토라면 역할의 `## 라우팅`과 실제 변경 경로가 맞는 **관련 파일 목록만** 전달한다.
   diff 본문은 메시지에 넣지 않고, 서브에이전트가 `git diff -- <관련 파일>`로 직접 읽게 한다.
   내용 신호로 선택됐지만 경로가 매칭되지 않으면 필요한 최소 파일과 선택 이유를 전달한다.
@@ -64,7 +66,8 @@ Codex의 `spawn_agent`를 사용할 때는 각 역할에 필요한 내용을 `me
 
 - Akasha 역할 문서와 context packet이 이미 전문 역할을 정의하므로 런타임 `agent_type`으로
   다시 매핑하지 않는다. 기본 호출 인자는 정확히 `task_name`, `fork_turns: "none"`,
-  `message`만 사용하고 `agent_type`, `model`, `reasoning_effort`를 추가하지 않는다.
+  `message`만 사용한다. 사용자가 직접 지정한 경우에만 「모델 라우팅 계약」에 따라
+  `model` 또는 `reasoning_effort`를 추가한다.
 - 사용자가 특정 런타임 agent type을 직접 지정한 경우에만 예외로 사용하고, 그 사실을 최종
   보고에 남긴다. 프로젝트의 일반적인 specialist 권장표는 명시적 사용자 지정으로 보지 않는다.
 - `fork_turns: "all"`을 사용할 때는 `agent_type`, `model`, `reasoning_effort`를 함께
@@ -75,9 +78,33 @@ Codex의 `spawn_agent`를 사용할 때는 각 역할에 필요한 내용을 `me
   기다리지 않는다.
 - 선택한 역할마다 성공한 `spawn_agent` 호출이 정확히 하나 있는지 확인한 뒤 결과를 기다린다.
 
-Codex의 `wait_agent`로 결과를 기다릴 때 `timeout_ms`는 최소 `10000`이어야 한다.
-기본값은 `30000` 이상으로 하고, 완료되지 않았다는 이유만으로 짧은 간격의 반복 polling을
-하지 않는다. 대기가 끝나면 완료된 결과를 수집하고, 남은 에이전트만 다시 기다린다.
+#### 모델 라우팅 계약
+
+모델은 보안 경계가 아니며, 어떤 model을 사용해도 같은 sandbox·approval·검증 계약을 유지한다.
+역할 이름만으로 model이나 reasoning effort를 자동 변경하지 않는다. 검증되지 않은 tiering은
+토큰·시간·탐색 횟수를 오히려 늘릴 수 있으므로 production 기본값은 부모 model·effort 상속이다.
+
+다음 high-risk 신호는 모델 자동 승격 조건이 아니라 최종 보고에 남길 검토 위험 신호다.
+
+- 인증·인가·세션 또는 외부 입력 trust boundary 변경
+- secret·개인정보 처리, 권한 있는 CI에서 untrusted code 실행
+- 되돌리기 어려운 migration·데이터 무결성 변경
+- 배포·릴리스 권한을 확대하거나 destructive operation을 자동화하는 변경
+
+사용자가 특정 model 또는 reasoning effort를 직접 지정하면 그 범위에만 override를 전달한다.
+범위를 지정하지 않은 model 요청은 선택된 모든 child에 적용하고, 역할을 지정했으면 해당 역할에만
+적용한다. 사용자 지정 조합으로 spawn이 실패하면 `reasoning_effort`만 생략하고 같은 model로 한 번만
+재시도한다. 그래도 실패하면 다른 model로 조용히 바꾸거나 같은 역할을 다시 만들지 않고 역할 누락을
+보고한다. 품질이 불확실하다는 이유만으로 상위 model child를 사후 재실행하지 않고
+`needs_parent_expansion` 또는 지식 공백으로 반환한다.
+
+최종 보고의 `model_routes`에는 기본 실행을 `mode: "inherit"`, `model: "inherited"`,
+`reasoning_effort: "inherited"`로 적는다. 사용자 override에는 `mode: "user-override"`와 요청값을
+적는다. 실제 런타임 model을 관찰할 수 없는 환경에서는 추정값을 쓰지 않는다.
+
+Codex의 `wait_agent`로 결과를 기다릴 때는 항상 `timeout_ms: 30000`을 사용한다.
+`30000`보다 짧거나 긴 값을 임의로 쓰지 않고, 완료되지 않았다는 이유만으로 짧은 간격의 반복
+polling을 하지 않는다. 대기가 끝나면 완료된 결과를 수집하고, 남은 에이전트만 다시 기다린다.
 
 #### 탐색 예산과 중단 조건
 
@@ -122,6 +149,11 @@ Codex의 `wait_agent`로 결과를 기다릴 때 `timeout_ms`는 최소 `10000`�
 코드·diff·지식 문서 전문이나 요청 요약을 다시 출력하지 않는다. 판정이 없으면 빈 배열을
 반환한다. 심각도가 높은 판정을 먼저 두되, 개수 제한을 채우기 위한 낮은 가치의 판정을
 추가하지 않는다.
+
+최종 보고에는 역할마다 `role`, `mode`, 요청한 `model`, `reasoning_effort`, `reason`,
+`risk_signals`를 `model_routes` 배열로 남기고, fallback이 없더라도 `fallbacks`를 빈 배열로
+남긴다. 상속 실행은 위 계약대로 `inherited`로 적으며, 이 값은 비용 추정이 아니라 실행 선택을
+감사하기 위한 기록이다.
 
 `needs_parent_expansion`이 있으면 부모는 제안 경로가 원래 역할 범위에 속하는지 확인한 뒤
 필요한 경우에만 해당 파일을 직접 재검증한다. 같은 child를 다시 실행하거나 follow-up하지
