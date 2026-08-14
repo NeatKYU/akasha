@@ -9,7 +9,7 @@
 
 `/akasha` 하나로 역할 에이전트 팀이 알아서 구성됩니다.
 
-[설치](#설치-30초) · [사용](#사용) · [왜 플러그인인가](#왜-플러그인인가) · [신뢰 경계](#신뢰-경계) · [구조](#저장소-구조) · [자동화](#자동화)
+[설치](#설치-30초) · [업데이트](#업데이트) · [사용](#사용) · [왜 플러그인인가](#왜-플러그인인가) · [신뢰 경계](#신뢰-경계) · [구조](#저장소-구조) · [자동화](#자동화)
 
 </div>
 
@@ -40,7 +40,8 @@ codex plugin marketplace add https://github.com/NeatKYU/akasha.git
 codex plugin add akasha@neatkyu
 ```
 
-public 저장소라 별도 자격 증명 없이 설치와 자동 업데이트가 동작합니다.
+public 저장소라 별도 자격 증명 없이 설치할 수 있습니다. 기존 설치본은 새 버전이 배포돼도
+자동으로 교체되지 않으므로 아래 업데이트 절차를 사용합니다.
 소비 프로젝트에는 **파일이 하나도 들어가지 않습니다** — 플러그인은 런타임 캐시 디렉터리에 설치됩니다.
 
 <details>
@@ -55,6 +56,36 @@ codex plugin marketplace add .
 `{"source": "local", "path": "./akasha"}`(Codex)로 되돌려 설치하면 워킹트리가 바로 반영됩니다.
 
 </details>
+
+## 업데이트
+
+업데이트는 마켓플레이스 스냅샷을 먼저 새로 받은 뒤 플러그인을 갱신하는 두 단계입니다.
+열려 있던 대화는 이전 스킬을 유지할 수 있으므로 업데이트가 끝나면 Claude Code를 재시작하거나
+Codex에서 새 대화를 시작합니다.
+
+**Claude Code**
+
+```bash
+claude plugin marketplace update neatkyu
+claude plugin update akasha@neatkyu
+```
+
+**Codex**
+
+```bash
+codex plugin marketplace upgrade neatkyu
+codex plugin add akasha@neatkyu
+```
+
+Codex CLI에는 별도의 plugin update 명령이 없으므로 같은 plugin을 다시 `add`해 최신 marketplace
+스냅샷의 버전으로 재설치합니다. 설치된 버전은 다음 명령으로 확인할 수 있습니다.
+
+```bash
+codex plugin list --json
+```
+
+업데이트가 필요 없으면 기존 캐시 버전이 그대로 유지됩니다. 버전별 변경 내용은
+[CHANGELOG.md](CHANGELOG.md)에서 확인할 수 있습니다.
 
 ## 사용
 
@@ -151,9 +182,28 @@ kb-* git tag                   소비 프로젝트가 고정하는 불변 버전
 
 ```bash
 npm run validate
+npm run version:set -- 0.2.1
 npm run refresh -- --date 2026-08-04
 npm run prepare-promotion
 ```
+
+### 버전 관리
+
+플러그인 릴리스는 [Semantic Versioning](https://semver.org/)을 사용합니다.
+
+- **MAJOR**: 명령, 반환 계약, 설치 방식의 호환되지 않는 변경
+- **MINOR**: 기존 사용법과 호환되는 역할·라우팅·오케스트레이션 기능 추가
+- **PATCH**: 버그 수정, 문서 수정, 승인 지식 스냅샷 갱신
+
+`package.json`을 기준 버전으로 삼고 Claude Code와 Codex manifest 및 lockfile을 같은 버전으로
+유지합니다. 직접 여러 파일을 수정하지 말고 `npm run version:set -- <version>`을 실행한 뒤
+`CHANGELOG.md`에 같은 버전의 변경 내역을 작성합니다. `npm run validate`는 버전 불일치, 누락된
+CHANGELOG 항목, 저장소에 커밋된 `+codex.<timestamp>` build metadata를 차단합니다.
+
+`kb-*` 태그는 사람이 승인한 **지식 스냅샷**, SemVer는 **플러그인 제품 릴리스**를 나타냅니다.
+승격 전에 SemVer와 CHANGELOG를 확정하고, owner-gated workflow가 해당 `kb-*` 태그에 marketplace를
+핀 고정합니다. 저장소에는 `0.2.0` 같은 안정 버전만 커밋합니다. 로컬 개발에서 캐시를 갱신하려고
+만든 `0.2.0+codex.<timestamp>`는 설치 확인 후 되돌리고 커밋하지 않습니다.
 
 | workflow | 하는 일 |
 | --- | --- |
@@ -166,8 +216,8 @@ merge API를 호출하지 않고, 자동화 토큰은 main에 직접 커밋하�
 
 마켓플레이스 카탈로그는 항상 마지막으로 승인된 스냅샷을 가리킵니다. `kb-*` 태그가 만들어지면
 `scripts/pin-marketplace.mjs`가 카탈로그를 그 태그에 핀 고정하는 PR을 열고, CODEOWNER가 병합하면 배포가 갱신됩니다
-— Claude Code 카탈로그는 `ref`(태그)+`sha` 핀과 승인 날짜로 갱신되는 `version`(이 문자열이 바뀌어야 업데이트가
-전파됩니다), Codex 카탈로그는 `ref`(태그) 핀입니다.
+— Claude Code 카탈로그는 `ref`(태그)+`sha` 핀과 SemVer `version`, Codex 카탈로그는 `ref`(태그) 핀입니다.
+사용자 설치본은 위의 명시적 업데이트 절차를 실행할 때 새 스냅샷으로 교체됩니다.
 
 <details>
 <summary>권한·게이트 상세</summary>

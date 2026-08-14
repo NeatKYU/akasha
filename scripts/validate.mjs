@@ -19,6 +19,29 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+async function validateReleaseVersion() {
+  const packageJson = JSON.parse(await readFile(resolveContained(ROOT, 'package.json'), 'utf8'));
+  const packageLock = JSON.parse(await readFile(resolveContained(ROOT, 'package-lock.json'), 'utf8'));
+  const claudeManifest = JSON.parse(
+    await readFile(resolveContained(ROOT, 'akasha', '.claude-plugin', 'plugin.json'), 'utf8')
+  );
+  const codexManifest = JSON.parse(
+    await readFile(resolveContained(ROOT, 'akasha', '.codex-plugin', 'plugin.json'), 'utf8')
+  );
+  const changelog = await readFile(resolveContained(ROOT, 'CHANGELOG.md'), 'utf8');
+  const stableSemver = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+
+  assert(stableSemver.test(packageJson.version), 'package.json version must be stable SemVer without build metadata');
+  assert(packageLock.version === packageJson.version, 'package-lock.json version must match package.json');
+  assert(packageLock.packages?.['']?.version === packageJson.version, 'package-lock root version must match package.json');
+  assert(claudeManifest.version === packageJson.version, 'Claude plugin version must match package.json');
+  assert(codexManifest.version === packageJson.version, 'Codex plugin version must match package.json');
+  assert(
+    changelog.includes(`## [${packageJson.version}]`),
+    `CHANGELOG.md must contain a ${packageJson.version} release entry`
+  );
+}
+
 async function validateManifest() {
   const manifest = JSON.parse(await readFile(resolveContained(ROOT, 'manifest.json'), 'utf8'));
   assert(manifest.schema_version === 1, 'manifest.schema_version must be 1');
@@ -366,6 +389,7 @@ function normalizeRelativePath(value) {
 }
 
 const sources = await loadSources();
+await validateReleaseVersion();
 await validateManifest();
 await validateKnowledgeDocuments();
 await validateAkashaSkillContract();

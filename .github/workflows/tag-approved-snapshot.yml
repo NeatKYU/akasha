@@ -118,12 +118,11 @@ jobs:
             echo "Marketplace is already pinned to ${TAG}; skipping PR." >&2
             exit 0
           fi
-          git add .claude-plugin/marketplace.json .agents/plugins/marketplace.json \
-            akasha/.claude-plugin/plugin.json akasha/.codex-plugin/plugin.json
+          git add .claude-plugin/marketplace.json .agents/plugins/marketplace.json
           git commit -m "📌 플러그인: 마켓플레이스를 ${TAG}에 핀 고정"
           git push origin "$branch"
           gh pr create \
             --base main \
             --head "$branch" \
             --title "📌 플러그인: 마켓플레이스를 ${TAG}에 핀 고정" \
-            --body "$(printf '승인 태그 %s (%s)에 마켓플레이스 카탈로그를 핀 고정합니다.\n\n- Claude Code: git-subdir ref/sha 핀, version 갱신\n- Codex: git-subdir ref 핀\n- akasha plugin.json version 갱신 (다음 태그 스냅샷에 반영)\n\n자동 생성: tag-approved-snapshot workflow' "$TAG" "$MERGE_SHA")"
+            --body "$(printf '승인 태그 %s (%s)에 마켓플레이스 카탈로그를 핀 고정합니다.\n\n- Claude Code: git-subdir ref/sha 핀, SemVer version 반영\n- Codex: git-subdir ref 핀\n- plugin manifest는 release commit의 SemVer를 그대로 사용\n\n자동 생성: tag-approved-snapshot workflow' "$TAG" "$MERGE_SHA")"

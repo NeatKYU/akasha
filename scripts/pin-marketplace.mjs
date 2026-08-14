@@ -25,15 +25,13 @@ async function writeJson(value, ...segments) {
   );
 }
 
-// 버전은 승인 스냅샷 날짜에서 파생한다. 마켓플레이스가 이 문자열을 바꿔야만
-// 설치된 플러그인에 업데이트가 전파된다.
-const manifest = await readJson('manifest.json');
-const approvedDate = manifest.approved_report_date;
-if (!/^\d{4}-\d{2}-\d{2}$/.test(approvedDate ?? '')) {
-  throw new Error('manifest.approved_report_date is missing or invalid');
+// kb-* 태그는 승인 지식 스냅샷을 식별하고, plugin version은 독립적인 SemVer를 쓴다.
+// promotion 전에 version:set과 CHANGELOG 갱신이 끝나 있어야 한다.
+const packageJson = await readJson('package.json');
+const version = packageJson.version;
+if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/.test(version ?? '')) {
+  throw new Error('package.json version must be stable SemVer without build metadata');
 }
-const [year, month, day] = approvedDate.split('-').map(Number);
-const version = `${year}.${month}.${day}`;
 
 const claudeMarketplace = await readJson('.claude-plugin', 'marketplace.json');
 const claudeEntry = claudeMarketplace.plugins?.find((plugin) => plugin.name === 'akasha');
@@ -49,11 +47,13 @@ if (!codexEntry) throw new Error('akasha entry is missing in .agents/plugins/mar
 codexEntry.source = { source: 'git-subdir', url: REPO_URL, path: './akasha', ref: tag };
 await writeJson(codexMarketplace, '.agents', 'plugins', 'marketplace.json');
 
-// plugin.json 버전은 다음 태그 스냅샷에 실리도록 main에서 함께 올린다.
+// 두 런타임 manifest가 배포 SemVer와 일치하는지 확인한다. 핀 단계에서 버전을
+// 묵시적으로 바꾸지 않아 release commit과 배포 artifact의 provenance를 보존한다.
 for (const dir of ['.claude-plugin', '.codex-plugin']) {
   const pluginManifest = await readJson('akasha', dir, 'plugin.json');
-  pluginManifest.version = version;
-  await writeJson(pluginManifest, 'akasha', dir, 'plugin.json');
+  if (pluginManifest.version !== version) {
+    throw new Error(`akasha/${dir}/plugin.json version must match package.json`);
+  }
 }
 
 console.log(`Pinned akasha marketplace entries to ${tag} (${sha.slice(0, 7)}) as version ${version}.`);
