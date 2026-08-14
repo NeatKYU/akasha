@@ -20,5 +20,16 @@
     "license_note": "Use metadata, links, and concise attributed summaries.",
     "allowed_purpose": "Current project authentication implementation guidance.",
     "enabled": true
+  },
+  {
+    "id": "next-data-security",
+    "role": "backend",
+    "title": "How to think about data security in Next.js",
+    "url": "https://nextjs.org/docs/app/guides/data-security",
+    "authority": "primary",
+    "owner": "Vercel",
+    "license_note": "Use metadata, links, and concise attributed summaries.",
+    "allowed_purpose": "Server-side data access, authorization, DTO, and Server Action security guidance.",
+    "enabled": true
   }
 ]
