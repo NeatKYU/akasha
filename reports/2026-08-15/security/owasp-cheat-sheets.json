@@ -1,0 +1,22 @@
+{
+  "source_id": "owasp-cheat-sheets",
+  "role": "security",
+  "source_url": "https://cheatsheetseries.owasp.org/",
+  "final_url": "https://cheatsheetseries.owasp.org/",
+  "authority": "primary",
+  "retrieved_at": "2026-08-15T18:47:50.237Z",
+  "content_sha256": "0e3cf9082864efd460383f7a06a9f0fca846da017233aa42fdf3585476773159",
+  "metadata_sha256": "d9101e6078b3ab64643c21deb2d0589284f10ef433076d5ef7707542208205b1",
+  "http_status": 200,
+  "title": "Introduction - OWASP Cheat Sheet Series",
+  "description": "Website with the collection of all the cheat sheets of the project.",
+  "headings": [
+    "&para;"
+  ],
+  "redirect_hops": [
+    "https://cheatsheetseries.owasp.org/"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}
