@@ -1,0 +1,41 @@
+{
+  "source_id": "playwright-best-practices",
+  "role": "qa",
+  "source_url": "https://playwright.dev/docs/best-practices",
+  "final_url": "https://playwright.dev/docs/best-practices",
+  "authority": "primary",
+  "retrieved_at": "2026-08-16T18:47:36.615Z",
+  "content_sha256": "511b79b4acdac72f2fa30bcbd4aaea430d4ecaf38d767885363ab77646a8d474",
+  "metadata_sha256": "4759958f6b2ab770bcf75dd80a92c3d993011e7f579f33c0518c5b48d6732264",
+  "http_status": 200,
+  "title": "Best Practices | Playwright",
+  "description": "",
+  "headings": [
+    "Best Practices",
+    "Introduction ​",
+    "Testing philosophy ​",
+    "Test user-visible behavior ​",
+    "Make tests as isolated as possible ​",
+    "Avoid testing third-party dependencies ​",
+    "Testing with a database ​",
+    "Best Practices ​",
+    "Use locators ​",
+    "Generate locators ​",
+    "Use web first assertions ​",
+    "Configure debugging ​",
+    "Use Playwright's Tooling ​",
+    "Test across all browsers ​",
+    "Keep your Playwright dependency up to date ​",
+    "Run tests on CI ​",
+    "Lint your tests ​",
+    "Use parallelism and sharding ​",
+    "Productivity tips ​",
+    "Use Soft assertions ​"
+  ],
+  "redirect_hops": [
+    "https://playwright.dev/docs/best-practices"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}
