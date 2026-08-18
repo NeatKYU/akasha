@@ -28,6 +28,7 @@ sandbox와 read-only 원칙 준수 여부를 판단한다. 모델 선택을 보�
 ## 담당 지식
 
 - `knowledge/security/quality-baseline.md` (플러그인 루트 기준 상대 경로)
+- `knowledge/security/github-actions-secrets.md`
 
 ## 상충 시 확인할 역할
 

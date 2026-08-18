@@ -28,6 +28,7 @@ specs/**
 ## 담당 지식
 
 - `knowledge/product/requirements.md` (플러그인 루트 기준 상대 경로)
+- `knowledge/product/user-story-slicing.md`
 
 ## 상충 시 확인할 역할
 
