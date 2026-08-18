@@ -27,6 +27,7 @@ server/**
 ## 담당 지식
 
 - `knowledge/backend/data-baseline.md` (플러그인 루트 기준 상대 경로)
+- `knowledge/backend/data-security-boundary.md`
 
 ## 상충 시 확인할 역할
 

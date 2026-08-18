@@ -215,6 +215,83 @@ async function validateKnowledgeDocuments() {
       `akasha/knowledge/INDEX.md points outside approved knowledge documents: ${indexTarget}`
     );
   }
+
+  return documentPaths;
+}
+
+async function validateRoleKnowledgeRouting(documentPaths) {
+  const rolesRoot = resolveContained(ROOT, 'akasha', 'roles');
+  const knowledgeRoot = resolveContained(ROOT, 'akasha', 'knowledge');
+  const roleEntries = (await readdir(rolesRoot)).filter((entry) => entry.endsWith('.md')).sort();
+  assert(roleEntries.length > 0, 'akasha/roles must contain at least one role document');
+
+  const routedDocuments = new Map();
+  const roleNames = new Set();
+
+  for (const roleEntry of roleEntries) {
+    const roleName = roleEntry.slice(0, -3);
+    assert(/^[a-z0-9-]+$/.test(roleName), `Invalid role document name: akasha/roles/${roleEntry}`);
+    roleNames.add(roleName);
+    const roleText = await readFile(resolveContained(rolesRoot, roleEntry), 'utf8');
+
+    const section = roleText.match(/^## 담당 지식\s*$([\s\S]*?)(?=^## |\Z)/m);
+    assert(section, `Role document must declare a 담당 지식 section: akasha/roles/${roleEntry}`);
+
+    const references = [...section[1].matchAll(/`([^`]+\.md)`/g)].map((match) => match[1]);
+    assert(
+      references.length > 0,
+      `Role document must reference at least one knowledge document: akasha/roles/${roleEntry}`
+    );
+
+    const seenInRole = new Set();
+    for (const reference of references) {
+      assertRelativePath(reference, `role ${roleName} 담당 지식 reference`);
+      assert(
+        reference.startsWith('knowledge/'),
+        `Role knowledge reference must be plugin-root relative and start with knowledge/: ${reference} (akasha/roles/${roleEntry})`
+      );
+
+      const relativePath = normalizeRelativePath(
+        path.relative(knowledgeRoot, resolveContained(knowledgeRoot, reference.slice('knowledge/'.length)))
+      );
+      assert(
+        documentPaths.has(relativePath),
+        `Role knowledge reference does not resolve to an approved knowledge document: ${reference} (akasha/roles/${roleEntry})`
+      );
+      assert(
+        !seenInRole.has(relativePath),
+        `Duplicate 담당 지식 reference in akasha/roles/${roleEntry}: ${reference}`
+      );
+      seenInRole.add(relativePath);
+
+      const owners = routedDocuments.get(relativePath) ?? [];
+      owners.push(roleName);
+      routedDocuments.set(relativePath, owners);
+    }
+  }
+
+  const orphans = [...documentPaths].filter((documentPath) => !routedDocuments.has(documentPath)).sort();
+  if (orphans.length > 0) {
+    const details = orphans.map((documentPath) => {
+      const directory = documentPath.split('/')[0];
+      const target = roleNames.has(directory)
+        ? `akasha/roles/${directory}.md`
+        : 'the owning role document';
+      return [
+        `  - akasha/knowledge/${documentPath}`,
+        `      add to ${target} under "## 담당 지식":`,
+        `        - \`knowledge/${documentPath}\``
+      ].join('\n');
+    });
+    assert(
+      false,
+      [
+        `Knowledge documents are not routed to any role (${orphans.length}):`,
+        ...details,
+        '  The directory name is only a suggestion; wire each document to whichever role owns the judgment.'
+      ].join('\n')
+    );
+  }
 }
 
 async function validateAkashaSkillContract() {
@@ -439,7 +516,7 @@ function normalizeRelativePath(value) {
 const sources = await loadSources();
 await validateReleaseVersion();
 await validateManifest();
-await validateKnowledgeDocuments();
+await validateRoleKnowledgeRouting(await validateKnowledgeDocuments());
 await validateAkashaSkillContract();
 await validateReports(new Map(sources.map((source) => [source.id, source])));
 await validateRepoSecretScan();

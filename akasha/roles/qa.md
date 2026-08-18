@@ -28,6 +28,7 @@ cypress/**
 ## 담당 지식
 
 - `knowledge/qa/e2e-test-baseline.md` (플러그인 루트 기준 상대 경로)
+- `knowledge/qa/accessibility-regression-testing.md`
 
 ## 상충 시 확인할 역할
 
