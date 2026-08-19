@@ -42,6 +42,8 @@ cypress/**
 - `knowledge/qa/parallel-execution.md` — 파일·테스트 단위 병렬 기본값, 모듈 수준 상태 누수, serial 모드
 - `knowledge/qa/ci-execution.md` — CI 워커 수, 브라우저 설치, 산출물 보관, 샤딩 대 병렬도
 - `knowledge/qa/accessibility-testing-scope.md` — 자동 검사가 잡는 범위와 못 잡는 범위, 수동 검사 필수
+- `knowledge/qa/test-sharding.md` — 샤드 분배 단위, fullyParallel 과의 관계, 리포트 병합
+- `knowledge/qa/component-test-scope.md` — E2E와 컴포넌트 테스트 경계, story 분리, 관찰 가능한 DOM 검증
 
 ## 상충 시 확인할 역할
 

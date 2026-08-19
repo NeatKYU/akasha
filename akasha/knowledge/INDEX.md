@@ -6,6 +6,7 @@
 
 ## product
 
+- [사용자 조사 참여와 공유 기준](product/research-participation.md)
 - [서비스 설계 원칙](product/service-design-principles.md)
 - [사용자 조사 근거 기준](product/user-research-evidence.md)
 - [사용자 니즈 정의 기준](product/user-needs.md)
@@ -37,6 +38,8 @@
 
 ## backend
 
+- [Prisma Client 수명과 운영 기준](backend/prisma-client-lifecycle.md)
+- [use cache 제약과 캐시 키 기준](backend/use-cache-constraints.md)
 - [서버 fetch 캐시 의미 기준](backend/fetch-cache-semantics.md)
 - [웹 서비스 입출력 방어 기준](backend/web-service-hardening.md)
 - [서비스 간 신뢰 경계 기준](backend/service-to-service-trust.md)
@@ -48,6 +51,7 @@
 
 ## data
 
+- [통계 갱신 운영 기준](data/statistics-maintenance.md)
 - [플래너 통계 신뢰성 기준](data/planner-statistics.md)
 - [플래너 설정 변경 기준](data/planner-configuration.md)
 - [관계 로딩과 과다 조회 기준](data/relation-loading.md)
@@ -58,6 +62,7 @@
 
 ## security
 
+- [로그 이벤트 어휘 기준](security/logging-vocabulary.md)
 - [Actions 비밀값 취급과 스크립트 주입 방지](security/actions-secret-handling.md)
 - [보안 로깅 기준](security/security-logging.md)
 - [장기 자격증명 대신 OIDC 사용 기준](security/oidc-credentials.md)
@@ -68,6 +73,8 @@
 
 ## qa
 
+- [테스트 샤딩 기준](qa/test-sharding.md)
+- [컴포넌트 테스트 범위 기준](qa/component-test-scope.md)
 - [테스트 격리 메커니즘 기준](qa/test-isolation.md)
 - [병렬 실행과 순서 의존 기준](qa/parallel-execution.md)
 - [CI 테스트 실행 구성 기준](qa/ci-execution.md)
@@ -84,12 +91,15 @@
 
 ## marketing
 
+- [페이지 경험 신호 기준](marketing/page-experience-signals.md)
+- [검색 노출 3단계 진단 기준](marketing/search-pipeline-stages.md)
 - [성능 지표 임계값 기준](marketing/core-web-vitals.md)
 - [검색 발견 가능성 기준](marketing/search-discoverability.md)
 - [Next.js metadata와 공유 미리보기 구현 기준](marketing/next-metadata-implementation.md)
 
 ## ai
 
+- [모델 선택과 이행 판단 기준](ai/model-selection.md)
 - [구조화 출력 계약 기준](ai/structured-output-contract.md)
 - [평가 설계 기준](ai/eval-design.md)
 - [프롬프트 접두사 캐싱 기준](ai/prompt-prefix-caching.md)

@@ -2,6 +2,17 @@
 
 이 프로젝트는 [Semantic Versioning](https://semver.org/)을 따릅니다.
 
+## [0.14.0] - 2026-08-19
+
+### 추가
+
+- 지식 문서 10개. 62개 → 72개
+  - qa 2 / data 1 / backend 2 / marketing 2 / product 1 / security 1 / ai 1
+
+### 제외
+
+- `google-search-essentials`, `govuk-ds-patterns` — 다른 페이지로 링크만 하는 허브라 판정 기준을 뽑을 수 없다
+
 ## [0.13.0] - 2026-08-19
 
 ### 추가

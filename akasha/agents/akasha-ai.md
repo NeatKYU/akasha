@@ -42,6 +42,7 @@ prompts/**
 - `knowledge/ai/prompt-prefix-caching.md` — 고정·가변 내용 배치, 접두사를 깨뜨리는 요소, 캐시 쓰기 비용
 - `knowledge/ai/structured-output-contract.md` — 반환 형식을 스키마로 강제, 필수 필드와 거절 응답 처리, 미지원 스키마 기능
 - `knowledge/ai/eval-design.md` — 성공 기준과 임계값, 경계·적대적 사례, 채점자 선택과 LLM 채점 편향
+- `knowledge/ai/model-selection.md` — 모델·추론 수준 변경의 비교 근거, 한 단계 낮은 설정 시험, 품질과 비용 동시 측정
 
 ## 상충 시 확인할 역할
 

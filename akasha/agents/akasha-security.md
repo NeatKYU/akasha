@@ -42,6 +42,7 @@ sandbox와 read-only 원칙 준수 여부를 판단한다. 모델 선택을 보�
 - `knowledge/security/security-logging.md` — 반드시 남길 이벤트와 절대 남기지 않을 값, 로그 주입 방지
 - `knowledge/security/oidc-credentials.md` — 장기 secret 대신 OIDC, 신뢰 조건 범위 좁히기
 - `knowledge/security/actions-secret-handling.md` — 파생 비밀값 등록, 컨텍스트 값 보간으로 인한 스크립트 주입, 액션 SHA 고정
+- `knowledge/security/logging-vocabulary.md` — 이벤트 명명 형식, 범주 구분, 필수 필드와 시각 형식
 
 ## 상충 시 확인할 역할
 

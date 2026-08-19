@@ -39,6 +39,7 @@ specs/**
 - `knowledge/product/user-story-slicing.md` — 스토리를 사용자 관점으로 쓰기, 큰 스토리의 분할 단위, 수용 조건 작성법
 - `knowledge/product/user-research-evidence.md` — 요구사항의 조사 근거, 가정과 관찰의 구분, 기존 데이터 활용
 - `knowledge/product/service-design-principles.md` — 사용자 니즈 출발, 적게 만들기, 데이터 기반 결정, 접근성 기본 포함
+- `knowledge/product/research-participation.md` — 조사 참여 범위와 배제 여부, 팀 공유와 분석 참여
 
 ## 상충 시 확인할 역할
 

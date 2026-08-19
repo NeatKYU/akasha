@@ -39,6 +39,7 @@ prisma/**
 - `knowledge/data/planner-configuration.md` — enable_* 는 진단 수단, 비용 상수 변경의 위험, 통계 개선 우선
 - `knowledge/data/relation-loading.md` — select와 include 선택, fluent API의 쿼리 증가, 과다 조회
 - `knowledge/data/connection-pool-limits.md` — 풀 크기와 데이터베이스 한계, 서버리스 인스턴스별 풀, 타임아웃 기본값
+- `knowledge/data/statistics-maintenance.md` — ANALYZE 실행 시점, autovacuum이 덮지 않는 파티션, 통계 목표 조정
 
 ## 상충 시 확인할 역할
 

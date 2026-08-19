@@ -42,6 +42,8 @@ server/**
 - `knowledge/backend/web-service-hardening.md` — TLS, 스키마 검증, 메시지 크기·자원 소모 상한, 출력 인코딩
 - `knowledge/backend/service-to-service-trust.md` — 내부망 신뢰 전제, 외부 토큰 재사용 금지, 서비스 간 인증
 - `knowledge/backend/fetch-cache-semantics.md` — 서버 fetch의 캐시 옵션 의미, 개인화 응답 캐싱 위험, 캐시 매칭 기준
+- `knowledge/backend/prisma-client-lifecycle.md` — 클라이언트 단일 인스턴스, 서버리스 초기화 위치, 커서 페이지네이션, 운영 마이그레이션
+- `knowledge/backend/use-cache-constraints.md` — 캐시 범위에서 금지되는 요청 API, 클로저가 캐시 키에 들어가는 규칙, 직렬화 제약
 
 ## 상충 시 확인할 역할
 
