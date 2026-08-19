@@ -39,6 +39,10 @@ components/**
 - `knowledge/design/wcag-conformance.md` — 적합성 주장의 수준과 범위, 페이지·절차 단위 적합, AA 성공 기준
 - `knowledge/design/design-system-responsibility.md` — 디자인 시스템 채택과 서비스 접근성 책임의 경계, 컴포넌트 변형 시 재검증
 - `knowledge/design/component-extension.md` — 컴포넌트 확장 시점 판단 — secondary 사례이며 위반 판정의 단독 근거로 쓰지 않는다
+- `knowledge/design/alert-dialog-pattern.md` — 파괴적 작업 확인창의 alertdialog 역할, 경고 메시지 연결
+- `knowledge/design/apg-normative-status.md` — 규범 표준과 참고 자료 구분, 위반 판정에 인용할 근거
+- `knowledge/design/native-dialog-technique.md` — 네이티브 dialog와 showModal, 브라우저가 주는 것과 저자 책임
+- `knowledge/design/component-contribution.md` — 새 컴포넌트 제안의 조사 근거와 단계, 기존 구현 확인
 
 ## 상충 시 확인할 역할
 

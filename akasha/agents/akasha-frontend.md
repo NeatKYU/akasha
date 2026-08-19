@@ -38,6 +38,10 @@ hooks/**
 - `knowledge/frontend/useeffect-contract.md` — 의존성 배열에 넣을 값, 정리 함수 계약, 객체·함수 의존성, Strict Mode 이중 실행
 - `knowledge/frontend/server-client-boundary.md` — `'use client'` 배치 위치, Server→Client props 직렬화, 번들·노출 범위
 - `knowledge/frontend/next-caching-boundary.md` — 캐시 선언과 수명, 요청 시점 API와 Suspense 경계, 프리렌더 범위
+- `knowledge/frontend/memoized-values.md` — useMemo가 값어치 있는 세 조건, 비싼 계산 측정, 의존성 객체 함정
+- `knowledge/frontend/component-memoization.md` — memo가 무효가 되는 조건, props 참조 안정성, 커스텀 비교 함정
+- `knowledge/frontend/render-profiling.md` — 렌더 성능 주장의 측정 근거, actualDuration과 baseDuration 비교
+- `knowledge/frontend/error-boundary-placement.md` — 예상 오류와 미포착 예외 구분, error.js 배치, 이벤트 핸들러 오류
 
 ## 상충 시 확인할 역할
 

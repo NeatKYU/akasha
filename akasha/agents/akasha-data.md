@@ -35,6 +35,10 @@ prisma/**
 - `knowledge/data/postgres-execution-plan.md` — EXPLAIN 실행 계획 판독, scan·join·sort·row estimate, 인덱스 후보 검증
 - `knowledge/data/prisma-query-patterns.md` — Prisma 반복 호출과 N+1, 관계 로딩 비용, 배치 처리 판단
 - `knowledge/data/index-usage-verification.md` — ANALYZE 선행, 플래너 설정 강제 비교, 운영 분포 데이터 요구
+- `knowledge/data/planner-statistics.md` — 추정 행 수 오차의 원인, 통계 최신성, 상관 컬럼과 확장 통계
+- `knowledge/data/planner-configuration.md` — enable_* 는 진단 수단, 비용 상수 변경의 위험, 통계 개선 우선
+- `knowledge/data/relation-loading.md` — select와 include 선택, fluent API의 쿼리 증가, 과다 조회
+- `knowledge/data/connection-pool-limits.md` — 풀 크기와 데이터베이스 한계, 서버리스 인스턴스별 풀, 타임아웃 기본값
 
 ## 상충 시 확인할 역할
 
