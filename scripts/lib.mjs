@@ -1,7 +1,6 @@
 import { createHash } from 'node:crypto';
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
-import Ajv2020 from 'ajv/dist/2020.js';
 
 export const ROOT = path.resolve(new URL('..', import.meta.url).pathname);
 // 최신 문서 페이지는 1MB를 흔히 넘는다. 여전히 상한이지만 정상 문서를 막지 않는 크기로 둔다.

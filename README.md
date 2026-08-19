@@ -189,6 +189,8 @@ kb-* git tag                   소비 프로젝트가 고정하는 불변 버전
 ```bash
 npm run validate
 npm run check:sources
+npm run check:version
+npm run pin:source -- <출처 id> <URL>
 npm run eval:model-routing:test
 npm run eval:model-routing:smoke -- --output /tmp/akasha-model-smoke
 npm run eval:model-routing:screen -- --output /tmp/akasha-model-screen
@@ -206,9 +208,13 @@ npm run version:set -- 0.2.1
 
 플러그인 릴리스는 [Semantic Versioning](https://semver.org/)을 사용합니다.
 
-- **MAJOR**: 명령, 반환 계약, 설치 방식의 호환되지 않는 변경
-- **MINOR**: 기존 사용법과 호환되는 역할·라우팅·오케스트레이션 기능 추가
-- **PATCH**: 버그 수정, 문서 수정, 승인 지식 스냅샷 갱신
+배포되는 것은 `akasha/` 뿐이므로 그 안의 변화만 버전을 정합니다. 등급 기준과 판정 절차는
+[docs/versioning.md](docs/versioning.md)에 있고, `npm run check:version`이 대조합니다.
+
+- **MAJOR**: 역할 삭제·이름 변경, 스킬 명령 변경, 반환 계약 필드 제거, 설치 방식 변경
+- **MINOR**: 역할 추가, 지식 문서 추가·삭제, 오케스트레이션 기능 추가
+- **PATCH**: 지식·역할 문서 내용 수정, 검토 스냅샷 갱신
+- **없음**: `scripts/`, `.github/`, `docs/` 등 배포되지 않는 부분만 변경
 
 `package.json`을 기준 버전으로 삼고 Claude Code와 Codex manifest 및 lockfile을 같은 버전으로
 유지합니다. 직접 여러 파일을 수정하지 말고 `npm run version:set -- <version>`을 실행한 뒤

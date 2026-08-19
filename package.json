@@ -1,10 +1,11 @@
 {
   "name": "akasha",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "private": true,
   "type": "module",
   "scripts": {
     "validate": "node scripts/validate.mjs --fixtures",
+    "check:version": "node scripts/check-version.mjs",
     "check:sources": "node scripts/check-sources.mjs",
     "pin:source": "node scripts/pin-source.mjs",
     "eval:model-routing:test": "node scripts/model-routing-eval.test.mjs",

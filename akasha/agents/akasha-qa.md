@@ -37,6 +37,7 @@ cypress/**
 
 - `knowledge/qa/e2e-test-baseline.md` — 사용자 관점 locator, 테스트 격리와 flaky 예방, web-first assertion, trace 근거
 - `knowledge/qa/accessibility-regression-testing.md` — 접근성 자동 검사의 smoke 범위, 키보드 이동·focus 순서·대체 텍스트 회귀 확인
+- `knowledge/qa/test-fixtures.md` — fixture와 before/after 훅 선택, test·worker 스코프, 자동 fixture, fixture timeout
 
 ## 상충 시 확인할 역할
 

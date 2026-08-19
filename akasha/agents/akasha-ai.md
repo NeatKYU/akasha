@@ -38,6 +38,7 @@ prompts/**
 경로는 packet이 전달한 `<플러그인 루트>` 절대 경로 기준이다. **이번 판정에 해당하는 문서만 골라 읽는다.**
 
 - `knowledge/ai/codex-agent-operations.md` — 프로젝트 지시 파일의 계층과 우선순위, 하위 에이전트의 역할·범위·검증 책임, 권한·샌드박스·승인 경계
+- `knowledge/ai/agent-evaluation.md` — 실행 기록(trace) 단위 평가, 도구 선택·인계 시점 채점, 형식화 시점 판단
 
 ## 상충 시 확인할 역할
 

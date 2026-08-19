@@ -16,6 +16,18 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+
+// docs/versioning.md 의 등급 규칙을 검사한다. 배포 대상(akasha/)의 변화 종류가
+// 올린 SemVer 등급과 맞는지 본다. base ref가 없는 환경에서는 건너뛴다.
+async function validateVersionLevel() {
+  const { execFileSync } = await import('node:child_process');
+  try {
+    execFileSync('node', ['scripts/check-version.mjs'], { cwd: ROOT, stdio: 'inherit' });
+  } catch (error) {
+    assert(false, 'Version level does not match the change class. See docs/versioning.md.');
+  }
+}
+
 async function validateReleaseVersion() {
   const packageJson = JSON.parse(await readFile(resolveContained(ROOT, 'package.json'), 'utf8'));
   const packageLock = JSON.parse(await readFile(resolveContained(ROOT, 'package-lock.json'), 'utf8'));
@@ -133,8 +145,10 @@ async function validateRoleKnowledgeRouting(documentPaths) {
     const roleText = await readFile(resolveContained(rolesRoot, roleEntry), 'utf8');
     roleTexts.set(roleName, { file: roleEntry, text: roleText });
 
-    const section = roleText.match(/^## 담당 지식\s*$([\s\S]*?)(?=^## |\Z)/m);
-    assert(section, `Role document must declare a 담당 지식 section: akasha/agents/${roleEntry}`);
+    // JS 정규식에 \Z 는 없다. 리터럴 'Z'로 해석되어 본문 중간에서 절이 잘린다.
+    const sectionBody = sectionText(roleText, '담당 지식');
+    assert(sectionBody !== null, `Role document must declare a 담당 지식 section: akasha/agents/${roleEntry}`);
+    const section = [null, sectionBody];
 
     // 골라 읽기가 성립하려면 목록의 각 항목이 "언제 쓰는 문서인지"를 스스로 말해야 한다.
     // 설명 없는 항목은 자식이 선택 근거 없이 추측하게 만든다.
@@ -550,6 +564,7 @@ function normalizeRelativePath(value) {
 
 await validateKnowledgeSources();
 await validateReleaseVersion();
+await validateVersionLevel();
 const knowledgeDocuments = await validateKnowledgeDocuments();
 await validateAgentContract(await validateRoleKnowledgeRouting(knowledgeDocuments));
 await validateAkashaSkillContract();

@@ -2,6 +2,19 @@
 
 이 프로젝트는 [Semantic Versioning](https://semver.org/)을 따릅니다.
 
+## [0.10.0] - 2026-08-19
+
+### 추가
+
+- 지식 문서 4개: 테스트 fixture 설계(qa), 에이전트 워크플로 평가(ai), 인덱스 사용 검증(data), 인증 처리(security). 문서 27개 → 31개
+- **버전 규칙 문서** [`docs/versioning.md`](docs/versioning.md) — 배포 대상은 `akasha/` 뿐이며 그 변화 종류가 SemVer 등급을 정한다
+- `npm run check:version` — `akasha/` 변경을 분류해 필요한 등급과 실제 올린 등급을 대조한다. `npm run validate`가 이 검사를 포함한다
+
+### 수정
+
+- `scripts/lib.mjs`가 0.8.0에서 제거한 `ajv` 를 계속 import하고 있었다. 로컬 `node_modules`에 남아 있어 드러나지 않았고, 새로 clone한 환경에서는 모든 스크립트가 실패했다
+- `validateRoleKnowledgeRouting` 의 절 추출 정규식이 `\Z` 를 쓰고 있었다. JS 정규식에 `\Z` 는 없고 리터럴 `Z` 로 해석되어, 담당 지식 힌트에 대문자 Z가 나오면(`ANALYZE`) 그 지점에서 절이 잘렸다
+
 ## [0.9.0] - 2026-08-19
 
 ### 변경

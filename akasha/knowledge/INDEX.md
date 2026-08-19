@@ -33,17 +33,20 @@
 
 ## data
 
+- [인덱스 사용 검증 절차](data/index-usage-verification.md)
 - [PostgreSQL 실행 계획 판독 기준](data/postgres-execution-plan.md)
 - [Prisma 쿼리 패턴과 N+1 진단 기준](data/prisma-query-patterns.md)
 
 ## security
 
+- [인증 처리 기준](security/authentication-baseline.md)
 - [인가 검사 기준](security/authorization-checks.md)
 - [입력 검증 기준](security/input-validation.md)
 - [GitHub Actions 비밀값 사용 기준](security/github-actions-secrets.md)
 
 ## qa
 
+- [테스트 fixture 설계 기준](qa/test-fixtures.md)
 - [품질보증 E2E 테스트 기준](qa/e2e-test-baseline.md)
 - [접근성 회귀 테스트 기준](qa/accessibility-regression-testing.md)
 
@@ -59,4 +62,5 @@
 
 ## ai
 
+- [에이전트 워크플로 평가 기준](ai/agent-evaluation.md)
 - [Codex 에이전트 운영 기준](ai/codex-agent-operations.md)

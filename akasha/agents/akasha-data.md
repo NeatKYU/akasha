@@ -34,6 +34,7 @@ prisma/**
 
 - `knowledge/data/postgres-execution-plan.md` — EXPLAIN 실행 계획 판독, scan·join·sort·row estimate, 인덱스 후보 검증
 - `knowledge/data/prisma-query-patterns.md` — Prisma 반복 호출과 N+1, 관계 로딩 비용, 배치 처리 판단
+- `knowledge/data/index-usage-verification.md` — ANALYZE 선행, 플래너 설정 강제 비교, 운영 분포 데이터 요구
 
 ## 상충 시 확인할 역할
 
