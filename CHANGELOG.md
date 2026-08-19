@@ -2,6 +2,26 @@
 
 이 프로젝트는 [Semantic Versioning](https://semver.org/)을 따릅니다.
 
+## [0.5.0] - 2026-08-19
+
+### 추가
+
+- Claude Code 서브에이전트 호출 계약 (`subagent_type: akasha-<역할>`)과 정의 없는 환경의 fallback 경로
+- 역할 문서 frontmatter, 비-읽기 전용 도구, 역할별 model 고정, 공용 절 분기를 차단하는 `validate` 검사
+
+### 변경
+
+- `akasha/roles/` → `akasha/agents/akasha-<역할>.md`. Claude Code가 서브에이전트로 직접 읽는 위치로 옮기고 frontmatter를 추가해, 역할 지시문 한 벌이 양쪽 런타임을 겸한다
+- 자식 실행 계약(`## 실행 예산`·`## 반환 계약`·`## 도구 경계`)을 역할 문서로 옮겨 packet에서 역할 수만큼 반복되던 전달을 제거
+- 부모는 팀 구성 시 문서 전문 대신 `## 담당`·`## 호출 시점`·`## 라우팅` 블록만 범위 지정해 읽는다
+- 읽기 전용 자식에게는 부모가 역할별 scoped diff를 파일로 넘기고 자식은 셸을 쓰지 않는다
+
+### 보안
+
+- 역할 서브에이전트의 읽기 전용을 지시문이 아니라 `tools: Read, Grep, Glob` 도구 경계로 강제
+- `model: inherit`을 검사로 고정해 검증되지 않은 역할별 tiering 유입을 차단
+- 파일명 `akasha-` prefix를 강제해 소비 프로젝트의 동명 에이전트와 충돌하지 않게 함
+
 ## [0.4.0] - 2026-08-14
 
 ### 추가

@@ -97,7 +97,7 @@ codex plugin list --json
 $akasha 컴포넌트 상태 설계 기준이 뭐야                (Codex)
 ```
 
-스킬이 요청을 분석해 `akasha/roles/*.md`에서 필요한 역할을 고릅니다. 요청 내용을 각 역할의 담당·호출 시점과
+스킬이 요청을 분석해 `akasha/agents/*.md`에서 필요한 역할을 고릅니다. 요청 내용을 각 역할의 담당·호출 시점과
 대조하고, 코드 검토가 포함되면 변경 파일을 라우팅 글롭과 매칭합니다. 걸린 역할마다 자문 서브에이전트를
 병렬로 띄워 결과를 종합하며, 역할 간 상충 지점은 별도로 보고합니다. 출처 조회 같은 단순 요청은 팀 없이 바로 처리합니다.
 
@@ -106,8 +106,16 @@ $akasha 컴포넌트 상태 설계 기준이 뭐야                (Codex)
 
 **역할 10개** — product · design · frontend · backend · data · security · qa · platform · marketing · ai
 
-역할을 추가하려면 `akasha/roles/<역할>.md` 하나만 추가하면 됩니다. 스킬이 실행 시점에 역할 문서를 읽으므로
-별도 등록 절차가 없습니다.
+역할을 추가하려면 `akasha/agents/akasha-<역할>.md` **파일 하나만** 추가하면 됩니다. 별도 등록 절차도, 생성
+단계도 없습니다.
+
+이 파일 한 벌이 두 가지 역할을 겸합니다. Claude Code는 `agents/`를 서브에이전트 디렉터리로 직접 읽어
+`akasha-<역할>`을 등록하고, Codex는 스킬이 같은 파일을 역할 지시문으로 전달합니다. 복제본이 없으므로
+두 런타임의 판정 기준이 갈라질 수 없습니다.
+
+frontmatter가 `tools: Read, Grep, Glob`으로 고정되어 있어 읽기 전용은 지시문이 아니라 **도구 경계**로
+강제됩니다 — 자문 에이전트에게는 파일 수정·커밋·셸 실행·네트워크 접근 수단 자체가 없습니다. `model:
+inherit`이라 역할 이름만으로 모델이 바뀌지도 않습니다. `npm run validate`가 이 둘을 검사합니다.
 
 ## 왜 플러그인인가
 
@@ -169,7 +177,7 @@ akasha/                        플러그인 루트 (배포 대상)
   .claude-plugin/plugin.json   Claude Code 매니페스트
   .codex-plugin/plugin.json    Codex 매니페스트
   skills/akasha/SKILL.md       단일 진입점 오케스트레이터 (양쪽 공용)
-  roles/                       역할별 자문 지시문 (라우팅 글롭, 담당 지식, 상충 역할)
+  agents/akasha-<역할>.md      역할 지시문 겸 Claude Code 서브에이전트 (읽기 전용, 한 벌)
   knowledge/                   사람이 검토한 지식 요약 (INDEX.md 포함)
 
 catalog/roles/*/sources.json   허용된 출처와 사용 목적       (배포 안 함)
@@ -214,6 +222,12 @@ CHANGELOG 항목, 저장소에 커밋된 `+codex.<timestamp>` build metadata를 
 승격 전에 SemVer와 CHANGELOG를 확정하고, owner-gated workflow가 해당 `kb-*` 태그에 marketplace를
 핀 고정합니다. 저장소에는 `0.2.0` 같은 안정 버전만 커밋합니다. 로컬 개발에서 캐시를 갱신하려고
 만든 `0.2.0+codex.<timestamp>`는 설치 확인 후 되돌리고 커밋하지 않습니다.
+
+### 변경 기록
+
+커밋마다 이전과 무엇이 달라졌는지와 그 변화가 토큰·강제 수단을 얼마나 움직였는지를
+[docs/changes/](docs/changes/INDEX.md)에 누적합니다. `git commit` 직후 훅이 `explain-diff-html`로
+설명을 만들고 기록을 남기도록 요구합니다 — [scripts/hooks/README.md](scripts/hooks/README.md).
 
 | workflow | 하는 일 |
 | --- | --- |

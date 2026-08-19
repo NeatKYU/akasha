@@ -220,27 +220,33 @@ async function validateKnowledgeDocuments() {
 }
 
 async function validateRoleKnowledgeRouting(documentPaths) {
-  const rolesRoot = resolveContained(ROOT, 'akasha', 'roles');
+  const rolesRoot = resolveContained(ROOT, 'akasha', 'agents');
   const knowledgeRoot = resolveContained(ROOT, 'akasha', 'knowledge');
   const roleEntries = (await readdir(rolesRoot)).filter((entry) => entry.endsWith('.md')).sort();
-  assert(roleEntries.length > 0, 'akasha/roles must contain at least one role document');
+  assert(roleEntries.length > 0, 'akasha/agents must contain at least one role document');
 
   const routedDocuments = new Map();
   const roleNames = new Set();
+  const roleTexts = new Map();
 
   for (const roleEntry of roleEntries) {
-    const roleName = roleEntry.slice(0, -3);
-    assert(/^[a-z0-9-]+$/.test(roleName), `Invalid role document name: akasha/roles/${roleEntry}`);
+    assert(
+      roleEntry.startsWith('akasha-'),
+      `Role agent filename must be prefixed to avoid colliding with project agents: akasha/agents/${roleEntry}`
+    );
+    const roleName = roleEntry.slice('akasha-'.length, -3);
+    assert(/^[a-z0-9-]+$/.test(roleName), `Invalid role document name: akasha/agents/${roleEntry}`);
     roleNames.add(roleName);
     const roleText = await readFile(resolveContained(rolesRoot, roleEntry), 'utf8');
+    roleTexts.set(roleName, { file: roleEntry, text: roleText });
 
     const section = roleText.match(/^## 담당 지식\s*$([\s\S]*?)(?=^## |\Z)/m);
-    assert(section, `Role document must declare a 담당 지식 section: akasha/roles/${roleEntry}`);
+    assert(section, `Role document must declare a 담당 지식 section: akasha/agents/${roleEntry}`);
 
     const references = [...section[1].matchAll(/`([^`]+\.md)`/g)].map((match) => match[1]);
     assert(
       references.length > 0,
-      `Role document must reference at least one knowledge document: akasha/roles/${roleEntry}`
+      `Role document must reference at least one knowledge document: akasha/agents/${roleEntry}`
     );
 
     const seenInRole = new Set();
@@ -248,7 +254,7 @@ async function validateRoleKnowledgeRouting(documentPaths) {
       assertRelativePath(reference, `role ${roleName} 담당 지식 reference`);
       assert(
         reference.startsWith('knowledge/'),
-        `Role knowledge reference must be plugin-root relative and start with knowledge/: ${reference} (akasha/roles/${roleEntry})`
+        `Role knowledge reference must be plugin-root relative and start with knowledge/: ${reference} (akasha/agents/${roleEntry})`
       );
 
       const relativePath = normalizeRelativePath(
@@ -256,11 +262,11 @@ async function validateRoleKnowledgeRouting(documentPaths) {
       );
       assert(
         documentPaths.has(relativePath),
-        `Role knowledge reference does not resolve to an approved knowledge document: ${reference} (akasha/roles/${roleEntry})`
+        `Role knowledge reference does not resolve to an approved knowledge document: ${reference} (akasha/agents/${roleEntry})`
       );
       assert(
         !seenInRole.has(relativePath),
-        `Duplicate 담당 지식 reference in akasha/roles/${roleEntry}: ${reference}`
+        `Duplicate 담당 지식 reference in akasha/agents/${roleEntry}: ${reference}`
       );
       seenInRole.add(relativePath);
 
@@ -275,7 +281,7 @@ async function validateRoleKnowledgeRouting(documentPaths) {
     const details = orphans.map((documentPath) => {
       const directory = documentPath.split('/')[0];
       const target = roleNames.has(directory)
-        ? `akasha/roles/${directory}.md`
+        ? `akasha/agents/akasha-${directory}.md`
         : 'the owning role document';
       return [
         `  - akasha/knowledge/${documentPath}`,
@@ -291,6 +297,84 @@ async function validateRoleKnowledgeRouting(documentPaths) {
         '  The directory name is only a suggestion; wire each document to whichever role owns the judgment.'
       ].join('\n')
     );
+  }
+
+  return roleTexts;
+}
+
+// 자식에게 절대 주어져서는 안 되는 도구. 역할 문서가 그대로 Claude Code 서브에이전트가
+// 되므로, 읽기 전용 경계는 이 검사로만 보장된다.
+const FORBIDDEN_AGENT_TOOLS = [
+  'Bash', 'Write', 'Edit', 'NotebookEdit', 'Task', 'Agent', 'WebFetch', 'WebSearch'
+];
+
+// 자식 실행에만 쓰이는 절. 모든 역할에서 완전히 같아야 Codex와 Claude Code의 판정
+// 규칙이 갈라지지 않는다.
+const SHARED_CHILD_SECTIONS = ['규칙', '실행 예산', '반환 계약', '도구 경계'];
+
+function parseFrontmatter(text, label) {
+  const match = text.match(/^---\n([\s\S]*?)\n---\n/);
+  assert(match, `${label} must start with YAML frontmatter so Claude Code can load it as an agent`);
+  return new Map(
+    match[1]
+      .split('\n')
+      .map((line) => line.match(/^([a-z]+): (.*)$/))
+      .filter(Boolean)
+      .map((entry) => [entry[1], entry[2].trim()])
+  );
+}
+
+function sectionText(text, name) {
+  const heading = `\n## ${name}\n`;
+  const start = text.indexOf(heading);
+  if (start === -1) return null;
+  const rest = text.slice(start + heading.length);
+  const next = rest.search(/^## /m);
+  return (next === -1 ? rest : rest.slice(0, next)).trim();
+}
+
+async function validateAgentContract(roleTexts) {
+  let baseline = null;
+
+  for (const [roleName, { file, text }] of roleTexts) {
+    const label = `akasha/agents/${file}`;
+    const fields = parseFrontmatter(text, label);
+
+    assert(
+      fields.get('name') === file.slice(0, -3),
+      `${label} name field must match its filename — Claude Code derives the subagent type from the filename`
+    );
+    assert(fields.get('description'), `${label} must declare a description`);
+
+    const tools = (fields.get('tools') ?? '').split(',').map((tool) => tool.trim()).filter(Boolean);
+    assert(tools.length > 0, `${label} must declare an explicit read-only tools allowlist`);
+    for (const tool of tools) {
+      assert(
+        !FORBIDDEN_AGENT_TOOLS.includes(tool),
+        `${label} grants a non-read-only tool: ${tool}`
+      );
+    }
+
+    // 모델 상속은 검증되지 않은 역할별 tiering을 막는 계약이다.
+    assert(
+      fields.get('model') === 'inherit',
+      `${label} must inherit the parent model until routing passes the promotion gate`
+    );
+
+    const shared = SHARED_CHILD_SECTIONS.map((name) => {
+      const body = sectionText(text, name);
+      assert(body, `${label} must declare a "## ${name}" section`);
+      return `## ${name}\n${body}`;
+    }).join('\n\n');
+
+    if (baseline === null) baseline = { roleName, shared };
+    else {
+      assert(
+        shared === baseline.shared,
+        `Shared child sections diverge between akasha/agents/akasha-${baseline.roleName}.md and ${label}. ` +
+          `Every role must carry byte-identical ${SHARED_CHILD_SECTIONS.map((n) => `"## ${n}"`).join(', ')} sections.`
+      );
+    }
   }
 }
 
@@ -319,7 +403,7 @@ async function validateAkashaSkillContract() {
     'Akasha skill must define a bounded role context packet'
   );
   assert(
-    skillText.includes('diff 본문은 메시지에 넣지 않고'),
+    skillText.includes('diff 본문은 메시지에 넣지 않는다'),
     'Akasha skill must not inline full diffs in subagent messages'
   );
   assert(
@@ -389,6 +473,22 @@ async function validateAkashaSkillContract() {
   assert(
     skillText.includes('`needs_parent_expansion`에 `reason`, `missing_scope`, 최대 3개의'),
     'Akasha skill must provide a bounded parent expansion escape hatch'
+  );
+  assert(
+    skillText.includes('`subagent_type`에 `akasha-<역할>`'),
+    'Akasha skill must bind Claude Code subagents to the role documents by filename'
+  );
+  assert(
+    skillText.includes('`tools: Read, Grep, Glob`으로 고정'),
+    'Akasha skill must document the read-only tool boundary of role subagents'
+  );
+  assert(
+    skillText.includes('도구 제한이 적용되지 않았다는'),
+    'Akasha skill must report when the read-only agent definitions are unavailable'
+  );
+  assert(
+    skillText.includes('읽기 전용 도구만 가진 서브에이전트에는 부모가 같은 범위의 scoped diff를'),
+    'Akasha skill must supply scoped diffs to shell-less subagents'
   );
 }
 
@@ -516,7 +616,7 @@ function normalizeRelativePath(value) {
 const sources = await loadSources();
 await validateReleaseVersion();
 await validateManifest();
-await validateRoleKnowledgeRouting(await validateKnowledgeDocuments());
+await validateAgentContract(await validateRoleKnowledgeRouting(await validateKnowledgeDocuments()));
 await validateAkashaSkillContract();
 await validateReports(new Map(sources.map((source) => [source.id, source])));
 await validateRepoSecretScan();
