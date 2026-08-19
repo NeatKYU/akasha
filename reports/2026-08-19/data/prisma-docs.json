@@ -1,0 +1,35 @@
+{
+  "source_id": "prisma-docs",
+  "role": "data",
+  "source_url": "https://www.prisma.io/docs/orm",
+  "final_url": "https://www.prisma.io/docs/orm",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T18:53:59.320Z",
+  "content_sha256": "c1e0d5963db8692b9a8d3b8be2774379d59580db45e780e9862a56803227a419",
+  "metadata_sha256": "3bfa4a11d63026c511243de166a7c4a187d29d0556fb62cce462d3d09ef2c380",
+  "http_status": 200,
+  "title": "What is Prisma ORM? (Overview) | Prisma Documentation",
+  "description": "Prisma ORM is a next-generation Node.js and TypeScript ORM that provides type-safe database access, migrations, and a visual data editor.",
+  "headings": [
+    "Prisma ORM",
+    "Get started",
+    "Quickstart",
+    "Add to an existing project",
+    "Prisma 8 docs",
+    "Why Prisma ORM",
+    "When to use Prisma",
+    "How it works",
+    "1. Define your schema",
+    "2. Configure your connection",
+    "3. Run migrations",
+    "4. Query with Prisma Client",
+    "Next steps",
+    "On this page"
+  ],
+  "redirect_hops": [
+    "https://www.prisma.io/docs/orm"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}
