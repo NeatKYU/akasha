@@ -1,0 +1,34 @@
+{
+  "source_id": "gh-dependabot-actions",
+  "role": "platform",
+  "source_url": "https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-on-actions",
+  "final_url": "https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-on-actions",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:00.060Z",
+  "content_sha256": "a2c22b2696634415dc2f4548bf152f37a99089ef0449b31070ab5bcf51195fd5",
+  "metadata_sha256": "906c80596ebbabac2775a84daacb0b6804a81962f53b0e53180baaef918b140d",
+  "http_status": 200,
+  "title": "Dependabot on GitHub Actions - GitHub Docs",
+  "description": "Detailed information on using Dependabot with GitHub Actions.",
+  "headings": [
+    "Security and code quality",
+    "Dependabot on GitHub Actions",
+    "In this article",
+    "Restrictions when Dependabot triggers events",
+    "Requirements for using Dependabot with self-hosted runners",
+    "System requirements",
+    "Network requirements",
+    "Certificate configuration",
+    "Help and support",
+    "Did you find what you needed?",
+    "Help us make these docs great!",
+    "Still need help?",
+    "Legal"
+  ],
+  "redirect_hops": [
+    "https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-on-actions"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

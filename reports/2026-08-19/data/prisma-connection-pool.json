@@ -1,0 +1,28 @@
+{
+  "source_id": "prisma-connection-pool",
+  "role": "data",
+  "source_url": "https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections/connection-pool",
+  "final_url": "https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections/connection-pool",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:42.417Z",
+  "content_sha256": "af2d239912ca85f8402794566df361573e88730029c1501508d48d502fb32b52",
+  "metadata_sha256": "b2ecb45fbeed0299e33783d949a93c44f992e780af2d53daf0fc28f5b80de510",
+  "http_status": 200,
+  "title": "Connection pool | Prisma Documentation",
+  "description": "Prisma ORM&#x27;s query engine creates a connection pool to store and manage database connections.",
+  "headings": [
+    "Connection pool",
+    "Relational databases",
+    "Prisma ORM v7 driver adapter defaults",
+    "MongoDB",
+    "External connection poolers",
+    "Manual database connection handling",
+    "On this page"
+  ],
+  "redirect_hops": [
+    "https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections/connection-pool"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

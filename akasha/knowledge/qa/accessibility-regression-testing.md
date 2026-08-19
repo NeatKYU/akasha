@@ -8,7 +8,7 @@
 - 라이선스 메모: 메타데이터, 링크, 짧은 출처 표기 요약만 사용한다.
 - 사용 메모: 접근성 회귀 탐지와 브라우저 테스트 범위 조정 기준으로만 사용한다.
 - 출처 카탈로그: `playwright-accessibility-testing`
-- 검토 스냅샷: `playwright-accessibility-testing@ac8dfc82e7d2`
+- 검토 스냅샷: `playwright-accessibility-testing` 구조 `1d178a574f7b` 본문 `ac8dfc82e7d2`
 
 ## 이 문서가 해당 역할에 도움이 되는 이유
 

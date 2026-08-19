@@ -43,7 +43,19 @@ async function validateReleaseVersion() {
   );
 }
 
+async function collectCitedSourceIds() {
+  const knowledgeRoot = resolveContained(ROOT, 'akasha', 'knowledge');
+  const cited = new Set();
+  for (const entry of await readdir(knowledgeRoot, { withFileTypes: true, recursive: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.md') || entry.name === 'INDEX.md') continue;
+    const text = await readFile(path.join(entry.parentPath ?? entry.path, entry.name), 'utf8');
+    for (const id of parseKnowledgeSources(text).ids) cited.add(id);
+  }
+  return cited;
+}
+
 async function validateManifest() {
+  const citedSourceIds = await collectCitedSourceIds();
   const manifest = JSON.parse(await readFile(resolveContained(ROOT, 'manifest.json'), 'utf8'));
   assert(manifest.schema_version === 1, 'manifest.schema_version must be 1');
   assert(
@@ -71,10 +83,12 @@ async function validateManifest() {
         entry && /^[a-z0-9-]+$/.test(entry.source_id),
         'manifest unavailable source id is invalid'
       );
-      // 승인된 스냅샷은 secondary 출처만 누락할 수 있다. primary 누락은 승격 자체가 막혀야 한다.
+      // 승인 스냅샷에서 누락이 허용되는 경우는 둘 뿐이다: secondary 출처이거나, 아직 어떤
+      // 지식 문서도 인용하지 않는 출처. 인용된 primary가 누락되면 그 문서의 근거가 사라지므로
+      // 승격 자체가 막혀야 한다 (prepare-promotion.mjs의 의존성 게이트와 같은 규칙).
       assert(
-        entry.authority === 'secondary',
-        `manifest unavailable source ${entry.source_id} must be secondary`
+        entry.authority === 'secondary' || !citedSourceIds.has(entry.source_id),
+        `manifest unavailable source ${entry.source_id} is cited by approved knowledge and must not be missing`
       );
       assert(
         !Object.hasOwn(manifest.source_hashes ?? {}, entry.source_id),
@@ -89,6 +103,7 @@ async function validateManifest() {
   for (const [sourceId, hashes] of Object.entries(manifest.source_hashes)) {
     assert(/^[a-z0-9-]+$/.test(sourceId), `manifest source id is invalid: ${sourceId}`);
     assert(/^[a-f0-9]{64}$/.test(hashes.content_sha256), `manifest content hash is invalid for ${sourceId}`);
+    assert(/^[a-f0-9]{64}$/.test(hashes.metadata_sha256), `manifest metadata hash is invalid for ${sourceId}`);
     assert(/^[a-f0-9]{64}$/.test(hashes.snapshot_sha256), `manifest snapshot hash is invalid for ${sourceId}`);
   }
 }
@@ -414,6 +429,7 @@ async function validateKnowledgeReviewPins(documentPaths) {
   const unavailable = new Set((manifest.unavailable_sources ?? []).map((entry) => entry.source_id));
 
   const queue = [];
+  const soft = [];
   for (const relativePath of [...documentPaths].sort()) {
     const text = await readFile(resolveContained(knowledgeRoot, relativePath), 'utf8');
     const { ids, pins, hasSourceSection } = parseKnowledgeSources(text);
@@ -433,23 +449,33 @@ async function validateKnowledgeReviewPins(documentPaths) {
     }
     for (const id of ids) {
       if (unavailable.has(id)) continue;
-      const current = currentHashes[id]?.content_sha256;
-      if (!current) {
+      const entry = currentHashes[id];
+      if (!entry) {
         queue.push({ path: label, reason: 'no-manifest-hash', detail: `${id} 승인 스냅샷 해시 없음` });
         continue;
       }
       const pin = pins.get(id);
       if (!pin) {
         queue.push({ path: label, reason: 'unpinned', detail: `${id} 검토 스냅샷 미기록` });
-      } else if (!current.startsWith(pin)) {
-        queue.push({ path: label, reason: 'drifted', detail: `${id} ${pin} → ${current.slice(0, 12)}` });
+        continue;
+      }
+      // 구조(제목·설명·헤딩)가 바뀌면 문서가 다루는 범위가 달라졌을 수 있으므로 재검토 필수다.
+      // 본문만 바뀐 경우는 표현 수정일 가능성이 높아 확인 권장으로 낮춘다.
+      if (!entry.metadata_sha256.startsWith(pin.structure)) {
+        queue.push({ path: label, reason: 'structure-changed', detail: `${id} 구조 ${pin.structure} → ${entry.metadata_sha256.slice(0, 12)}` });
+      } else if (!entry.content_sha256.startsWith(pin.body)) {
+        soft.push({ path: label, detail: `${id} 본문 ${pin.body} → ${entry.content_sha256.slice(0, 12)}` });
       }
     }
   }
 
   if (queue.length > 0) {
     const lines = queue.map((item) => `  - [${item.reason}] ${item.path}: ${item.detail}`);
-    console.log(`재검토 큐 ${queue.length}건 (상한 ${REVIEW_DEBT_CEILING}):\n${lines.join('\n')}`);
+    console.log(`재검토 필수 ${queue.length}건 (상한 ${REVIEW_DEBT_CEILING}):\n${lines.join('\n')}`);
+  }
+  if (soft.length > 0) {
+    const lines = soft.map((item) => `  - ${item.path}: ${item.detail}`);
+    console.log(`본문만 변경 ${soft.length}건 (확인 권장, 상한 대상 아님):\n${lines.join('\n')}`);
   }
   assert(
     queue.length <= REVIEW_DEBT_CEILING,

@@ -1,0 +1,25 @@
+{
+  "source_id": "postgres-planner-stats",
+  "role": "data",
+  "source_url": "https://www.postgresql.org/docs/current/planner-stats.html",
+  "final_url": "https://www.postgresql.org/docs/current/planner-stats.html",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:41.494Z",
+  "content_sha256": "bca428a2ba997d2bad1d67d56d533bafe7af3125d1aa1a1f3657d75c51117d04",
+  "metadata_sha256": "b8d99ace3ae1da085d85e86760597b85d4887e05becc04921142577617782960",
+  "http_status": 200,
+  "title": "PostgreSQL: Documentation: 18: 14.2. Statistics Used by the Planner",
+  "description": "",
+  "headings": [
+    "14.2.&nbsp;Statistics Used by the Planner #",
+    "14.2.1.&nbsp;Single-Column Statistics #",
+    "14.2.2.&nbsp;Extended Statistics #",
+    "Submit correction"
+  ],
+  "redirect_hops": [
+    "https://www.postgresql.org/docs/current/planner-stats.html"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

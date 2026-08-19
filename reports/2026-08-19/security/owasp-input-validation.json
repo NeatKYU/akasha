@@ -1,0 +1,43 @@
+{
+  "source_id": "owasp-input-validation",
+  "role": "security",
+  "source_url": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
+  "final_url": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:36.871Z",
+  "content_sha256": "5c5f5b768c43ddc03a4ce4e02c5fd4de5d255a1873a775620645d39ef56641d0",
+  "metadata_sha256": "f2a441191d03c1e73d42eeecc6939887a5104d69c23a8ceabbba950bb15b314b",
+  "http_status": 200,
+  "title": "Input Validation - OWASP Cheat Sheet Series",
+  "description": "Website with the collection of all the cheat sheets of the project.",
+  "headings": [
+    "Input Validation Cheat Sheet &para;",
+    "Introduction &para;",
+    "Goals of Input Validation &para;",
+    "Input Validation Strategies &para;",
+    "Implementing Input Validation &para;",
+    "Allowlist vs Denylist &para;",
+    "Validating Free-form Unicode Text &para;",
+    "Regular Expressions (Regex) &para;",
+    "Allowlist Regular Expression Examples &para;",
+    "Client-side vs Server-side Validation &para;",
+    "Validating Rich User Content &para;",
+    "Preventing XSS and Content Security Policy &para;",
+    "File Upload Validation &para;",
+    "Upload Verification &para;",
+    "Upload Storage &para;",
+    "Public Serving of Uploaded Content &para;",
+    "Beware of Specific File Types &para;",
+    "Image Upload Verification &para;",
+    "Email Address Validation &para;",
+    "Syntactic Validation &para;",
+    "Semantic Validation &para;",
+    "References &para;"
+  ],
+  "redirect_hops": [
+    "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

@@ -338,8 +338,9 @@ export function parseKnowledgeSources(text) {
   const ids = new Set();
   const pins = new Map();
   for (const match of text.matchAll(/^- 출처 카탈로그: `([a-z0-9-]+)`\s*$/gm)) ids.add(match[1]);
-  for (const match of text.matchAll(/^- 검토 스냅샷: `([a-z0-9-]+)@([a-f0-9]{12})`\s*$/gm)) {
-    pins.set(match[1], match[2]);
+  const pinPattern = /^- 검토 스냅샷: `([a-z0-9-]+)` 구조 `([a-f0-9]{12})` 본문 `([a-f0-9]{12})`\s*$/gm;
+  for (const match of text.matchAll(pinPattern)) {
+    pins.set(match[1], { structure: match[2], body: match[3] });
   }
   const legacy = text.match(/^Source catalog:([\s\S]*?)\.\s*$/m);
   if (legacy) for (const match of legacy[1].matchAll(/`([a-z0-9-]+)`/g)) ids.add(match[1]);

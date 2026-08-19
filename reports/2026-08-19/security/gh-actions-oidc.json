@@ -1,0 +1,42 @@
+{
+  "source_id": "gh-actions-oidc",
+  "role": "security",
+  "source_url": "https://docs.github.com/en/actions/concepts/security/openid-connect",
+  "final_url": "https://docs.github.com/en/actions/concepts/security/openid-connect",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:46:59.496Z",
+  "content_sha256": "7861dc33006f8adfab0d102bb3fbe04d9b457caf8e258f94d512cb165f5376e8",
+  "metadata_sha256": "5b46866f04aa53799ef0f6eb291d57db017a3935b2587fd469ff0fe752ffacdf",
+  "http_status": 200,
+  "title": "OpenID Connect - GitHub Docs",
+  "description": "OpenID Connect allows your workflows to exchange short-lived tokens directly from your cloud provider.",
+  "headings": [
+    "GitHub Actions",
+    "OpenID Connect",
+    "In this article",
+    "Overview of OpenID Connect (OIDC)",
+    "Benefits of using OIDC",
+    "How OIDC integrates with GitHub Actions",
+    "Understanding the OIDC token",
+    "Authenticating custom actions using OIDC",
+    "Updating your workflows for OIDC",
+    "Using repository custom properties as OIDC claims",
+    "How custom property claims work",
+    "Prerequisites",
+    "Adding a custom property to OIDC token claims",
+    "Example OIDC token with custom properties",
+    "OIDC support for Dependabot",
+    "Next steps",
+    "Help and support",
+    "Did you find what you needed?",
+    "Help us make these docs great!",
+    "Still need help?",
+    "Legal"
+  ],
+  "redirect_hops": [
+    "https://docs.github.com/en/actions/concepts/security/openid-connect"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

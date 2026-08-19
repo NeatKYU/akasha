@@ -9,7 +9,7 @@
 - 라이선스 메모: 메타데이터, 링크, 짧은 출처 표기 요약만 사용한다.
 - 사용 메모: repository, environment, organization, workflow, log 처리 단위의 GitHub Actions 비밀값 검토에 사용한다.
 - 출처 카탈로그: `github-actions-secrets`
-- 검토 스냅샷: `github-actions-secrets@51681093620e`
+- 검토 스냅샷: `github-actions-secrets` 구조 `7d89e53efad5` 본문 `51681093620e`
 
 ## 이 문서가 해당 역할에 도움이 되는 이유
 

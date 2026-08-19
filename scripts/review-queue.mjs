@@ -12,6 +12,7 @@ const sources = new Map((await loadSources()).map((source) => [source.id, source
 
 const knowledgeRoot = resolveContained(ROOT, 'akasha', 'knowledge');
 const queue = [];
+const soft = [];
 for (const entry of await readdir(knowledgeRoot, { withFileTypes: true, recursive: true })) {
   if (!entry.isFile() || !entry.name.endsWith('.md') || entry.name === 'INDEX.md') continue;
   const full = path.join(entry.parentPath ?? entry.path, entry.name);
@@ -24,24 +25,34 @@ for (const entry of await readdir(knowledgeRoot, { withFileTypes: true, recursiv
   }
   for (const id of ids) {
     if (unavailable.has(id)) continue;
-    const hash = current[id]?.content_sha256;
+    const entry = current[id];
     const url = sources.get(id)?.url ?? '';
-    if (!hash) queue.push({ doc: relative, kind: '승인 해시 없음', detail: id, url });
-    else if (!pins.has(id)) queue.push({ doc: relative, kind: '고정 없음', detail: id, url });
-    else if (!hash.startsWith(pins.get(id))) {
-      queue.push({ doc: relative, kind: '출처 변경', detail: `${id}  ${pins.get(id)} → ${hash.slice(0, 12)}`, url });
+    if (!entry) { queue.push({ doc: relative, kind: '승인 해시 없음', detail: id, url }); continue; }
+    const pin = pins.get(id);
+    if (!pin) { queue.push({ doc: relative, kind: '고정 없음', detail: id, url }); continue; }
+    if (!entry.metadata_sha256.startsWith(pin.structure)) {
+      queue.push({ doc: relative, kind: '구조 변경', detail: `${id}  ${pin.structure} → ${entry.metadata_sha256.slice(0, 12)}`, url });
+    } else if (!entry.content_sha256.startsWith(pin.body)) {
+      soft.push({ doc: relative, kind: '본문 변경', detail: `${id}  ${pin.body} → ${entry.content_sha256.slice(0, 12)}`, url });
     }
   }
 }
 
-if (queue.length === 0) {
-  console.log('재검토 큐가 비어 있습니다. 모든 지식 문서가 승인 스냅샷에 고정되어 있습니다.');
-} else {
-  console.log(`재검토 필요 ${queue.length}건\n`);
-  for (const item of queue) {
+function render(title, items, note) {
+  if (items.length === 0) return;
+  console.log(`\n${title} ${items.length}건`);
+  for (const item of items) {
     console.log(`  [${item.kind}] akasha/knowledge/${item.doc}`);
     console.log(`      ${item.detail}${item.url ? `\n      ${item.url}` : ''}`);
   }
-  console.log('\n출처 변경 항목은 원문을 다시 읽고 요약이 여전히 맞는지 확인한 뒤,');
-  console.log('`- 검토 스냅샷: `<id>@<새 해시 12자>`` 로 고정을 갱신합니다.');
+  if (note) console.log(`  → ${note}`);
+}
+
+if (queue.length === 0 && soft.length === 0) {
+  console.log('재검토 큐가 비어 있습니다. 모든 지식 문서가 승인 스냅샷에 고정되어 있습니다.');
+} else {
+  render('재검토 필수', queue, '출처의 제목·설명·헤딩이 바뀌었습니다. 다루는 범위가 달라졌을 수 있으니 원문을 다시 읽으세요.');
+  render('확인 권장', soft, '헤딩은 그대로이고 본문만 바뀌었습니다. 표현 수정일 가능성이 높습니다.');
+  console.log('\n확인 후 고정을 갱신합니다:');
+  console.log('  - 검토 스냅샷: `<id>` 구조 `<metadata 12자>` 본문 `<content 12자>`');
 }

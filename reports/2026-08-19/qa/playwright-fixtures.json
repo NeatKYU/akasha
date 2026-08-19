@@ -1,0 +1,39 @@
+{
+  "source_id": "playwright-fixtures",
+  "role": "qa",
+  "source_url": "https://playwright.dev/docs/test-fixtures",
+  "final_url": "https://playwright.dev/docs/test-fixtures",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:39.381Z",
+  "content_sha256": "b445ae3b1f45d428a2b583b08c51cb5b2ee393aa6070d1052be40749ffa74262",
+  "metadata_sha256": "29fdd78261cf566aff754dd316204e6fad0d01bfb92bd8b9bce28b9dce25c487",
+  "http_status": 200,
+  "title": "Fixtures | Playwright",
+  "description": "",
+  "headings": [
+    "Fixtures",
+    "Introduction ​",
+    "Built-in fixtures ​",
+    "Without fixtures ​",
+    "With fixtures ​",
+    "Creating a fixture ​",
+    "Using a fixture ​",
+    "Overriding fixtures ​",
+    "Worker-scoped fixtures ​",
+    "Automatic fixtures ​",
+    "Fixture timeout ​",
+    "Fixtures-options ​",
+    "Execution order ​",
+    "Combine custom fixtures from multiple modules ​",
+    "Box fixtures ​",
+    "Custom fixture title ​",
+    "Adding global beforeEach/afterEach hooks ​",
+    "Adding global beforeAll/afterAll hooks ​"
+  ],
+  "redirect_hops": [
+    "https://playwright.dev/docs/test-fixtures"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

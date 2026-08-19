@@ -1,0 +1,39 @@
+{
+  "source_id": "react-profiler",
+  "role": "frontend",
+  "source_url": "https://react.dev/reference/react/Profiler",
+  "final_url": "https://react.dev/reference/react/Profiler",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:44.330Z",
+  "content_sha256": "e1c75794978f6ceddd6df43efc128719a9cd692d1c8371111ccf1bbe75341e60",
+  "metadata_sha256": "54e828d4d65df947fa9f3552b6c4f864cc1219a2cf914531621788d9a8835cde",
+  "http_status": 200,
+  "title": "<Profiler> – React",
+  "description": "",
+  "headings": [
+    "react@19.2",
+    "react-dom@19.2",
+    "React Compiler",
+    "React DevTools",
+    "eslint-plugin-react-hooks",
+    "Rules of React",
+    "React Server Components",
+    "Legacy APIs",
+    "<Profiler>",
+    "Reference",
+    "<Profiler>",
+    "onRender callback",
+    "Usage",
+    "Measuring rendering performance programmatically",
+    "Pitfall",
+    "Note",
+    "Measuring different parts of the application",
+    "On this page"
+  ],
+  "redirect_hops": [
+    "https://react.dev/reference/react/Profiler"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

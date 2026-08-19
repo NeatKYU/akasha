@@ -1,0 +1,35 @@
+{
+  "source_id": "next-error-handling",
+  "role": "frontend",
+  "source_url": "https://nextjs.org/docs/app/getting-started/error-handling",
+  "final_url": "https://nextjs.org/docs/app/getting-started/error-handling",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:29.625Z",
+  "content_sha256": "c8ce8747be0798de2a39b586308cef924553f3a5081860f50725c31bf9638045",
+  "metadata_sha256": "4aa39d415adfedd465d1efdb286d4f2e2411b1d150a0a8c27c7c7961d0e131c8",
+  "http_status": 200,
+  "title": "Getting Started: Error Handling | Next.js",
+  "description": "Learn how to display expected errors and handle uncaught exceptions.",
+  "headings": [
+    "Error Handling",
+    "Handling expected errors",
+    "Server Functions",
+    "Server Components",
+    "Not found",
+    "Handling uncaught exceptions",
+    "Nested error boundaries",
+    "Global errors",
+    "API Reference",
+    "redirect",
+    "error.js",
+    "catchError",
+    "notFound",
+    "not-found.js"
+  ],
+  "redirect_hops": [
+    "https://nextjs.org/docs/app/getting-started/error-handling"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

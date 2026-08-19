@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-19",
+  "attempted": 100,
+  "expected": 100,
+  "complete": true,
+  "succeeded": 95,
+  "failures": [
+    {
+      "source_id": "gh-dependabot-options",
+      "url": "https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference",
+      "error": "Response body exceeds 1000000 bytes"
+    },
+    {
+      "source_id": "openai-structured-outputs",
+      "url": "https://developers.openai.com/api/docs/guides/structured-outputs",
+      "error": "Response body exceeds 1000000 bytes"
+    },
+    {
+      "source_id": "owasp-logging",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+      "error": "prompt-injection pattern detected: exfiltrat(?:e|ion)"
+    },
+    {
+      "source_id": "prisma-relation-queries",
+      "url": "https://www.prisma.io/docs/orm/prisma-client/queries/relation-queries",
+      "error": "Response body exceeds 1000000 bytes"
+    },
+    {
+      "source_id": "prisma-transactions",
+      "url": "https://www.prisma.io/docs/orm/prisma-client/queries/transactions",
+      "error": "Response body exceeds 1000000 bytes"
+    }
+  ],
+  "max_response_bytes": 1000000,
+  "max_redirects": 5,
+  "trust": "quarantine-only"
+}

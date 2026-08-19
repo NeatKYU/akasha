@@ -1,0 +1,36 @@
+{
+  "source_id": "toss-design-operations",
+  "role": "design",
+  "source_url": "https://toss.tech/article/toss-design-system",
+  "final_url": "https://toss.tech/article/toss-design-system",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:46.449Z",
+  "content_sha256": "1b4d16b9111003edc360ccdf268e3ea2082035d0f9b56874a35061f53621f2f9",
+  "metadata_sha256": "60e4c1dd5b07bb6ec9d242c2e6ec9aeb5dad181227243e28c19da3c9d9882701",
+  "http_status": 200,
+  "title": "토스 디자이너가 제품에만 집중할 수 있는 방법",
+  "description": "디자인 시스템은 제품의 어느 단계까지 기여할 수 있을까요? 더 이상 다른 것에는 신경쓰지 않아도 되는 Menu 컴포넌트를 만들었던 3가지 방법을 소개할게요.",
+  "headings": [
+    "토스 디자이너가 제품에만 집중할 수 있는 방법",
+    "문제",
+    "가설",
+    "1. 다양한 케이스를 패턴화 해요",
+    "반복해서 사용되는 체크형 아이콘",
+    "5자 이상의 긴 단어를 쓰는 경우",
+    "메뉴 길이가 제한될 때",
+    "2. 심미적인 경험을 설계해요",
+    "팝업 요소의 무거움 없애기",
+    "인터랙션의 정성적인 느낌 추가하기",
+    "3. 모든 유저의 사용성을 지켜요",
+    "텍스트를 키우거나 해상도를 변경한 환경",
+    "화면 읽기 기능 대응",
+    "결과",
+    "적용해보기"
+  ],
+  "redirect_hops": [
+    "https://toss.tech/article/toss-design-system"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

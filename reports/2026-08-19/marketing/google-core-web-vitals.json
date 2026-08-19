@@ -1,0 +1,29 @@
+{
+  "source_id": "google-core-web-vitals",
+  "role": "marketing",
+  "source_url": "https://developers.google.com/search/docs/appearance/core-web-vitals",
+  "final_url": "https://developers.google.com/search/docs/appearance/core-web-vitals?hl=zh-tw",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:04.978Z",
+  "content_sha256": "67d815ef2f6ee458f876c9fbbba0507de73ae9e4457adb45c6e47d872c032ccc",
+  "metadata_sha256": "559c4d4d4a78627b2459ff03e9efbc2972a0e455823de359746f7548cbc7ec7d",
+  "http_status": 200,
+  "title": "瞭解 Core Web Vitals 和 Google 搜尋結果 | Google 搜尋中心 &nbsp;|&nbsp; Documentation &nbsp;|&nbsp; Google for Developers",
+  "description": "Core Web Vitals 是一組衡量實際使用者體驗的指標。進一步瞭解 Google 搜尋和 Core Web Vitals。",
+  "headings": [
+    "瞭解 Core Web Vitals 和 Google 搜尋結果",
+    "Core Web Vitals 指標",
+    "最佳化 Core Web Vitals",
+    "網誌近期更新內容",
+    "取得支援",
+    "資源",
+    "工具"
+  ],
+  "redirect_hops": [
+    "https://developers.google.com/search/docs/appearance/core-web-vitals",
+    "https://developers.google.com/search/docs/appearance/core-web-vitals?hl=zh-tw"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

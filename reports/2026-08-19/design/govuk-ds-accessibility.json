@@ -1,0 +1,41 @@
+{
+  "source_id": "govuk-ds-accessibility",
+  "role": "design",
+  "source_url": "https://design-system.service.gov.uk/accessibility/",
+  "final_url": "https://design-system.service.gov.uk/accessibility/",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:13.787Z",
+  "content_sha256": "95a3df45ca14a033e7a54aee02a8aa33d7c3137198cf682ea54eff3b226c3136",
+  "metadata_sha256": "3ed7750b1983f59b5e785aa567720329e1d0676ff847d949482ddff4baffb30f",
+  "http_status": 200,
+  "title": "Accessibility – GOV.UK Design System",
+  "description": "How we make and keep the GOV.UK Design System accessible and what service teams can do to do the same.",
+  "headings": [
+    "Cookies on GOV.UK Design System",
+    "Setup guides",
+    "How to guides",
+    "Page structure",
+    "Typography",
+    "Visual elements",
+    "Ask users for…",
+    "Help users to…",
+    "Pages",
+    "What we’re working on",
+    "Ways to get involved",
+    "How we work",
+    "Resources",
+    "Events and workshops",
+    "Pages in this section",
+    "Accessibility",
+    "Accessibility strategy",
+    "Accessibility statement",
+    "Accessibility in the Service Manual",
+    "Support links"
+  ],
+  "redirect_hops": [
+    "https://design-system.service.gov.uk/accessibility/"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

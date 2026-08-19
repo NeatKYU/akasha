@@ -1,0 +1,23 @@
+{
+  "source_id": "postgres-indexes-examine",
+  "role": "data",
+  "source_url": "https://www.postgresql.org/docs/current/indexes-examine.html",
+  "final_url": "https://www.postgresql.org/docs/current/indexes-examine.html",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:41.309Z",
+  "content_sha256": "3aa4baecf2192dcb0e87a78647c840e8c49804147b5ea6efbd87917aa4725d92",
+  "metadata_sha256": "20c18ef3aec37beda00d3b24b9be7d2a12f13ebf6d3132e1e2e9b711a227553a",
+  "http_status": 200,
+  "title": "PostgreSQL: Documentation: 18: 11.12. Examining Index Usage",
+  "description": "",
+  "headings": [
+    "11.12.&nbsp;Examining Index Usage #",
+    "Submit correction"
+  ],
+  "redirect_hops": [
+    "https://www.postgresql.org/docs/current/indexes-examine.html"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

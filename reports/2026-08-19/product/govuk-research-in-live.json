@@ -1,0 +1,39 @@
+{
+  "source_id": "govuk-research-in-live",
+  "role": "product",
+  "source_url": "https://www.gov.uk/service-manual/user-research/user-research-in-live",
+  "final_url": "https://www.gov.uk/service-manual/user-research/user-research-in-live",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:19.032Z",
+  "content_sha256": "f7d75659afb274cf5dd8083e53eca5df88bb1fea6f9ea00abbdfa2847b83a102",
+  "metadata_sha256": "6565feed0669033177371552f7819b661311c51dd199a09e2521da054d7ffe1d",
+  "http_status": 200,
+  "title": "User research in live - Service Manual - GOV.UK",
+  "description": "Review how your service meets user needs and test new design features or improvements.",
+  "headings": [
+    "Cookies on GOV.UK",
+    "Navigation menu",
+    "Services and information",
+    "Government activity",
+    "Search",
+    "User research in live",
+    "Contents",
+    "How to do user research in live",
+    "Who to research with",
+    "Typical user research activities",
+    "Related guides",
+    "Updates to this page",
+    "Is this page useful?",
+    "Help us improve GOV.UK",
+    "Help us improve GOV.UK",
+    "Services and information",
+    "Government activity",
+    "Support links"
+  ],
+  "redirect_hops": [
+    "https://www.gov.uk/service-manual/user-research/user-research-in-live"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

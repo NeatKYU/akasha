@@ -1,0 +1,36 @@
+{
+  "source_id": "react-compiler-intro",
+  "role": "frontend",
+  "source_url": "https://react.dev/learn/react-compiler/introduction",
+  "final_url": "https://react.dev/learn/react-compiler/introduction",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:44.000Z",
+  "content_sha256": "e5e463cb4940d3e7605973f9d4ef489d569f5d9cb4d8e55e62f9090d797be9e3",
+  "metadata_sha256": "1cd71d6e08fcf32a3162675deb513f0b7025dd7686fcc84ef3e306f8a4f974c5",
+  "http_status": 200,
+  "title": "Introduction – React",
+  "description": "",
+  "headings": [
+    "GET STARTED",
+    "LEARN REACT",
+    "Introduction",
+    "You will learn",
+    "What does React Compiler do?",
+    "Before React Compiler",
+    "Note",
+    "After React Compiler",
+    "Should I try out the compiler?",
+    "Is it safe to use?",
+    "What build tools are supported?",
+    "What should I do about useMemo, useCallback, and React.memo?",
+    "Try React Compiler",
+    "Additional resources",
+    "On this page"
+  ],
+  "redirect_hops": [
+    "https://react.dev/learn/react-compiler/introduction"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

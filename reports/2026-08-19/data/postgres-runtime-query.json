@@ -1,0 +1,29 @@
+{
+  "source_id": "postgres-runtime-query",
+  "role": "data",
+  "source_url": "https://www.postgresql.org/docs/current/runtime-config-query.html",
+  "final_url": "https://www.postgresql.org/docs/current/runtime-config-query.html",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:41.674Z",
+  "content_sha256": "e98b24c8aaeb273ffa7ffee2009708ccd2b6567ff577e015d16114948fc8762c",
+  "metadata_sha256": "b77bdd64c4ca256f590c8d8d445fb7c80c06adac5b3e1062f88db831651c7e62",
+  "http_status": 200,
+  "title": "PostgreSQL: Documentation: 18: 19.7. Query Planning",
+  "description": "",
+  "headings": [
+    "19.7.&nbsp;Query Planning #",
+    "19.7.1.&nbsp;Planner Method Configuration #",
+    "19.7.2.&nbsp;Planner Cost Constants #",
+    "Note",
+    "Tip",
+    "19.7.3.&nbsp;Genetic Query Optimizer #",
+    "19.7.4.&nbsp;Other Planner Options #",
+    "Submit correction"
+  ],
+  "redirect_hops": [
+    "https://www.postgresql.org/docs/current/runtime-config-query.html"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

@@ -84,6 +84,7 @@ for (const roleEntry of await readdir(reportRoot, { withFileTypes: true })) {
     assertSnapshot(snapshot);
     sourceHashes[snapshot.source_id] = {
       content_sha256: snapshot.content_sha256,
+      metadata_sha256: snapshot.metadata_sha256,
       snapshot_sha256: sha256(snapshotText),
       retrieved_at: snapshot.retrieved_at
     };

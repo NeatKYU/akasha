@@ -1,0 +1,43 @@
+{
+  "source_id": "govuk-testing-accessibility",
+  "role": "qa",
+  "source_url": "https://www.gov.uk/service-manual/helping-people-to-use-your-service/testing-for-accessibility",
+  "final_url": "https://www.gov.uk/service-manual/helping-people-to-use-your-service/testing-for-accessibility",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:22.210Z",
+  "content_sha256": "95c5660d0c74acf43ecbf35f0387d86d251113ca8ce82d00590dadf9da1933f0",
+  "metadata_sha256": "281e8990a5cfe085b12dfb16db760e87ae189da985fbf82c67eb12499f8b9661",
+  "http_status": 200,
+  "title": "Testing for accessibility - Service Manual - GOV.UK",
+  "description": "How to test your service to make sure it's accessible to disabled users.",
+  "headings": [
+    "Cookies on GOV.UK",
+    "Navigation menu",
+    "Services and information",
+    "Government activity",
+    "Search",
+    "Testing for accessibility",
+    "Contents",
+    "Think about accessibility from the start",
+    "Testing your code",
+    "Automated testing",
+    "Manual testing",
+    "Testing with assistive technologies",
+    "Getting an accessibility audit",
+    "Useful resources",
+    "Related guides",
+    "Updates to this page",
+    "Is this page useful?",
+    "Help us improve GOV.UK",
+    "Help us improve GOV.UK",
+    "Services and information",
+    "Government activity",
+    "Support links"
+  ],
+  "redirect_hops": [
+    "https://www.gov.uk/service-manual/helping-people-to-use-your-service/testing-for-accessibility"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

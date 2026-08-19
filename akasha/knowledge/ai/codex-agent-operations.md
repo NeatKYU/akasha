@@ -8,7 +8,7 @@
 - 라이선스 메모: 공식 링크와 짧은 출처 표기 요약만 사용한다.
 - 사용 메모: Codex 에이전트 설정, 지시 파일, 하위 에이전트, 권한·샌드박스 운영 기준을 검토할 때만 사용한다.
 - 출처 카탈로그: `openai-codex-docs`
-- 검토 스냅샷: `openai-codex-docs@aebfefdf93e5`
+- 검토 스냅샷: `openai-codex-docs` 구조 `db22460c450b` 본문 `aebfefdf93e5`
 
 ## 이 문서가 해당 역할에 도움이 되는 이유
 

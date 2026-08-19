@@ -1,0 +1,30 @@
+{
+  "source_id": "aria-apg-introduction",
+  "role": "design",
+  "source_url": "https://www.w3.org/WAI/ARIA/apg/about/introduction/",
+  "final_url": "https://www.w3.org/WAI/ARIA/apg/about/introduction/",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:46:59.223Z",
+  "content_sha256": "81eef803fd054405674ff469430cd56e74bf46ec9fb64f18168649e0cbe9bf17",
+  "metadata_sha256": "0d6f2b0a239ba8055f6dd79e0b11143a477516e09f9f72b50658085dfd18c802",
+  "http_status": 200,
+  "title": "Introduction | APG | WAI | W3C",
+  "description": "Accessibility resources free online from the international standards organization: W3C Web Accessibility Initiative (WAI).",
+  "headings": [
+    "Page Contents",
+    "Introduction",
+    "Purpose of the APG",
+    "APG is Not a Normative Standard",
+    "Exercise Caution If Deviating from APG Patterns",
+    "APG is not a UI Design System",
+    "Important Prerequisite Knowledge",
+    "How the APG is Organized",
+    "Help improve this page"
+  ],
+  "redirect_hops": [
+    "https://www.w3.org/WAI/ARIA/apg/about/introduction/"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

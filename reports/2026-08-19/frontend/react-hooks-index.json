@@ -1,0 +1,38 @@
+{
+  "source_id": "react-hooks-index",
+  "role": "frontend",
+  "source_url": "https://react.dev/reference/react/hooks",
+  "final_url": "https://react.dev/reference/react/hooks",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:44.212Z",
+  "content_sha256": "56d1057a35086a01b8fc0131b1f5e88d311968326ccb340ca93ff06aeb78544b",
+  "metadata_sha256": "f5938018682841308043d683f13d48f6fc83c9f40b33f89ea7440a423535ca0c",
+  "http_status": 200,
+  "title": "Built-in React Hooks – React",
+  "description": "",
+  "headings": [
+    "react@19.2",
+    "react-dom@19.2",
+    "React Compiler",
+    "React DevTools",
+    "eslint-plugin-react-hooks",
+    "Rules of React",
+    "React Server Components",
+    "Legacy APIs",
+    "Built-in React Hooks",
+    "State Hooks",
+    "Context Hooks",
+    "Ref Hooks",
+    "Effect Hooks",
+    "Performance Hooks",
+    "Other Hooks",
+    "Your own Hooks",
+    "On this page"
+  ],
+  "redirect_hops": [
+    "https://react.dev/reference/react/hooks"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

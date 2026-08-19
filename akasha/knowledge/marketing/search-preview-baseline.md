@@ -8,7 +8,7 @@
 - 라이선스 메모: 메타데이터, 링크, 짧은 출처 표기 요약만 사용한다.
 - 사용 메모: 검색 노출 가능성과 콘텐츠 구조 검토에만 사용한다.
 - 출처 카탈로그: `google-seo-starter`
-- 검토 스냅샷: `google-seo-starter@ad029ebc4b95`
+- 검토 스냅샷: `google-seo-starter` 구조 `3113038944d3` 본문 `0821efc46ffb`
 
 - URL: https://nextjs.org/docs/app/getting-started/metadata-and-og-images
 - 소유자: Vercel
@@ -16,7 +16,7 @@
 - 라이선스 메모: 메타데이터, 링크, 짧은 출처 표기 요약만 사용한다.
 - 사용 메모: Next.js App Router metadata와 Open Graph 이미지 구현 기준으로만 사용한다.
 - 출처 카탈로그: `next-metadata-og`
-- 검토 스냅샷: `next-metadata-og@b8a539dbc0c1`
+- 검토 스냅샷: `next-metadata-og` 구조 `db539d27c2af` 본문 `f169a6b26793`
 
 ## 이 문서가 해당 역할에 도움이 되는 이유
 

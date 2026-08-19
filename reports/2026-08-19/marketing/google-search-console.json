@@ -1,0 +1,27 @@
+{
+  "source_id": "google-search-console",
+  "role": "marketing",
+  "source_url": "https://developers.google.com/search/docs/monitor-debug/search-console-start",
+  "final_url": "https://developers.google.com/search/docs/monitor-debug/search-console-start",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:08.667Z",
+  "content_sha256": "cd9b92b7dffd289135087f50c8d1cddcbad9c82753d26bb2ec8f627f9a4ae91f",
+  "metadata_sha256": "ac4f42ab9d03d2e451dc21467047ca06fe53f5f331d1920f3d2593413b00ccee",
+  "http_status": 200,
+  "title": "How To Use Search Console | Google Search Central &nbsp;|&nbsp; Documentation &nbsp;|&nbsp; Google for Developers",
+  "description": "Search Console is a tool from Google to help website owners. Explore this guide to learn how to set up and use Search Console.",
+  "headings": [
+    "Get started with Search Console",
+    "Helpful reports for SEO specialists, digital marketers, and site administrators",
+    "Helpful reports for web developers",
+    "Get support",
+    "Resources",
+    "Tools"
+  ],
+  "redirect_hops": [
+    "https://developers.google.com/search/docs/monitor-debug/search-console-start"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

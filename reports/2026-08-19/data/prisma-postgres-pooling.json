@@ -1,0 +1,31 @@
+{
+  "source_id": "prisma-postgres-pooling",
+  "role": "data",
+  "source_url": "https://www.prisma.io/docs/postgres/database/connection-pooling",
+  "final_url": "https://www.prisma.io/docs/postgres/database/connection-pooling",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:43.438Z",
+  "content_sha256": "d5b6a444eb2505b1e098db16f68b28a2491de00930c10c93905b78abd6dd0fa1",
+  "metadata_sha256": "a768e6e324b56810153108cdfe10b7ebafb4c33fbf5e03b890697926580151d5",
+  "http_status": 200,
+  "title": "Connection pooling in Prisma Postgres | Prisma Documentation",
+  "description": "Prisma Postgres manages connection pooling for you. Use it for concurrent application traffic and know when to bypass it.",
+  "headings": [
+    "Connection pooling",
+    "Connection limits",
+    "How the pooler works",
+    "When to use each connection type",
+    "Troubleshooting",
+    "\"Too many connections\" or connection limit errors",
+    "Migration fails with lock, session, or prepared statement errors",
+    "Session state not persisting between queries",
+    "Query killed after 10 minutes",
+    "On this page"
+  ],
+  "redirect_hops": [
+    "https://www.prisma.io/docs/postgres/database/connection-pooling"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

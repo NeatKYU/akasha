@@ -1,0 +1,30 @@
+{
+  "source_id": "aria-apg-dialog-modal",
+  "role": "design",
+  "source_url": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+  "final_url": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:46:59.186Z",
+  "content_sha256": "3a6faf3acec7f3d6df4557664e49c0d0576643f4bdb0469e89a6e51f0e9f2aed",
+  "metadata_sha256": "2d19623c77e741a0c64893d966ca99cecb202ac6c40c004c9e1dcce32f8b0c02",
+  "http_status": 200,
+  "title": "Dialog (Modal) Pattern | APG | WAI | W3C",
+  "description": "Accessibility resources free online from the international standards organization: W3C Web Accessibility Initiative (WAI).",
+  "headings": [
+    "Page Contents",
+    "Dialog (Modal) Pattern",
+    "About This Pattern",
+    "Examples",
+    "Keyboard Interaction",
+    "Note",
+    "WAI-ARIA Roles, States, and Properties",
+    "Note",
+    "Help improve this page"
+  ],
+  "redirect_hops": [
+    "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

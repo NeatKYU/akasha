@@ -1,0 +1,42 @@
+{
+  "source_id": "react-effect-avoidance",
+  "role": "frontend",
+  "source_url": "https://react.dev/learn/you-might-not-need-an-effect",
+  "final_url": "https://react.dev/learn/you-might-not-need-an-effect",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:44.135Z",
+  "content_sha256": "8194cab734dc0a9da8c18ceafc0d0ee61bc117cbf5d70e258846b166431293e8",
+  "metadata_sha256": "15162b5a4f59d1e3f1ad02aa35da738032853fde58b01083226ef43637d046d3",
+  "http_status": 200,
+  "title": "You Might Not Need an Effect – React",
+  "description": "",
+  "headings": [
+    "GET STARTED",
+    "LEARN REACT",
+    "You Might Not Need an Effect",
+    "You will learn",
+    "How to remove unnecessary Effects",
+    "Updating state based on props or state",
+    "Caching expensive calculations",
+    "Note",
+    "Resetting all state when a prop changes",
+    "Adjusting some state when a prop changes",
+    "Sharing logic between event handlers",
+    "Sending a POST request",
+    "Chains of computations",
+    "Initializing the application",
+    "Notifying parent components about state changes",
+    "Passing data to the parent",
+    "Subscribing to an external store",
+    "Fetching data",
+    "Recap",
+    "Try out some challenges",
+    "On this page"
+  ],
+  "redirect_hops": [
+    "https://react.dev/learn/you-might-not-need-an-effect"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

@@ -1,0 +1,34 @@
+{
+  "source_id": "next-caching-previous-model",
+  "role": "platform",
+  "source_url": "https://nextjs.org/docs/app/guides/caching-without-cache-components",
+  "final_url": "https://nextjs.org/docs/app/guides/caching-without-cache-components",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:28.554Z",
+  "content_sha256": "e91db91a11990e8b26e8b200d8c913cc156238b4e8fc4845df31d0526e5bc55b",
+  "metadata_sha256": "0d8aedeffa4d9c0212105203ba61fff3535d92a6684c373b48cd471dec5fa9d3",
+  "http_status": 200,
+  "title": "Guides: Caching (Previous Model) | Next.js",
+  "description": "Learn how to cache and revalidate data using fetch options, unstable_cache, and route segment configs for projects not using Cache Components.",
+  "headings": [
+    "Caching and Revalidating (Previous Model)",
+    "Caching fetch requests",
+    "unstable_cache for non- fetch functions",
+    "Route segment config",
+    "Time-based revalidation",
+    "Route segment config revalidate",
+    "On-demand revalidation",
+    "Tagging cached data",
+    "revalidateTag",
+    "revalidatePath",
+    "Deduplicating requests",
+    "Preloading data",
+    "Statically generating dynamic routes"
+  ],
+  "redirect_hops": [
+    "https://nextjs.org/docs/app/guides/caching-without-cache-components"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

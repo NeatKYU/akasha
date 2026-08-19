@@ -1,0 +1,43 @@
+{
+  "source_id": "govuk-research-improves-design",
+  "role": "product",
+  "source_url": "https://www.gov.uk/service-manual/user-research/how-user-research-improves-service-design",
+  "final_url": "https://www.gov.uk/service-manual/user-research/how-user-research-improves-service-design",
+  "authority": "primary",
+  "retrieved_at": "2026-08-19T06:47:17.404Z",
+  "content_sha256": "f4d10b1e069692ab0bbb799aca4ebc6ffe9b27f3a83e442e3388730df568cdc6",
+  "metadata_sha256": "7827f1e75ecc83c499014564e2a8530c7614bdf7ddf1f35dd794e808dab6496a",
+  "http_status": 200,
+  "title": "User research for government services: an introduction - Service Manual - GOV.UK",
+  "description": "The importance of user research in service design and how it helps you understand and build for user needs.",
+  "headings": [
+    "Cookies on GOV.UK",
+    "Navigation menu",
+    "Services and information",
+    "Government activity",
+    "Search",
+    "User research for government services: an introduction",
+    "Contents",
+    "Understand your users",
+    "Make your research inclusive",
+    "Find what works, not what’s popular",
+    "Research continually",
+    "Make time for research",
+    "Make user research a team sport",
+    "Share your findings",
+    "Examples and case studies",
+    "Updates to this page",
+    "Is this page useful?",
+    "Help us improve GOV.UK",
+    "Help us improve GOV.UK",
+    "Services and information",
+    "Government activity",
+    "Support links"
+  ],
+  "redirect_hops": [
+    "https://www.gov.uk/service-manual/user-research/how-user-research-improves-service-design"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}
