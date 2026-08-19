@@ -243,7 +243,28 @@ async function validateRoleKnowledgeRouting(documentPaths) {
     const section = roleText.match(/^## 담당 지식\s*$([\s\S]*?)(?=^## |\Z)/m);
     assert(section, `Role document must declare a 담당 지식 section: akasha/agents/${roleEntry}`);
 
+    // 골라 읽기가 성립하려면 목록의 각 항목이 "언제 쓰는 문서인지"를 스스로 말해야 한다.
+    // 설명 없는 항목은 자식이 선택 근거 없이 추측하게 만든다.
+    const entryLines = section[1]
+      .split('\n')
+      .filter((line) => line.trim().startsWith('- ') && line.includes('.md`'));
+    for (const line of entryLines) {
+      const entry = line.match(/^\s*- `([^`]+\.md)`\s*—\s*(\S.*)$/);
+      assert(
+        entry,
+        `담당 지식 entry must read "- \`path.md\` — 선택 힌트" in akasha/agents/${roleEntry}: ${line.trim()}`
+      );
+      assert(
+        entry[2].trim().length >= 10,
+        `담당 지식 selection hint is too short to choose on in akasha/agents/${roleEntry}: ${entry[1]}`
+      );
+    }
+
     const references = [...section[1].matchAll(/`([^`]+\.md)`/g)].map((match) => match[1]);
+    assert(
+      references.length === entryLines.length,
+      `Every 담당 지식 reference must be its own "- \`path.md\` — 힌트" line in akasha/agents/${roleEntry}`
+    );
     assert(
       references.length > 0,
       `Role document must reference at least one knowledge document: akasha/agents/${roleEntry}`
@@ -489,6 +510,10 @@ async function validateAkashaSkillContract() {
   assert(
     skillText.includes('읽기 전용 도구만 가진 서브에이전트에는 부모가 같은 범위의 scoped diff를'),
     'Akasha skill must supply scoped diffs to shell-less subagents'
+  );
+  assert(
+    skillText.includes('해당하는 문서만 골라 읽는다'),
+    'Akasha skill must scope child knowledge reads to the relevant documents'
   );
 }
 
