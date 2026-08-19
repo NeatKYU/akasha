@@ -42,6 +42,8 @@ hooks/**
 - `knowledge/frontend/component-memoization.md` — memo가 무효가 되는 조건, props 참조 안정성, 커스텀 비교 함정
 - `knowledge/frontend/render-profiling.md` — 렌더 성능 주장의 측정 근거, actualDuration과 baseDuration 비교
 - `knowledge/frontend/error-boundary-placement.md` — 예상 오류와 미포착 예외 구분, error.js 배치, 이벤트 핸들러 오류
+- `knowledge/frontend/callback-stability.md` — useCallback이 값어치 있는 세 조건, 의존성 무효화, Effect 내부 이동
+- `knowledge/frontend/compiler-memoization.md` — React Compiler 사용 시 수동 최적화 판정 범위, 컴파일러가 못 하는 것
 
 ## 상충 시 확인할 역할
 

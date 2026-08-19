@@ -2,6 +2,15 @@
 
 이 프로젝트는 [Semantic Versioning](https://semver.org/)을 따릅니다.
 
+## [0.13.0] - 2026-08-19
+
+### 추가
+
+- 지식 문서 8개. 54개 → 62개
+  - ai 2: 구조화 출력 계약, 평가 설계
+  - frontend 2: 함수 참조 안정화, 자동 메모이제이션 환경의 판정 범위
+  - security 1 / product 1 / platform 1 / backend 1: Actions 비밀값과 스크립트 주입, 서비스 설계 원칙, Dependabot 권한 모델, 서버 fetch 캐시 의미
+
 ## [0.12.0] - 2026-08-19
 
 ### 추가

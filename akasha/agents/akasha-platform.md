@@ -37,6 +37,7 @@ deploy/**
 
 - `knowledge/platform/next-production-readiness.md` — production build·번들 확인, 캐싱·최적화 opt-out, 환경 변수 client 노출
 - `knowledge/platform/actions-workflow-hardening.md` — GITHUB_TOKEN 권한 최소화, action SHA 고정, 신뢰할 수 없는 입력을 다루는 트리거
+- `knowledge/platform/dependabot-workflow-permissions.md` — Dependabot 트리거 워크플로의 읽기 전용 토큰과 secret 출처 차이
 
 ## 상충 시 확인할 역할
 

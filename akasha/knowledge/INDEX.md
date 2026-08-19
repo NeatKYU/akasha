@@ -6,6 +6,7 @@
 
 ## product
 
+- [서비스 설계 원칙](product/service-design-principles.md)
 - [사용자 조사 근거 기준](product/user-research-evidence.md)
 - [사용자 니즈 정의 기준](product/user-needs.md)
 - [사용자 스토리 분할 기준](product/user-story-slicing.md)
@@ -23,6 +24,8 @@
 
 ## frontend
 
+- [함수 참조 안정화 판단 기준](frontend/callback-stability.md)
+- [자동 메모이제이션 환경의 최적화 판단](frontend/compiler-memoization.md)
 - [useMemo 사용 판단 기준](frontend/memoized-values.md)
 - [memo가 효과를 내는 조건](frontend/component-memoization.md)
 - [렌더 성능 측정 기준](frontend/render-profiling.md)
@@ -34,6 +37,7 @@
 
 ## backend
 
+- [서버 fetch 캐시 의미 기준](backend/fetch-cache-semantics.md)
 - [웹 서비스 입출력 방어 기준](backend/web-service-hardening.md)
 - [서비스 간 신뢰 경계 기준](backend/service-to-service-trust.md)
 - [Route Handler 요청·응답 계약 기준](backend/route-handler-contract.md)
@@ -54,6 +58,7 @@
 
 ## security
 
+- [Actions 비밀값 취급과 스크립트 주입 방지](security/actions-secret-handling.md)
 - [보안 로깅 기준](security/security-logging.md)
 - [장기 자격증명 대신 OIDC 사용 기준](security/oidc-credentials.md)
 - [인증 처리 기준](security/authentication-baseline.md)
@@ -73,6 +78,7 @@
 
 ## platform
 
+- [Dependabot 워크플로 권한 기준](platform/dependabot-workflow-permissions.md)
 - [Next.js 배포 준비 점검 기준](platform/next-production-readiness.md)
 - [GitHub Actions workflow 하드닝 기준](platform/actions-workflow-hardening.md)
 
@@ -84,6 +90,8 @@
 
 ## ai
 
+- [구조화 출력 계약 기준](ai/structured-output-contract.md)
+- [평가 설계 기준](ai/eval-design.md)
 - [프롬프트 접두사 캐싱 기준](ai/prompt-prefix-caching.md)
 - [에이전트 워크플로 평가 기준](ai/agent-evaluation.md)
 - [Codex 에이전트 운영 기준](ai/codex-agent-operations.md)
