@@ -39,6 +39,7 @@ prompts/**
 
 - `knowledge/ai/codex-agent-operations.md` — 프로젝트 지시 파일의 계층과 우선순위, 하위 에이전트의 역할·범위·검증 책임, 권한·샌드박스·승인 경계
 - `knowledge/ai/agent-evaluation.md` — 실행 기록(trace) 단위 평가, 도구 선택·인계 시점 채점, 형식화 시점 판단
+- `knowledge/ai/prompt-prefix-caching.md` — 고정·가변 내용 배치, 접두사를 깨뜨리는 요소, 캐시 쓰기 비용
 
 ## 상충 시 확인할 역할
 

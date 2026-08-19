@@ -39,6 +39,8 @@ server/**
 - `knowledge/backend/server-action-boundary.md` — Server Action의 인증·인가·입력 검증, 클라이언트가 보낸 식별자 신뢰, 반환값 범위
 - `knowledge/backend/prisma-transaction-integrity.md` — 트랜잭션 경계, 자동 트랜잭션 여부, 격리 수준, 타임아웃과 교착
 - `knowledge/backend/data-security-boundary.md` — 데이터 접근 계층 설계, 클라이언트로 넘기는 DTO 필드 제한, 비밀값 서버 전용 격리
+- `knowledge/backend/web-service-hardening.md` — TLS, 스키마 검증, 메시지 크기·자원 소모 상한, 출력 인코딩
+- `knowledge/backend/service-to-service-trust.md` — 내부망 신뢰 전제, 외부 토큰 재사용 금지, 서비스 간 인증
 
 ## 상충 시 확인할 역할
 

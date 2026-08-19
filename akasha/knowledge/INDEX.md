@@ -6,6 +6,7 @@
 
 ## product
 
+- [사용자 조사 근거 기준](product/user-research-evidence.md)
 - [사용자 니즈 정의 기준](product/user-needs.md)
 - [사용자 스토리 분할 기준](product/user-story-slicing.md)
 
@@ -33,6 +34,8 @@
 
 ## backend
 
+- [웹 서비스 입출력 방어 기준](backend/web-service-hardening.md)
+- [서비스 간 신뢰 경계 기준](backend/service-to-service-trust.md)
 - [Route Handler 요청·응답 계약 기준](backend/route-handler-contract.md)
 - [REST API 보안 계약 기준](backend/rest-api-security.md)
 - [Server Action 보안 경계 기준](backend/server-action-boundary.md)
@@ -51,6 +54,8 @@
 
 ## security
 
+- [보안 로깅 기준](security/security-logging.md)
+- [장기 자격증명 대신 OIDC 사용 기준](security/oidc-credentials.md)
 - [인증 처리 기준](security/authentication-baseline.md)
 - [인가 검사 기준](security/authorization-checks.md)
 - [입력 검증 기준](security/input-validation.md)
@@ -58,6 +63,10 @@
 
 ## qa
 
+- [테스트 격리 메커니즘 기준](qa/test-isolation.md)
+- [병렬 실행과 순서 의존 기준](qa/parallel-execution.md)
+- [CI 테스트 실행 구성 기준](qa/ci-execution.md)
+- [접근성 테스트 범위 기준](qa/accessibility-testing-scope.md)
 - [테스트 fixture 설계 기준](qa/test-fixtures.md)
 - [품질보증 E2E 테스트 기준](qa/e2e-test-baseline.md)
 - [접근성 회귀 테스트 기준](qa/accessibility-regression-testing.md)
@@ -69,10 +78,12 @@
 
 ## marketing
 
+- [성능 지표 임계값 기준](marketing/core-web-vitals.md)
 - [검색 발견 가능성 기준](marketing/search-discoverability.md)
 - [Next.js metadata와 공유 미리보기 구현 기준](marketing/next-metadata-implementation.md)
 
 ## ai
 
+- [프롬프트 접두사 캐싱 기준](ai/prompt-prefix-caching.md)
 - [에이전트 워크플로 평가 기준](ai/agent-evaluation.md)
 - [Codex 에이전트 운영 기준](ai/codex-agent-operations.md)

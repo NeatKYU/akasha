@@ -38,6 +38,10 @@ cypress/**
 - `knowledge/qa/e2e-test-baseline.md` — 사용자 관점 locator, 테스트 격리와 flaky 예방, web-first assertion, trace 근거
 - `knowledge/qa/accessibility-regression-testing.md` — 접근성 자동 검사의 smoke 범위, 키보드 이동·focus 순서·대체 텍스트 회귀 확인
 - `knowledge/qa/test-fixtures.md` — fixture와 before/after 훅 선택, test·worker 스코프, 자동 fixture, fixture timeout
+- `knowledge/qa/test-isolation.md` — BrowserContext가 나누는 상태와 나누지 않는 상태, 순서 의존 실패 원인
+- `knowledge/qa/parallel-execution.md` — 파일·테스트 단위 병렬 기본값, 모듈 수준 상태 누수, serial 모드
+- `knowledge/qa/ci-execution.md` — CI 워커 수, 브라우저 설치, 산출물 보관, 샤딩 대 병렬도
+- `knowledge/qa/accessibility-testing-scope.md` — 자동 검사가 잡는 범위와 못 잡는 범위, 수동 검사 필수
 
 ## 상충 시 확인할 역할
 

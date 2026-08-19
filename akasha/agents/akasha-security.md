@@ -39,6 +39,8 @@ sandbox와 read-only 원칙 준수 여부를 판단한다. 모델 선택을 보�
 - `knowledge/security/input-validation.md` — 허용 목록 검증, 구문·의미 검증 분리, 파일 업로드, 출력 인코딩과의 구분
 - `knowledge/security/github-actions-secrets.md` — 비밀값 범위(repository/environment/organization), 보호 규칙·승인자·브랜치 제한
 - `knowledge/security/authentication-baseline.md` — 로그인 실패 응답 일관성, 비밀번호 정책, 계정 잠금, 민감 작업 재인증
+- `knowledge/security/security-logging.md` — 반드시 남길 이벤트와 절대 남기지 않을 값, 로그 주입 방지
+- `knowledge/security/oidc-credentials.md` — 장기 secret 대신 OIDC, 신뢰 조건 범위 좁히기
 
 ## 상충 시 확인할 역할
 

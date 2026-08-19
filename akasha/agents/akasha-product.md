@@ -37,6 +37,7 @@ specs/**
 
 - `knowledge/product/user-needs.md` — 사용자 문제와 대상 사용자 정의, 조사 근거 요구, 해결책이 니즈로 위장한 경우
 - `knowledge/product/user-story-slicing.md` — 스토리를 사용자 관점으로 쓰기, 큰 스토리의 분할 단위, 수용 조건 작성법
+- `knowledge/product/user-research-evidence.md` — 요구사항의 조사 근거, 가정과 관찰의 구분, 기존 데이터 활용
 
 ## 상충 시 확인할 역할
 

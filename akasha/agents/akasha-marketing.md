@@ -36,6 +36,7 @@ model: inherit
 
 - `knowledge/marketing/search-discoverability.md` — 검색 발견 가능성, title·description 품질, canonical·robots·sitemap 노출 결정
 - `knowledge/marketing/next-metadata-implementation.md` — App Router metadata 구현, generateMetadata의 렌더링 영향, Open Graph 미리보기
+- `knowledge/marketing/core-web-vitals.md` — LCP·INP·CLS 임계값, 필드 데이터와 랩 측정 구분
 
 ## 상충 시 확인할 역할
 
