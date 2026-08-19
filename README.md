@@ -180,9 +180,7 @@ akasha/                        플러그인 루트 (배포 대상)
   agents/akasha-<역할>.md      역할 지시문 겸 Claude Code 서브에이전트 (읽기 전용, 한 벌)
   knowledge/                   사람이 검토한 지식 요약 (INDEX.md 포함)
 
-catalog/roles/*/sources.json   허용된 출처와 사용 목적       (배포 안 함)
-reports/                       일일 수집이 만든 격리 보고서   (배포 안 함, 에이전트가 읽지 않음)
-manifest.json                  마지막 승인 스냅샷과 출처 해시
+fixtures/                      악성 페이로드 샘플            (배포 안 함)
 kb-* git tag                   소비 프로젝트가 고정하는 불변 버전
 ```
 
@@ -190,14 +188,13 @@ kb-* git tag                   소비 프로젝트가 고정하는 불변 버전
 
 ```bash
 npm run validate
+npm run check:sources
 npm run eval:model-routing:test
 npm run eval:model-routing:smoke -- --output /tmp/akasha-model-smoke
 npm run eval:model-routing:screen -- --output /tmp/akasha-model-screen
 npm run eval:model-routing:integration -- --output /tmp/akasha-model-integration
 npm run eval:model-routing:integration:analyze -- --input /tmp/akasha-model-integration/raw.jsonl
 npm run version:set -- 0.2.1
-npm run refresh -- --date 2026-08-04
-npm run prepare-promotion
 ```
 
 ### 버전 관리
@@ -231,8 +228,7 @@ CHANGELOG 항목, 저장소에 커밋된 `+codex.<timestamp>` build metadata를 
 
 | workflow | 하는 일 |
 | --- | --- |
-| `refresh-quarantine.yml` | 매일 출처의 메타데이터와 내용 해시를 날짜별 격리 브랜치에 기록 |
-| `prepare-weekly-promotion.yml` | 최신 격리 결과로 주간 승격 브랜치를 만들고 검토용 PR 생성 |
+| `check-sources.yml` | 주 1회 지식 문서가 인용한 원본을 가져와 해시를 비교하고 변경분을 요약에 남김 |
 | `tag-approved-snapshot.yml` | 소유자가 수동 실행할 때만 불변 `kb-*` 태그 생성 후 마켓플레이스 핀 PR 오픈 |
 
 **자동화는 PR 생성까지이며 승인과 병합은 CODEOWNER가 직접 수행합니다.** 어떤 workflow도 review approve API나

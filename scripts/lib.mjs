@@ -1,5 +1,4 @@
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import Ajv2020 from 'ajv/dist/2020.js';
@@ -86,25 +85,6 @@ export function sha256(value) {
   return createHash('sha256').update(value).digest('hex');
 }
 
-const ajv = new Ajv2020({ allErrors: true, strict: true });
-const sourceSchema = JSON.parse(readFileSync(path.join(ROOT, 'schema', 'source.schema.json'), 'utf8'));
-const snapshotSchema = JSON.parse(
-  readFileSync(path.join(ROOT, 'schema', 'snapshot.schema.json'), 'utf8')
-);
-const validateSourceSchema = ajv.compile(sourceSchema);
-const validateSnapshotSchema = ajv.compile(snapshotSchema);
-
-function schemaErrorText(validate) {
-  return ajv.errorsText(validate.errors, { separator: '; ' });
-}
-
-export function assertSchema(value, schemaName) {
-  const validate = schemaName === 'source' ? validateSourceSchema : validateSnapshotSchema;
-  if (!validate(value)) {
-    throw new Error(`${schemaName} schema validation failed: ${schemaErrorText(validate)}`);
-  }
-}
-
 export function assertRelativePath(value, label) {
   if (typeof value !== 'string' || value.trim() === '') {
     throw new Error(`${label} must be a non-empty relative path`);
@@ -140,96 +120,6 @@ export function assertAllowlistedUrl(value, label = 'URL') {
     throw new Error(`${label} uses a non-allowlisted URL: ${value}`);
   }
   return url;
-}
-
-export function assertSource(source, expectedRole) {
-  assertSchema(source, 'source');
-  const requiredStrings = [
-    'id',
-    'role',
-    'title',
-    'url',
-    'authority',
-    'owner',
-    'license_note',
-    'allowed_purpose'
-  ];
-
-  for (const key of requiredStrings) {
-    if (typeof source[key] !== 'string' || source[key].trim() === '') {
-      throw new Error(`Source ${source.id ?? '<unknown>'} has invalid ${key}`);
-    }
-  }
-
-  if (!/^[a-z0-9-]+$/.test(source.id) || !/^[a-z0-9-]+$/.test(source.role)) {
-    throw new Error(`Source ${source.id} has an invalid id or role`);
-  }
-
-  if (source.role !== expectedRole) {
-    throw new Error(`Source ${source.id} role ${source.role} does not match ${expectedRole}`);
-  }
-
-  assertAllowlistedUrl(source.url, `Source ${source.id}`);
-
-  if (!['primary', 'secondary'].includes(source.authority)) {
-    throw new Error(`Source ${source.id} has invalid authority ${source.authority}`);
-  }
-
-  if (typeof source.enabled !== 'boolean') {
-    throw new Error(`Source ${source.id} has invalid enabled flag`);
-  }
-}
-
-export function assertSnapshot(snapshot) {
-  assertSchema(snapshot, 'snapshot');
-  if (detectPromptInjection(JSON.stringify(snapshot)) !== null) {
-    throw new Error(`Snapshot ${snapshot.source_id} contains an instruction-like payload`);
-  }
-  const secretPattern = detectSecret(JSON.stringify(snapshot));
-  if (secretPattern) {
-    throw new Error(`Snapshot ${snapshot.source_id} contains a secret-like payload: ${secretPattern}`);
-  }
-}
-
-export async function loadSources() {
-  const rolesRoot = path.join(ROOT, 'catalog', 'roles');
-  const roleEntries = await readdir(rolesRoot, { withFileTypes: true });
-  const sources = [];
-  const seenIds = new Set();
-  const seenUrls = new Map();
-
-  for (const roleEntry of roleEntries.filter((entry) => entry.isDirectory())) {
-    const file = path.join(rolesRoot, roleEntry.name, 'sources.json');
-    const roleSources = JSON.parse(await readFile(file, 'utf8'));
-    if (!Array.isArray(roleSources) || roleSources.length === 0) {
-      throw new Error(`${file} must contain a non-empty array`);
-    }
-
-    for (const source of roleSources) {
-      assertSource(source, roleEntry.name);
-      if (seenIds.has(source.id)) {
-        throw new Error(`Duplicate source id: ${source.id}`);
-      }
-      seenIds.add(source.id);
-      const sourceUrl = canonicalSourceUrl(source.url);
-      const duplicateUrlSource = seenUrls.get(sourceUrl);
-      if (duplicateUrlSource) {
-        throw new Error(
-          `Duplicate source URL: ${source.url} used by ${duplicateUrlSource} and ${source.id}`
-        );
-      }
-      seenUrls.set(sourceUrl, source.id);
-      sources.push(source);
-    }
-  }
-
-  return sources.sort((left, right) => left.id.localeCompare(right.id));
-}
-
-function canonicalSourceUrl(value) {
-  const url = assertAllowlistedUrl(value, 'Source URL');
-  url.hash = '';
-  return url.href.replace(/\/$/, '');
 }
 
 export async function fetchAllowlistedHtml(startUrl, options = {}) {
@@ -331,18 +221,37 @@ export function extractMetadata(html) {
   return { title, description, headings, normalizedText };
 }
 
-// 지식 문서가 어떤 출처를, 어떤 시점 스냅샷으로 요약했는지 읽는다.
-// `- 출처 카탈로그: \`id\`` 와 그 아래 `- 검토 스냅샷: \`id@hash12\`` 쌍, 그리고
-// 초기 스텁의 `Source catalog: \`a\`, \`b\`` 형식을 모두 인식한다.
+// 지식 문서의 `## 출처` 절이 단일 진실 원천이다. 각 출처 블록에서 id, URL, 권위,
+// 그리고 검토 시점에 고정한 구조·본문 해시를 읽는다.
 export function parseKnowledgeSources(text) {
-  const ids = new Set();
-  const pins = new Map();
-  for (const match of text.matchAll(/^- 출처 카탈로그: `([a-z0-9-]+)`\s*$/gm)) ids.add(match[1]);
-  const pinPattern = /^- 검토 스냅샷: `([a-z0-9-]+)` 구조 `([a-f0-9]{12})` 본문 `([a-f0-9]{12})`\s*$/gm;
-  for (const match of text.matchAll(pinPattern)) {
-    pins.set(match[1], { structure: match[2], body: match[3] });
+  const sources = new Map();
+  const blockPattern = /^- 출처 id: `([a-z0-9-]+)`\s*$/gm;
+  for (const match of text.matchAll(blockPattern)) {
+    const rest = text.slice(match.index);
+    const field = (name) => rest.match(new RegExp(`^- ${name}: (.+)$`, 'm'))?.[1]?.trim();
+    const pin = rest.match(/^- 검토 스냅샷: `([a-z0-9-]+)` 구조 `([a-f0-9]{12})` 본문 `([a-f0-9]{12})`\s*$/m);
+    sources.set(match[1], {
+      id: match[1],
+      url: field('URL'),
+      owner: field('소유자'),
+      authority: field('권위'),
+      pin: pin && pin[1] === match[1] ? { structure: pin[2], body: pin[3] } : null
+    });
   }
-  const legacy = text.match(/^Source catalog:([\s\S]*?)\.\s*$/m);
-  if (legacy) for (const match of legacy[1].matchAll(/`([a-z0-9-]+)`/g)) ids.add(match[1]);
-  return { ids, pins, hasSourceSection: /^## 출처\s*$/m.test(text) };
+  return { sources, hasSourceSection: /^## 출처\s*$/m.test(text) };
+}
+
+// akasha/knowledge 아래 모든 지식 문서를 읽어 출처 목록을 만든다.
+export async function loadKnowledgeSources() {
+  const { readdir, readFile } = await import('node:fs/promises');
+  const knowledgeRoot = path.join(ROOT, 'akasha', 'knowledge');
+  const docs = [];
+  for (const entry of await readdir(knowledgeRoot, { withFileTypes: true, recursive: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.md') || entry.name === 'INDEX.md') continue;
+    const full = path.join(entry.parentPath ?? entry.path, entry.name);
+    const relative = path.relative(knowledgeRoot, full).split(path.sep).join('/');
+    const text = await readFile(full, 'utf8');
+    docs.push({ path: relative, ...parseKnowledgeSources(text) });
+  }
+  return docs.sort((a, b) => a.path.localeCompare(b.path));
 }

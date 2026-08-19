@@ -2,6 +2,27 @@
 
 이 프로젝트는 [Semantic Versioning](https://semver.org/)을 따릅니다.
 
+## [0.8.0] - 2026-08-19
+
+### 제거
+
+- `catalog/roles/*/sources.json` (1,120줄) — 모든 필드가 지식 문서의 `## 출처` 절과 중복이었다
+- `reports/` (276파일, 1.1MB) — 본문을 저장하지 않고 배포되지도 않아 에이전트에 도달하지 않았다. 남기는 값은 해시 2개뿐이었고 그건 지식 문서에 고정된다
+- `manifest.json`, `schema/`, `scripts/refresh.mjs`, `scripts/prepare-promotion.mjs`, `scripts/review-queue.mjs`
+- `refresh-quarantine.yml`, `prepare-weekly-promotion.yml`
+- `ajv` 의존성
+
+### 변경
+
+- **지식 문서의 `## 출처` 절이 단일 진실 원천이 되었다.** 출처 id, URL, 소유자, 권위, 라이선스 메모, 사용 메모, 검토 스냅샷을 담는다
+- 스텁 5개의 `Source catalog:` 꼬리 줄을 정식 `## 출처` 절로 승격. 이제 14개 문서 전부 출처 URL을 갖는다
+- 출처 블록 형식을 정규화 (`신뢰도`→`권위`, id를 블록 첫 줄로)
+
+### 추가
+
+- `npm run check:sources` — 지식 문서가 인용한 URL만 가져와 해시를 비교한다. 아무 파일도 쓰지 않고 재검토 목록만 출력한다
+- `check-sources.yml` — 주 1회 실행, 결과를 워크플로 요약에 남긴다
+
 ## [0.7.0] - 2026-08-19
 
 ### 추가

@@ -3,16 +3,12 @@ import path from 'node:path';
 import {
   ROOT,
   assertAllowlistedUrl,
-  assertDate,
   assertRelativePath,
-  assertSnapshot,
-  assertSource,
   detectPromptInjection,
   detectRawHtmlPromptInjection,
   detectRawHtmlSecret,
   detectSecret,
-  loadSources,
-  parseKnowledgeSources,
+  loadKnowledgeSources,
   resolveContained
 } from './lib.mjs';
 
@@ -41,125 +37,6 @@ async function validateReleaseVersion() {
     changelog.includes(`## [${packageJson.version}]`),
     `CHANGELOG.md must contain a ${packageJson.version} release entry`
   );
-}
-
-async function collectCitedSourceIds() {
-  const knowledgeRoot = resolveContained(ROOT, 'akasha', 'knowledge');
-  const cited = new Set();
-  for (const entry of await readdir(knowledgeRoot, { withFileTypes: true, recursive: true })) {
-    if (!entry.isFile() || !entry.name.endsWith('.md') || entry.name === 'INDEX.md') continue;
-    const text = await readFile(path.join(entry.parentPath ?? entry.path, entry.name), 'utf8');
-    for (const id of parseKnowledgeSources(text).ids) cited.add(id);
-  }
-  return cited;
-}
-
-async function validateManifest() {
-  const citedSourceIds = await collectCitedSourceIds();
-  const manifest = JSON.parse(await readFile(resolveContained(ROOT, 'manifest.json'), 'utf8'));
-  assert(manifest.schema_version === 1, 'manifest.schema_version must be 1');
-  assert(
-    ['bootstrap', 'approved-main'].includes(manifest.snapshot_status),
-    'manifest.snapshot_status is invalid'
-  );
-  assert(manifest.trust === 'human-reviewed-main-only', 'manifest trust boundary is invalid');
-  assertRelativePath(manifest.knowledge_index, 'manifest.knowledge_index');
-  assert(
-    manifest.knowledge_index === 'akasha/knowledge/INDEX.md',
-    'manifest.knowledge_index must point to akasha/knowledge/INDEX.md'
-  );
-  await access(resolveContained(ROOT, manifest.knowledge_index));
-  if (manifest.approved_report_date !== undefined) assertDate(manifest.approved_report_date);
-  if (manifest.approved_commit !== null && manifest.approved_commit !== undefined) {
-    assert(/^[a-f0-9]{40}$/.test(manifest.approved_commit), 'manifest.approved_commit is invalid');
-  }
-  if (manifest.unavailable_sources !== undefined) {
-    assert(
-      Array.isArray(manifest.unavailable_sources),
-      'manifest.unavailable_sources must be an array'
-    );
-    for (const entry of manifest.unavailable_sources) {
-      assert(
-        entry && /^[a-z0-9-]+$/.test(entry.source_id),
-        'manifest unavailable source id is invalid'
-      );
-      // 승인 스냅샷에서 누락이 허용되는 경우는 둘 뿐이다: secondary 출처이거나, 아직 어떤
-      // 지식 문서도 인용하지 않는 출처. 인용된 primary가 누락되면 그 문서의 근거가 사라지므로
-      // 승격 자체가 막혀야 한다 (prepare-promotion.mjs의 의존성 게이트와 같은 규칙).
-      assert(
-        entry.authority === 'secondary' || !citedSourceIds.has(entry.source_id),
-        `manifest unavailable source ${entry.source_id} is cited by approved knowledge and must not be missing`
-      );
-      assert(
-        !Object.hasOwn(manifest.source_hashes ?? {}, entry.source_id),
-        `manifest unavailable source ${entry.source_id} must not carry a hash`
-      );
-    }
-  }
-  assert(
-    manifest.source_hashes && typeof manifest.source_hashes === 'object' && !Array.isArray(manifest.source_hashes),
-    'manifest.source_hashes must be an object'
-  );
-  for (const [sourceId, hashes] of Object.entries(manifest.source_hashes)) {
-    assert(/^[a-z0-9-]+$/.test(sourceId), `manifest source id is invalid: ${sourceId}`);
-    assert(/^[a-f0-9]{64}$/.test(hashes.content_sha256), `manifest content hash is invalid for ${sourceId}`);
-    assert(/^[a-f0-9]{64}$/.test(hashes.metadata_sha256), `manifest metadata hash is invalid for ${sourceId}`);
-    assert(/^[a-f0-9]{64}$/.test(hashes.snapshot_sha256), `manifest snapshot hash is invalid for ${sourceId}`);
-  }
-}
-
-async function validateReports(sourcesById) {
-  const reportsRoot = resolveContained(ROOT, 'reports');
-  let dateEntries = [];
-  try {
-    dateEntries = await readdir(reportsRoot, { withFileTypes: true });
-  } catch (error) {
-    if (error.code === 'ENOENT') return;
-    throw error;
-  }
-
-  for (const dateEntry of dateEntries.filter((entry) => entry.isDirectory())) {
-    assertDate(dateEntry.name);
-    const dateRoot = resolveContained(reportsRoot, dateEntry.name);
-    const collectionPath = resolveContained(dateRoot, '_collection.json');
-    const collection = JSON.parse(await readFile(collectionPath, 'utf8'));
-    assert(collection.schema_version === 1, `${dateEntry.name} collection schema_version must be 1`);
-    assert(collection.date === dateEntry.name, `${dateEntry.name} collection date mismatch`);
-    assert(collection.trust === 'quarantine-only', `${dateEntry.name} collection trust marker is invalid`);
-    assert(Number.isInteger(collection.attempted) && collection.attempted >= 0, 'collection attempted is invalid');
-    assert(Number.isInteger(collection.succeeded) && collection.succeeded >= 0, 'collection succeeded is invalid');
-    assert(Array.isArray(collection.failures), 'collection failures must be an array');
-    assert(
-      collection.attempted === collection.succeeded + collection.failures.length,
-      `${dateEntry.name} collection attempted/succeeded/failures mismatch`
-    );
-    let snapshotCount = 0;
-    const roleEntries = await readdir(dateRoot, { withFileTypes: true });
-    for (const roleEntry of roleEntries.filter((entry) => entry.isDirectory())) {
-      assert(/^[a-z0-9-]+$/.test(roleEntry.name), `Invalid report role directory: ${roleEntry.name}`);
-      const roleRoot = resolveContained(dateRoot, roleEntry.name);
-      const files = await readdir(roleRoot);
-      for (const file of files.filter((name) => name.endsWith('.json'))) {
-        assert(/^[a-z0-9-]+\.json$/.test(file), `Invalid report filename: ${file}`);
-        const snapshot = JSON.parse(
-          await readFile(resolveContained(roleRoot, file), 'utf8')
-        );
-        assertSnapshot(snapshot);
-        const source = sourcesById.get(snapshot.source_id);
-        assert(source, `Unknown snapshot source ${snapshot.source_id}`);
-        assert(snapshot.role === source.role, `Snapshot role mismatch for ${snapshot.source_id}`);
-        assert(snapshot.source_url === source.url, `Snapshot URL mismatch for ${snapshot.source_id}`);
-        if (snapshot.final_url !== undefined) assertAllowlistedUrl(snapshot.final_url, 'Snapshot final_url');
-        assert(/^[a-f0-9]{64}$/.test(snapshot.content_sha256), 'Invalid snapshot SHA-256');
-        assert(snapshot.trust === 'untrusted-external-data', 'Snapshot trust marker is missing');
-        snapshotCount += 1;
-      }
-    }
-    assert(
-      snapshotCount === collection.succeeded,
-      `${dateEntry.name} collection succeeded count does not match snapshots`
-    );
-  }
 }
 
 async function validateKnowledgeDocuments() {
@@ -415,74 +292,35 @@ async function validateAgentContract(roleTexts) {
   }
 }
 
-
-// 검토 부채 상한. 재검토가 필요한 문서가 이 수를 넘으면 CI가 막는다.
-// 부채를 눈에 보이게 하되 무한히 쌓이지 않게 하는 장치다.
+// 검토 부채 상한. 고정이 없는 출처가 이 수를 넘으면 CI가 막는다.
 const REVIEW_DEBT_CEILING = 12;
 
-async function validateKnowledgeReviewPins(documentPaths) {
-  const knowledgeRoot = resolveContained(ROOT, 'akasha', 'knowledge');
-  const manifest = JSON.parse(await readFile(resolveContained(ROOT, 'manifest.json'), 'utf8'));
-  const sources = await loadSources();
-  const knownIds = new Set(sources.map((source) => source.id));
-  const currentHashes = manifest.source_hashes ?? {};
-  const unavailable = new Set((manifest.unavailable_sources ?? []).map((entry) => entry.source_id));
+async function validateKnowledgeSources() {
+  const docs = await loadKnowledgeSources();
+  const debt = [];
 
-  const queue = [];
-  const soft = [];
-  for (const relativePath of [...documentPaths].sort()) {
-    const text = await readFile(resolveContained(knowledgeRoot, relativePath), 'utf8');
-    const { ids, pins, hasSourceSection } = parseKnowledgeSources(text);
-    const label = `akasha/knowledge/${relativePath}`;
+  for (const doc of docs) {
+    const label = `akasha/knowledge/${doc.path}`;
+    assert(doc.hasSourceSection, `${label} must declare a "## 출처" section`);
+    assert(doc.sources.size > 0, `${label} must declare at least one source block`);
 
-    assert(ids.size > 0, `${label} must declare at least one catalog source id`);
-    for (const id of ids) {
-      assert(knownIds.has(id), `${label} cites an unregistered catalog source: ${id}`);
-    }
-    for (const id of pins.keys()) {
-      assert(ids.has(id), `${label} pins a snapshot for a source it does not cite: ${id}`);
-    }
-
-    if (!hasSourceSection) {
-      queue.push({ path: label, reason: 'no-source-section', detail: '## 출처 절이 없어 검토 시점을 고정할 수 없다' });
-      continue;
-    }
-    for (const id of ids) {
-      if (unavailable.has(id)) continue;
-      const entry = currentHashes[id];
-      if (!entry) {
-        queue.push({ path: label, reason: 'no-manifest-hash', detail: `${id} 승인 스냅샷 해시 없음` });
-        continue;
-      }
-      const pin = pins.get(id);
-      if (!pin) {
-        queue.push({ path: label, reason: 'unpinned', detail: `${id} 검토 스냅샷 미기록` });
-        continue;
-      }
-      // 구조(제목·설명·헤딩)가 바뀌면 문서가 다루는 범위가 달라졌을 수 있으므로 재검토 필수다.
-      // 본문만 바뀐 경우는 표현 수정일 가능성이 높아 확인 권장으로 낮춘다.
-      if (!entry.metadata_sha256.startsWith(pin.structure)) {
-        queue.push({ path: label, reason: 'structure-changed', detail: `${id} 구조 ${pin.structure} → ${entry.metadata_sha256.slice(0, 12)}` });
-      } else if (!entry.content_sha256.startsWith(pin.body)) {
-        soft.push({ path: label, detail: `${id} 본문 ${pin.body} → ${entry.content_sha256.slice(0, 12)}` });
-      }
+    for (const source of doc.sources.values()) {
+      assertAllowlistedUrl(source.url, `${label} source ${source.id}`);
+      assert(source.owner, `${label} source ${source.id} must declare 소유자`);
+      assert(
+        ['primary', 'secondary'].includes(source.authority),
+        `${label} source ${source.id} 권위 must be primary or secondary`
+      );
+      if (!source.pin) debt.push(`${label}: ${source.id} 검토 스냅샷 없음`);
     }
   }
 
-  if (queue.length > 0) {
-    const lines = queue.map((item) => `  - [${item.reason}] ${item.path}: ${item.detail}`);
-    console.log(`재검토 필수 ${queue.length}건 (상한 ${REVIEW_DEBT_CEILING}):\n${lines.join('\n')}`);
-  }
-  if (soft.length > 0) {
-    const lines = soft.map((item) => `  - ${item.path}: ${item.detail}`);
-    console.log(`본문만 변경 ${soft.length}건 (확인 권장, 상한 대상 아님):\n${lines.join('\n')}`);
-  }
+  if (debt.length > 0) console.log(`고정 없는 출처 ${debt.length}건:\n${debt.map((d) => `  - ${d}`).join('\n')}`);
   assert(
-    queue.length <= REVIEW_DEBT_CEILING,
-    `Review debt ${queue.length} exceeds ceiling ${REVIEW_DEBT_CEILING}. ` +
-      '재검토를 끝내기 전에는 새 지식 문서를 늘리지 않는다.'
+    debt.length <= REVIEW_DEBT_CEILING,
+    `Review debt ${debt.length} exceeds ceiling ${REVIEW_DEBT_CEILING}.`
   );
-  return queue;
+  return docs;
 }
 
 async function validateAkashaSkillContract() {
@@ -607,68 +445,29 @@ async function validateFixtures() {
   const malicious = JSON.parse(
     await readFile(path.join(ROOT, 'fixtures', 'malicious-source.json'), 'utf8')
   );
-  assert(
-    detectPromptInjection(malicious.body) !== null,
-    'Malicious prompt-injection fixture was not rejected'
-  );
-  assert(
-    detectRawHtmlPromptInjection(malicious.body) !== null,
-    'Malicious raw HTML prompt-injection fixture was not rejected'
-  );
+  assert(detectPromptInjection(malicious.body) !== null, 'Malicious prompt-injection fixture was not rejected');
+  assert(detectRawHtmlPromptInjection(malicious.body) !== null, 'Malicious raw HTML fixture was not rejected');
   assert(
     detectRawHtmlPromptInjection('window.__data = { tool_call: "documented API field" };') === null,
     'Benign raw HTML tool_call fixture was rejected'
   );
 
-  const invalid = JSON.parse(
-    await readFile(path.join(ROOT, 'fixtures', 'invalid-source.json'), 'utf8')
-  );
+  const invalid = JSON.parse(await readFile(path.join(ROOT, 'fixtures', 'invalid-source.json'), 'utf8'));
   let rejected = false;
-  try {
-    assertSource(invalid, 'security');
-  } catch {
-    rejected = true;
-  }
+  try { assertAllowlistedUrl(invalid.url, 'fixture'); } catch { rejected = true; }
   assert(rejected, 'Non-HTTPS source fixture was not rejected');
 
-  const oversizedSnapshot = JSON.parse(
-    await readFile(resolveContained(ROOT, 'fixtures', 'oversized-snapshot.json'), 'utf8')
-  );
-  rejected = false;
-  try {
-    assertSnapshot(oversizedSnapshot);
-  } catch {
-    rejected = true;
-  }
-  assert(rejected, 'Oversized snapshot fixture was not rejected');
-
-  const pathTraversalManifest = JSON.parse(
+  const traversal = JSON.parse(
     await readFile(resolveContained(ROOT, 'fixtures', 'path-traversal-manifest.json'), 'utf8')
   );
   rejected = false;
-  try {
-    assertRelativePath(pathTraversalManifest.knowledge_index, 'fixture.knowledge_index');
-  } catch {
-    rejected = true;
-  }
+  try { assertRelativePath(traversal.knowledge_index, 'fixture'); } catch { rejected = true; }
   assert(rejected, 'Path traversal fixture was not rejected');
 
-  const promptInjectionSnapshot = JSON.parse(
-    await readFile(resolveContained(ROOT, 'fixtures', 'prompt-injection-snapshot.json'), 'utf8')
-  );
-  rejected = false;
-  try {
-    assertSnapshot(promptInjectionSnapshot);
-  } catch {
-    rejected = true;
-  }
-  assert(rejected, 'Prompt-injection snapshot fixture was not rejected');
-
-  const secretPayloadParts = JSON.parse(
+  const parts = JSON.parse(
     await readFile(resolveContained(ROOT, 'fixtures', 'secret-payload-parts.json'), 'utf8')
   );
-  const secretFixture = secretPayloadParts.parts.join('');
-  assert(detectSecret(secretFixture) !== null, 'Secret fixture was not detected');
+  assert(detectSecret(parts.parts.join('')) !== null, 'Secret fixture was not detected');
   assert(
     detectRawHtmlSecret('Gov.uk generated class sk-example-token-shaped-text') === null,
     'Benign raw HTML sk-* fixture was rejected'
@@ -724,15 +523,12 @@ function normalizeRelativePath(value) {
   return value.split(path.sep).join('/');
 }
 
-const sources = await loadSources();
+await validateKnowledgeSources();
 await validateReleaseVersion();
-await validateManifest();
 const knowledgeDocuments = await validateKnowledgeDocuments();
 await validateAgentContract(await validateRoleKnowledgeRouting(knowledgeDocuments));
-await validateKnowledgeReviewPins(knowledgeDocuments);
 await validateAkashaSkillContract();
-await validateReports(new Map(sources.map((source) => [source.id, source])));
 await validateRepoSecretScan();
 if (process.argv.includes('--fixtures')) await validateFixtures();
 
-console.log(`Validated ${sources.length} allowlisted sources and the knowledge manifest.`);
+console.log('Validated knowledge documents, role agents, and the Akasha skill contract.');

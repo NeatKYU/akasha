@@ -2,13 +2,12 @@
 
 ## 출처
 
-- 제목: How to think about data security in Next.js
+- 출처 id: `next-data-security`
 - URL: https://nextjs.org/docs/app/guides/data-security
 - 소유자: Vercel
-- 신뢰도: primary
+- 권위: primary
 - 라이선스 메모: 메타데이터, 링크, 짧은 출처 표기 요약만 사용한다.
 - 사용 메모: 서버 컴포넌트, 데이터 접근 계층, DTO, Server Action 보안 검토에 사용한다.
-- 출처 카탈로그: `next-data-security`
 - 검토 스냅샷: `next-data-security` 구조 `c75227780e82` 본문 `5bbfd74dbca1`
 
 ## 이 문서가 해당 역할에 도움이 되는 이유

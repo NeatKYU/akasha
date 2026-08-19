@@ -2,20 +2,20 @@
 
 ## 출처
 
+- 출처 id: `vercel-next-production`
 - URL: https://nextjs.org/docs/app/guides/production-checklist
 - 소유자: Vercel
 - 권위: primary
 - 라이선스 메모: 메타데이터, 링크, 짧은 출처 표기 요약만 사용한다.
 - 사용 메모: Next.js 배포 준비와 운영 점검 기준으로만 사용한다.
-- 출처 카탈로그: `vercel-next-production`
 - 검토 스냅샷: `vercel-next-production` 구조 `d597dc6781bf` 본문 `37f101f0ba84`
 
+- 출처 id: `github-actions-security`
 - URL: https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions
 - 소유자: GitHub
 - 권위: primary
 - 라이선스 메모: 메타데이터, 링크, 짧은 출처 표기 요약만 사용한다.
 - 사용 메모: workflow token, secret, supply-chain hardening 검토에만 사용한다.
-- 출처 카탈로그: `github-actions-security`
 - 검토 스냅샷: `github-actions-security` 구조 `6bbca9162fbf` 본문 `66741fec3093`
 
 ## 이 문서가 해당 역할에 도움이 되는 이유

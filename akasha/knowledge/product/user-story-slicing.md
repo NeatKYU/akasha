@@ -2,12 +2,12 @@
 
 ## 출처
 
+- 출처 id: `govuk-user-stories`
 - URL: https://www.gov.uk/service-manual/agile-delivery/writing-user-stories
 - 소유자: UK Government Digital Service
 - 권위: primary
 - 라이선스 메모: 메타데이터, 링크, 짧은 출처 표기 요약만 사용한다.
 - 사용 메모: 제품 백로그 분할과 수용 조건 검토 기준으로만 사용한다.
-- 출처 카탈로그: `govuk-user-stories`
 - 검토 스냅샷: `govuk-user-stories` 구조 `810b85ab3b3a` 본문 `ad98632a17d1`
 
 ## 이 문서가 해당 역할에 도움이 되는 이유
