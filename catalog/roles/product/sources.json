@@ -20,5 +20,71 @@
     "license_note": "Use metadata and concise attributed summaries only.",
     "allowed_purpose": "Product backlog slicing and acceptance criteria review.",
     "enabled": true
+  },
+  {
+    "id": "govuk-standard-point1",
+    "role": "product",
+    "title": "Service Standard point 1 understand user needs",
+    "url": "https://www.gov.uk/service-manual/service-standard/point-1-understand-user-needs",
+    "authority": "primary",
+    "owner": "UK Government Digital Service",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "사용자 니즈 이해 기준 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "govuk-user-research",
+    "role": "product",
+    "title": "GOV.UK user research",
+    "url": "https://www.gov.uk/service-manual/user-research",
+    "authority": "primary",
+    "owner": "UK Government Digital Service",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "사용자 조사 개괄 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "govuk-research-improves-design",
+    "role": "product",
+    "title": "How user research improves service design",
+    "url": "https://www.gov.uk/service-manual/user-research/how-user-research-improves-service-design",
+    "authority": "primary",
+    "owner": "UK Government Digital Service",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "조사가 설계를 바꾸는 방식 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "govuk-research-in-live",
+    "role": "product",
+    "title": "User research in live",
+    "url": "https://www.gov.uk/service-manual/user-research/user-research-in-live",
+    "authority": "primary",
+    "owner": "UK Government Digital Service",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "운영 단계 조사와 성과 측정 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "govuk-designing-services",
+    "role": "product",
+    "title": "Designing good government services",
+    "url": "https://www.gov.uk/service-manual/design/introduction-designing-government-services",
+    "authority": "primary",
+    "owner": "UK Government Digital Service",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "서비스 설계 개론 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "govuk-service-manual",
+    "role": "product",
+    "title": "GOV.UK Service Manual",
+    "url": "https://www.gov.uk/service-manual",
+    "authority": "primary",
+    "owner": "UK Government Digital Service",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "서비스 매뉴얼 색인 판정 근거로만 사용한다.",
+    "enabled": true
   }
 ]

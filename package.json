@@ -1,10 +1,11 @@
 {
   "name": "akasha",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "type": "module",
   "scripts": {
     "validate": "node scripts/validate.mjs --fixtures",
+    "review:queue": "node scripts/review-queue.mjs",
     "eval:model-routing:test": "node scripts/model-routing-eval.test.mjs",
     "eval:model-routing:smoke": "node scripts/run-model-routing-eval.mjs --phase smoke",
     "eval:model-routing:screen": "node scripts/run-model-routing-eval.mjs --phase screen",

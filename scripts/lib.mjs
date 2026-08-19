@@ -330,3 +330,18 @@ export function extractMetadata(html) {
 
   return { title, description, headings, normalizedText };
 }
+
+// 지식 문서가 어떤 출처를, 어떤 시점 스냅샷으로 요약했는지 읽는다.
+// `- 출처 카탈로그: \`id\`` 와 그 아래 `- 검토 스냅샷: \`id@hash12\`` 쌍, 그리고
+// 초기 스텁의 `Source catalog: \`a\`, \`b\`` 형식을 모두 인식한다.
+export function parseKnowledgeSources(text) {
+  const ids = new Set();
+  const pins = new Map();
+  for (const match of text.matchAll(/^- 출처 카탈로그: `([a-z0-9-]+)`\s*$/gm)) ids.add(match[1]);
+  for (const match of text.matchAll(/^- 검토 스냅샷: `([a-z0-9-]+)@([a-f0-9]{12})`\s*$/gm)) {
+    pins.set(match[1], match[2]);
+  }
+  const legacy = text.match(/^Source catalog:([\s\S]*?)\.\s*$/m);
+  if (legacy) for (const match of legacy[1].matchAll(/`([a-z0-9-]+)`/g)) ids.add(match[1]);
+  return { ids, pins, hasSourceSection: /^## 출처\s*$/m.test(text) };
+}

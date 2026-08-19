@@ -8,6 +8,7 @@
 - 라이선스 메모: 메타데이터, 링크, 짧은 출처 표기 요약만 사용한다.
 - 사용 메모: 브라우저 테스트 설계와 flaky test 예방 기준으로만 사용한다.
 - 출처 카탈로그: `playwright-best-practices`
+- 검토 스냅샷: `playwright-best-practices@511b79b4acda`
 
 ## 이 문서가 해당 역할에 도움이 되는 이유
 

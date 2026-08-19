@@ -53,5 +53,115 @@
     "license_note": "Secondary inspiration only; do not copy text, components, or assets.",
     "allowed_purpose": "Non-normative design-system team inspiration.",
     "enabled": true
+  },
+  {
+    "id": "aria-apg-dialog-modal",
+    "role": "design",
+    "title": "ARIA APG Dialog (Modal) Pattern",
+    "url": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+    "authority": "primary",
+    "owner": "W3C",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "모달 focus 관리·Escape·aria-modal 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "aria-apg-alertdialog",
+    "role": "design",
+    "title": "ARIA APG Alert and Message Dialogs Pattern",
+    "url": "https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/",
+    "authority": "primary",
+    "owner": "W3C",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "확인·경고 다이얼로그 패턴 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "aria-apg-introduction",
+    "role": "design",
+    "title": "ARIA APG Introduction",
+    "url": "https://www.w3.org/WAI/ARIA/apg/about/introduction/",
+    "authority": "primary",
+    "owner": "W3C",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "APG는 informative, WCAG/ARIA가 normative 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "aria-apg-index",
+    "role": "design",
+    "title": "ARIA Authoring Practices Guide",
+    "url": "https://www.w3.org/WAI/ARIA/apg/",
+    "authority": "primary",
+    "owner": "W3C",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "패턴 카탈로그 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "wcag22-h102-dialog",
+    "role": "design",
+    "title": "WCAG 2.2 Technique H102 modal dialogs",
+    "url": "https://www.w3.org/WAI/WCAG22/Techniques/html/H102",
+    "authority": "primary",
+    "owner": "W3C",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "native dialog 요소 기법 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "govuk-ds-accessibility",
+    "role": "design",
+    "title": "GOV.UK Design System Accessibility",
+    "url": "https://design-system.service.gov.uk/accessibility/",
+    "authority": "primary",
+    "owner": "UK Government Digital Service",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "디자인 시스템 접근성 책임 경계 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "govuk-ds-patterns",
+    "role": "design",
+    "title": "GOV.UK Design System Patterns",
+    "url": "https://design-system.service.gov.uk/patterns/",
+    "authority": "primary",
+    "owner": "UK Government Digital Service",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "패턴과 컴포넌트의 구분 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "govuk-ds-components",
+    "role": "design",
+    "title": "GOV.UK Design System Components",
+    "url": "https://design-system.service.gov.uk/components/",
+    "authority": "primary",
+    "owner": "UK Government Digital Service",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "컴포넌트별 사용 가이던스 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "govuk-ds-contribution",
+    "role": "design",
+    "title": "GOV.UK Design System component contribution",
+    "url": "https://design-system.service.gov.uk/community/develop-a-component-or-pattern/",
+    "authority": "primary",
+    "owner": "UK Government Digital Service",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "새 컴포넌트 승인 기준 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "govuk-design-principles",
+    "role": "design",
+    "title": "Government Design Principles",
+    "url": "https://www.gov.uk/guidance/government-design-principles",
+    "authority": "primary",
+    "owner": "UK Government Digital Service",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "설계 원칙 10개 판정 근거로만 사용한다.",
+    "enabled": true
   }
 ]

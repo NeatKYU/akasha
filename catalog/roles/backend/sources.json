@@ -31,5 +31,93 @@
     "license_note": "Use metadata, links, and concise attributed summaries.",
     "allowed_purpose": "Server-side data access, authorization, DTO, and Server Action security guidance.",
     "enabled": true
+  },
+  {
+    "id": "owasp-rest-security",
+    "role": "backend",
+    "title": "OWASP REST Security Cheat Sheet",
+    "url": "https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html",
+    "authority": "primary",
+    "owner": "OWASP",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "REST API 보안 계약 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "owasp-web-service-security",
+    "role": "backend",
+    "title": "OWASP Web Service Security Cheat Sheet",
+    "url": "https://cheatsheetseries.owasp.org/cheatsheets/Web_Service_Security_Cheat_Sheet.html",
+    "authority": "primary",
+    "owner": "OWASP",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "웹 서비스 경계 보안 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "owasp-microservices-security",
+    "role": "backend",
+    "title": "OWASP Microservices Security Cheat Sheet",
+    "url": "https://cheatsheetseries.owasp.org/cheatsheets/Microservices_Security_Cheat_Sheet.html",
+    "authority": "primary",
+    "owner": "OWASP",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "서비스 간 인가 전파 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "next-server-actions",
+    "role": "backend",
+    "title": "Next.js Server Actions guide",
+    "url": "https://nextjs.org/docs/app/guides/server-actions",
+    "authority": "primary",
+    "owner": "Vercel",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "Server Action의 보안 경계 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "next-fetch-reference",
+    "role": "backend",
+    "title": "Next.js fetch reference",
+    "url": "https://nextjs.org/docs/app/api-reference/functions/fetch",
+    "authority": "primary",
+    "owner": "Vercel",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "서버 fetch 캐시 설정 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "prisma-transactions",
+    "role": "backend",
+    "title": "Prisma transactions and batch queries",
+    "url": "https://www.prisma.io/docs/orm/prisma-client/queries/transactions",
+    "authority": "primary",
+    "owner": "Prisma Data",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "트랜잭션과 배치 쿼리 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "prisma-best-practices",
+    "role": "backend",
+    "title": "Prisma ORM best practices",
+    "url": "https://www.prisma.io/docs/orm/more/best-practices",
+    "authority": "primary",
+    "owner": "Prisma Data",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "Prisma 운영 권고 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "next-use-cache",
+    "role": "backend",
+    "title": "Next.js use cache directive",
+    "url": "https://nextjs.org/docs/app/api-reference/directives/use-cache",
+    "authority": "primary",
+    "owner": "Vercel",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "use cache 지시어 판정 근거로만 사용한다.",
+    "enabled": true
   }
 ]

@@ -1,6 +1,6 @@
 {
   "name": "akasha",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "역할 기반 승인 지식베이스 자문 플러그인. 변경 코드와 질문을 역할별 서브에이전트가 승인된 지식 문서 기준으로 검토한다.",
   "author": {
     "name": "NeatKYU",

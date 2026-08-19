@@ -1,5 +1,13 @@
 import { readdir, readFile, writeFile } from 'node:fs/promises';
-import { ROOT, assertDate, assertSnapshot, loadSources, resolveContained, sha256 } from './lib.mjs';
+import {
+  ROOT,
+  assertDate,
+  assertSnapshot,
+  loadSources,
+  parseKnowledgeSources,
+  resolveContained,
+  sha256
+} from './lib.mjs';
 
 const reportsRoot = resolveContained(ROOT, 'reports');
 const dates = (await readdir(reportsRoot, { withFileTypes: true }))
@@ -24,15 +32,38 @@ if (!collection.complete || collection.attempted !== expectedSources) {
   );
 }
 
-// primary 출처는 규범적 결론의 근거이므로 한 건이라도 실패하면 승격을 막는다. secondary 출처는
-// 영감·사례 용도라 한 곳의 장애가 주간 승격 전체를 영구히 막지 않도록 기록만 남기고 통과시킨다.
+// 승인된 지식 문서가 실제로 인용하는 출처만 승격을 막는다. 카탈로그에 등록만 되고 아직
+// 요약된 문서가 없는 출처는 의존하는 판정이 없으므로, 그 실패가 주간 승격 전체를 막지 않는다.
+// 출처가 늘수록 "하나라도 실패하면 전부 중단"은 승격을 사실상 불가능하게 만든다.
+const citedSourceIds = new Set();
+const knowledgeRoot = resolveContained(ROOT, 'akasha', 'knowledge');
+for (const entry of await readdir(knowledgeRoot, { withFileTypes: true, recursive: true })) {
+  if (!entry.isFile() || !entry.name.endsWith('.md') || entry.name === 'INDEX.md') continue;
+  const text = await readFile(resolveContained(entry.parentPath ?? entry.path, entry.name), 'utf8');
+  for (const id of parseKnowledgeSources(text).ids) citedSourceIds.add(id);
+}
+
+// secondary는 영감·사례 용도라 한 곳의 장애가 승격을 영구히 막지 않도록 기록만 남긴다.
 // catalog에 없는 source_id는 판단 근거가 없으므로 차단 쪽으로 처리한다.
-const blockingFailures = collection.failures.filter(
-  (failure) => authorityById.get(failure.source_id) !== 'secondary'
-);
+const blockingFailures = collection.failures.filter((failure) => {
+  const authority = authorityById.get(failure.source_id);
+  if (authority === 'secondary') return false;
+  if (authority === undefined) return true;
+  return citedSourceIds.has(failure.source_id);
+});
 if (blockingFailures.length > 0) {
+  const ids = blockingFailures.map((failure) => failure.source_id).join(', ');
   throw new Error(
-    `Cannot promote ${reportDate}: ${blockingFailures.length} primary source fetches failed.`
+    `Cannot promote ${reportDate}: ${blockingFailures.length} primary source(s) cited by approved knowledge failed: ${ids}`
+  );
+}
+const uncitedFailures = collection.failures.filter(
+  (failure) => authorityById.get(failure.source_id) === 'primary' && !citedSourceIds.has(failure.source_id)
+);
+if (uncitedFailures.length > 0) {
+  console.warn(
+    `${uncitedFailures.length} primary source(s) failed but are not cited by any knowledge document yet; ` +
+      'promotion continues and they stay recorded as unavailable.'
   );
 }
 // blockingFailures 검사를 통과했으므로 남은 실패는 모두 secondary 출처다.

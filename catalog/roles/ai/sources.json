@@ -20,5 +20,60 @@
     "license_note": "Use official links and concise attributed summaries.",
     "allowed_purpose": "Codex agent, skill, and configuration guidance.",
     "enabled": true
+  },
+  {
+    "id": "openai-agent-evals",
+    "role": "ai",
+    "title": "Evaluate agent workflows",
+    "url": "https://developers.openai.com/api/docs/guides/agent-evals",
+    "authority": "primary",
+    "owner": "OpenAI",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "에이전트 워크플로 평가 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "openai-evaluation-best-practices",
+    "role": "ai",
+    "title": "Evaluation best practices",
+    "url": "https://developers.openai.com/api/docs/guides/evaluation-best-practices",
+    "authority": "primary",
+    "owner": "OpenAI",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "평가 설계 원칙 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "openai-structured-outputs",
+    "role": "ai",
+    "title": "Structured model outputs",
+    "url": "https://developers.openai.com/api/docs/guides/structured-outputs",
+    "authority": "primary",
+    "owner": "OpenAI",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "스키마 준수 출력 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "openai-prompt-caching",
+    "role": "ai",
+    "title": "Prompt caching",
+    "url": "https://developers.openai.com/api/docs/guides/prompt-caching",
+    "authority": "primary",
+    "owner": "OpenAI",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "프롬프트 접두사 캐싱 판정 근거로만 사용한다.",
+    "enabled": true
+  },
+  {
+    "id": "openai-model-guidance",
+    "role": "ai",
+    "title": "Model guidance",
+    "url": "https://developers.openai.com/api/docs/guides/latest-model",
+    "authority": "primary",
+    "owner": "OpenAI",
+    "license_note": "메타데이터, 링크, 짧은 출처 표기 요약만 사용한다. 원문을 복제하지 않는다.",
+    "allowed_purpose": "모델 선택 가이드 판정 근거로만 사용한다.",
+    "enabled": true
   }
 ]

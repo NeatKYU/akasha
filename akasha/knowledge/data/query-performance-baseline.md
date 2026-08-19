@@ -8,6 +8,7 @@
 - 라이선스 메모: 메타데이터, 링크, 짧은 출처 표기 요약만 사용한다.
 - 사용 메모: 쿼리 실행 계획과 인덱스 효과를 검토할 때만 사용한다.
 - 출처 카탈로그: `postgres-explain`
+- 검토 스냅샷: `postgres-explain@20fc66d9edfb`
 
 - URL: https://www.prisma.io/docs/orm/prisma-client/queries/advanced/query-optimization-performance
 - 소유자: Prisma Data
@@ -15,6 +16,7 @@
 - 라이선스 메모: 메타데이터, 링크, 짧은 출처 표기 요약만 사용한다.
 - 사용 메모: Prisma Client 쿼리 병목과 N+1 패턴을 진단할 때만 사용한다.
 - 출처 카탈로그: `prisma-query-optimization`
+- 검토 스냅샷: `prisma-query-optimization@778a52074355`
 
 ## 이 문서가 해당 역할에 도움이 되는 이유
 

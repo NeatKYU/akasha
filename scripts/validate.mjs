@@ -12,6 +12,7 @@ import {
   detectRawHtmlSecret,
   detectSecret,
   loadSources,
+  parseKnowledgeSources,
   resolveContained
 } from './lib.mjs';
 
@@ -399,6 +400,65 @@ async function validateAgentContract(roleTexts) {
   }
 }
 
+
+// 검토 부채 상한. 재검토가 필요한 문서가 이 수를 넘으면 CI가 막는다.
+// 부채를 눈에 보이게 하되 무한히 쌓이지 않게 하는 장치다.
+const REVIEW_DEBT_CEILING = 12;
+
+async function validateKnowledgeReviewPins(documentPaths) {
+  const knowledgeRoot = resolveContained(ROOT, 'akasha', 'knowledge');
+  const manifest = JSON.parse(await readFile(resolveContained(ROOT, 'manifest.json'), 'utf8'));
+  const sources = await loadSources();
+  const knownIds = new Set(sources.map((source) => source.id));
+  const currentHashes = manifest.source_hashes ?? {};
+  const unavailable = new Set((manifest.unavailable_sources ?? []).map((entry) => entry.source_id));
+
+  const queue = [];
+  for (const relativePath of [...documentPaths].sort()) {
+    const text = await readFile(resolveContained(knowledgeRoot, relativePath), 'utf8');
+    const { ids, pins, hasSourceSection } = parseKnowledgeSources(text);
+    const label = `akasha/knowledge/${relativePath}`;
+
+    assert(ids.size > 0, `${label} must declare at least one catalog source id`);
+    for (const id of ids) {
+      assert(knownIds.has(id), `${label} cites an unregistered catalog source: ${id}`);
+    }
+    for (const id of pins.keys()) {
+      assert(ids.has(id), `${label} pins a snapshot for a source it does not cite: ${id}`);
+    }
+
+    if (!hasSourceSection) {
+      queue.push({ path: label, reason: 'no-source-section', detail: '## 출처 절이 없어 검토 시점을 고정할 수 없다' });
+      continue;
+    }
+    for (const id of ids) {
+      if (unavailable.has(id)) continue;
+      const current = currentHashes[id]?.content_sha256;
+      if (!current) {
+        queue.push({ path: label, reason: 'no-manifest-hash', detail: `${id} 승인 스냅샷 해시 없음` });
+        continue;
+      }
+      const pin = pins.get(id);
+      if (!pin) {
+        queue.push({ path: label, reason: 'unpinned', detail: `${id} 검토 스냅샷 미기록` });
+      } else if (!current.startsWith(pin)) {
+        queue.push({ path: label, reason: 'drifted', detail: `${id} ${pin} → ${current.slice(0, 12)}` });
+      }
+    }
+  }
+
+  if (queue.length > 0) {
+    const lines = queue.map((item) => `  - [${item.reason}] ${item.path}: ${item.detail}`);
+    console.log(`재검토 큐 ${queue.length}건 (상한 ${REVIEW_DEBT_CEILING}):\n${lines.join('\n')}`);
+  }
+  assert(
+    queue.length <= REVIEW_DEBT_CEILING,
+    `Review debt ${queue.length} exceeds ceiling ${REVIEW_DEBT_CEILING}. ` +
+      '재검토를 끝내기 전에는 새 지식 문서를 늘리지 않는다.'
+  );
+  return queue;
+}
+
 async function validateAkashaSkillContract() {
   const skillPath = resolveContained(ROOT, 'akasha', 'skills', 'akasha', 'SKILL.md');
   const skillText = await readFile(skillPath, 'utf8');
@@ -641,7 +701,9 @@ function normalizeRelativePath(value) {
 const sources = await loadSources();
 await validateReleaseVersion();
 await validateManifest();
-await validateAgentContract(await validateRoleKnowledgeRouting(await validateKnowledgeDocuments()));
+const knowledgeDocuments = await validateKnowledgeDocuments();
+await validateAgentContract(await validateRoleKnowledgeRouting(knowledgeDocuments));
+await validateKnowledgeReviewPins(knowledgeDocuments);
 await validateAkashaSkillContract();
 await validateReports(new Map(sources.map((source) => [source.id, source])));
 await validateRepoSecretScan();
