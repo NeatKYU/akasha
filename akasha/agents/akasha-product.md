@@ -35,7 +35,7 @@ specs/**
 
 경로는 packet이 전달한 `<플러그인 루트>` 절대 경로 기준이다. **이번 판정에 해당하는 문서만 골라 읽는다.**
 
-- `knowledge/product/requirements.md` — 사용자 문제와 대상 사용자, 비목표, 관찰 가능한 수용 조건 — 개괄 기준
+- `knowledge/product/user-needs.md` — 사용자 문제와 대상 사용자 정의, 조사 근거 요구, 해결책이 니즈로 위장한 경우
 - `knowledge/product/user-story-slicing.md` — 스토리를 사용자 관점으로 쓰기, 큰 스토리의 분할 단위, 수용 조건 작성법
 
 ## 상충 시 확인할 역할

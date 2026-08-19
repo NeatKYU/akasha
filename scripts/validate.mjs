@@ -295,6 +295,16 @@ async function validateAgentContract(roleTexts) {
 // 검토 부채 상한. 고정이 없는 출처가 이 수를 넘으면 CI가 막는다.
 const REVIEW_DEBT_CEILING = 12;
 
+// 지식 문서 양식. 에이전트가 어느 문서를 열든 같은 자리에서 같은 종류의 정보를 찾을 수 있어야
+// 한다. 「프로젝트에 적용할 기준」이 판정의 근거, 「체크리스트」가 판정 절차다.
+const REQUIRED_KNOWLEDGE_SECTIONS = [
+  '출처',
+  '이 문서가 해당 역할에 도움이 되는 이유',
+  '프로젝트에 적용할 기준',
+  '주의할 점',
+  '에이전트가 사용할 때의 체크리스트'
+];
+
 async function validateKnowledgeSources() {
   const docs = await loadKnowledgeSources();
   const debt = [];
@@ -302,7 +312,22 @@ async function validateKnowledgeSources() {
   for (const doc of docs) {
     const label = `akasha/knowledge/${doc.path}`;
     assert(doc.hasSourceSection, `${label} must declare a "## 출처" section`);
-    assert(doc.sources.size > 0, `${label} must declare at least one source block`);
+    // 문서 하나에 출처 하나. 검토 스냅샷이 무엇을 가리키는지, 원본이 바뀌었을 때 어느
+    // 문서를 다시 읽어야 하는지, 담당 지식 선택 힌트가 무엇을 약속하는지가 모두 1:1이 된다.
+    assert(
+      doc.sources.size === 1,
+      `${label} must declare exactly one source (found ${doc.sources.size}). 출처가 여럿이면 문서를 나눈다.`
+    );
+    for (const section of REQUIRED_KNOWLEDGE_SECTIONS) {
+      assert(
+        doc.sections.includes(section),
+        `${label} must declare a "## ${section}" section`
+      );
+    }
+    assert(
+      doc.sections[0] === '출처',
+      `${label} must open with the "## 출처" section`
+    );
 
     for (const source of doc.sources.values()) {
       assertAllowlistedUrl(source.url, `${label} source ${source.id}`);

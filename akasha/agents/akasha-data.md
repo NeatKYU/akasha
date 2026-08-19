@@ -32,8 +32,8 @@ prisma/**
 
 경로는 packet이 전달한 `<플러그인 루트>` 절대 경로 기준이다. **이번 판정에 해당하는 문서만 골라 읽는다.**
 
-- `knowledge/data/query-performance-baseline.md` — EXPLAIN 기반 실행 계획 판단, 인덱스 후보, N+1, 대표 데이터 규모 요구
-- `knowledge/backend/data-baseline.md` — schema·migration을 고위험 산출물로 보는 개괄 기준
+- `knowledge/data/postgres-execution-plan.md` — EXPLAIN 실행 계획 판독, scan·join·sort·row estimate, 인덱스 후보 검증
+- `knowledge/data/prisma-query-patterns.md` — Prisma 반복 호출과 N+1, 관계 로딩 비용, 배치 처리 판단
 
 ## 상충 시 확인할 역할
 

@@ -34,7 +34,10 @@ hooks/**
 
 경로는 packet이 전달한 `<플러그인 루트>` 절대 경로 기준이다. **이번 판정에 해당하는 문서만 골라 읽는다.**
 
-- `knowledge/frontend/runtime-baseline.md` — React·Next.js 버전 확인, Server/Client 경계, 데이터 페칭 위치, 구현 완료 조건
+- `knowledge/frontend/effect-avoidance.md` — 불필요한 useEffect 판별, 렌더 중 계산·useMemo·key·이벤트 핸들러 대안, Effect 연쇄
+- `knowledge/frontend/useeffect-contract.md` — 의존성 배열에 넣을 값, 정리 함수 계약, 객체·함수 의존성, Strict Mode 이중 실행
+- `knowledge/frontend/server-client-boundary.md` — `'use client'` 배치 위치, Server→Client props 직렬화, 번들·노출 범위
+- `knowledge/frontend/next-caching-boundary.md` — 캐시 선언과 수명, 요청 시점 API와 Suspense 경계, 프리렌더 범위
 
 ## 상충 시 확인할 역할
 

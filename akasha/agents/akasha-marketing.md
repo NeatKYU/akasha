@@ -34,7 +34,8 @@ model: inherit
 
 경로는 packet이 전달한 `<플러그인 루트>` 절대 경로 기준이다. **이번 판정에 해당하는 문서만 골라 읽는다.**
 
-- `knowledge/marketing/search-preview-baseline.md` — 라우트별 title·description, Open Graph 공유 미리보기, canonical·robots·sitemap 노출 결정
+- `knowledge/marketing/search-discoverability.md` — 검색 발견 가능성, title·description 품질, canonical·robots·sitemap 노출 결정
+- `knowledge/marketing/next-metadata-implementation.md` — App Router metadata 구현, generateMetadata의 렌더링 영향, Open Graph 미리보기
 
 ## 상충 시 확인할 역할
 

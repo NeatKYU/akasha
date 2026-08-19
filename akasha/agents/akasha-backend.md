@@ -34,8 +34,11 @@ server/**
 
 경로는 packet이 전달한 `<플러그인 루트>` 절대 경로 기준이다. **이번 판정에 해당하는 문서만 골라 읽는다.**
 
-- `knowledge/backend/data-baseline.md` — 서버 경계의 인증·인가·입력 검증, API 성공·오류 계약, 데이터 무결성 — 개괄 기준
-- `knowledge/backend/data-security-boundary.md` — 데이터 접근 계층 설계, 클라이언트로 넘기는 DTO 필드 제한, 비밀값·환경 변수의 서버 전용 격리
+- `knowledge/backend/route-handler-contract.md` — Route Handler 메서드 노출, params await, 본문 읽기, 세그먼트 캐싱 설정
+- `knowledge/backend/rest-api-security.md` — 엔드포인트별 접근 통제, 메서드 allowlist, 상태 코드, 오류 노출, CORS
+- `knowledge/backend/server-action-boundary.md` — Server Action의 인증·인가·입력 검증, 클라이언트가 보낸 식별자 신뢰, 반환값 범위
+- `knowledge/backend/prisma-transaction-integrity.md` — 트랜잭션 경계, 자동 트랜잭션 여부, 격리 수준, 타임아웃과 교착
+- `knowledge/backend/data-security-boundary.md` — 데이터 접근 계층 설계, 클라이언트로 넘기는 DTO 필드 제한, 비밀값 서버 전용 격리
 
 ## 상충 시 확인할 역할
 

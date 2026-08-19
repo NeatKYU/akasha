@@ -35,7 +35,10 @@ components/**
 
 경로는 packet이 전달한 `<플러그인 루트>` 절대 경로 기준이다. **이번 판정에 해당하는 문서만 골라 읽는다.**
 
-- `knowledge/design/system-principles.md` — 토큰·공용 컴포넌트 재사용, 컴포넌트 확장 기준, 다크 모드·반응형·키보드·스크린리더·오류/로딩 상태, WCAG 적합성
+- `knowledge/design/modal-dialog-accessibility.md` — 모달·확인 다이얼로그의 role·이름, 포커스 진입과 트랩, Escape, 포커스 복귀
+- `knowledge/design/wcag-conformance.md` — 적합성 주장의 수준과 범위, 페이지·절차 단위 적합, AA 성공 기준
+- `knowledge/design/design-system-responsibility.md` — 디자인 시스템 채택과 서비스 접근성 책임의 경계, 컴포넌트 변형 시 재검증
+- `knowledge/design/component-extension.md` — 컴포넌트 확장 시점 판단 — secondary 사례이며 위반 판정의 단독 근거로 쓰지 않는다
 
 ## 상충 시 확인할 역할
 

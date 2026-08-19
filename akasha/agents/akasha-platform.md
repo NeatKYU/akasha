@@ -35,7 +35,8 @@ deploy/**
 
 경로는 packet이 전달한 `<플러그인 루트>` 절대 경로 기준이다. **이번 판정에 해당하는 문서만 골라 읽는다.**
 
-- `knowledge/platform/production-release-baseline.md` — production 빌드·번들 확인, caching·streaming·이미지/폰트 최적화 opt-out, 환경 변수 client 노출과 dynamic rendering
+- `knowledge/platform/next-production-readiness.md` — production build·번들 확인, 캐싱·최적화 opt-out, 환경 변수 client 노출
+- `knowledge/platform/actions-workflow-hardening.md` — GITHUB_TOKEN 권한 최소화, action SHA 고정, 신뢰할 수 없는 입력을 다루는 트리거
 
 ## 상충 시 확인할 역할
 

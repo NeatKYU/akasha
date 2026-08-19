@@ -4,7 +4,8 @@ import path from 'node:path';
 import Ajv2020 from 'ajv/dist/2020.js';
 
 export const ROOT = path.resolve(new URL('..', import.meta.url).pathname);
-export const MAX_RESPONSE_BYTES = 1_000_000;
+// 최신 문서 페이지는 1MB를 흔히 넘는다. 여전히 상한이지만 정상 문서를 막지 않는 크기로 둔다.
+export const MAX_RESPONSE_BYTES = 5_000_000;
 export const MAX_REDIRECTS = 5;
 
 export const ALLOWED_HOSTS = new Set([
@@ -238,7 +239,8 @@ export function parseKnowledgeSources(text) {
       pin: pin && pin[1] === match[1] ? { structure: pin[2], body: pin[3] } : null
     });
   }
-  return { sources, hasSourceSection: /^## 출처\s*$/m.test(text) };
+  const sections = [...text.matchAll(/^## (.+?)\s*$/gm)].map((m) => m[1]);
+  return { sources, sections, hasSourceSection: sections.includes('출처') };
 }
 
 // akasha/knowledge 아래 모든 지식 문서를 읽어 출처 목록을 만든다.

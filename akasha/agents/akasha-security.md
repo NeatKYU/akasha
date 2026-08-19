@@ -35,8 +35,9 @@ sandbox와 read-only 원칙 준수 여부를 판단한다. 모델 선택을 보�
 
 경로는 packet이 전달한 `<플러그인 루트>` 절대 경로 기준이다. **이번 판정에 해당하는 문서만 골라 읽는다.**
 
-- `knowledge/security/quality-baseline.md` — 모델은 보안 경계가 아님, 외부 입력·비밀값을 agent context에 넣지 않기, read-only 원칙 — 개괄 기준
-- `knowledge/security/github-actions-secrets.md` — 비밀값 범위(repository/environment/organization), environment 보호 규칙·승인자·브랜치 제한
+- `knowledge/security/authorization-checks.md` — 인가 검사 위치, 기본 거부, 객체 소유권 확인, 정적 자원 통제
+- `knowledge/security/input-validation.md` — 허용 목록 검증, 구문·의미 검증 분리, 파일 업로드, 출력 인코딩과의 구분
+- `knowledge/security/github-actions-secrets.md` — 비밀값 범위(repository/environment/organization), 보호 규칙·승인자·브랜치 제한
 
 ## 상충 시 확인할 역할
 
