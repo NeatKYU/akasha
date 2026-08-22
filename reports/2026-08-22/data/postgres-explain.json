@@ -1,0 +1,26 @@
+{
+  "source_id": "postgres-explain",
+  "role": "data",
+  "source_url": "https://www.postgresql.org/docs/current/using-explain.html",
+  "final_url": "https://www.postgresql.org/docs/current/using-explain.html",
+  "authority": "primary",
+  "retrieved_at": "2026-08-22T18:49:56.381Z",
+  "content_sha256": "20fc66d9edfb4b24a3175161ec789ddecdb1f6747115b8476b855ec1f3be1e28",
+  "metadata_sha256": "4f4a8634e218f148c19e0db3e94c690ff1c62747fe9a41614c70cacc18b20ecb",
+  "http_status": 200,
+  "title": "PostgreSQL: Documentation: 18: 14.1. Using EXPLAIN",
+  "description": "",
+  "headings": [
+    "14.1.&nbsp;Using EXPLAIN #",
+    "14.1.1.&nbsp; EXPLAIN Basics #",
+    "14.1.2.&nbsp; EXPLAIN ANALYZE #",
+    "14.1.3.&nbsp;Caveats #",
+    "Submit correction"
+  ],
+  "redirect_hops": [
+    "https://www.postgresql.org/docs/current/using-explain.html"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

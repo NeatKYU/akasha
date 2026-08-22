@@ -1,0 +1,41 @@
+{
+  "source_id": "next-metadata-og",
+  "role": "marketing",
+  "source_url": "https://nextjs.org/docs/app/getting-started/metadata-and-og-images",
+  "final_url": "https://nextjs.org/docs/app/getting-started/metadata-and-og-images",
+  "authority": "primary",
+  "retrieved_at": "2026-08-22T18:49:53.841Z",
+  "content_sha256": "26ea44c6f08ccea25de5ab251456ddbadeb2612a814e3c97f91b897d29a9bbd6",
+  "metadata_sha256": "db539d27c2af3f24c9ad075c2965b5d277d067cfbeb741f4accee177f08605e7",
+  "http_status": 200,
+  "title": "Getting Started: Metadata and OG images | Next.js",
+  "description": "Learn how to add metadata to your pages and create dynamic OG images.",
+  "headings": [
+    "Metadata and OG images",
+    "Default fields",
+    "Static metadata",
+    "Generated metadata",
+    "Streaming metadata",
+    "Memoizing data requests",
+    "File-based metadata",
+    "Favicons",
+    "Static Open Graph images",
+    "Generated Open Graph images",
+    "API Reference",
+    "generateMetadata",
+    "generateViewport",
+    "ImageResponse",
+    "Metadata Files",
+    "favicon, icon, and apple-icon",
+    "opengraph-image and twitter-image",
+    "robots.txt",
+    "sitemap.xml",
+    "htmlLimitedBots"
+  ],
+  "redirect_hops": [
+    "https://nextjs.org/docs/app/getting-started/metadata-and-og-images"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}
