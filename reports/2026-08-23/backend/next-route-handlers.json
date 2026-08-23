@@ -1,0 +1,41 @@
+{
+  "source_id": "next-route-handlers",
+  "role": "backend",
+  "source_url": "https://nextjs.org/docs/app/api-reference/file-conventions/route",
+  "final_url": "https://nextjs.org/docs/app/api-reference/file-conventions/route",
+  "authority": "primary",
+  "retrieved_at": "2026-08-23T18:49:07.909Z",
+  "content_sha256": "c636e18a2f0b9f791d691effb666028e5c53fb9f9d9cc0d27002317cb5001cc7",
+  "metadata_sha256": "c940171ac0d4a7f1d9e949947a5cdd577ea9b0d6756a5e787c9ae3143f1c5c5a",
+  "http_status": 200,
+  "title": "File-system conventions: route.js | Next.js",
+  "description": "API reference for the route.js special file.",
+  "headings": [
+    "route.js",
+    "Reference",
+    "HTTP Methods",
+    "Parameters",
+    "Route Context Helper",
+    "Examples",
+    "Cookies",
+    "Headers",
+    "Revalidating Cached Data",
+    "Redirects",
+    "Dynamic Route Segments",
+    "URL Query Parameters",
+    "Streaming",
+    "Request Body",
+    "Request Body FormData",
+    "CORS",
+    "Webhooks",
+    "Non-UI Responses",
+    "Segment Config Options",
+    "Version History"
+  ],
+  "redirect_hops": [
+    "https://nextjs.org/docs/app/api-reference/file-conventions/route"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}
