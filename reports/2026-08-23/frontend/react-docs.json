@@ -1,0 +1,37 @@
+{
+  "source_id": "react-docs",
+  "role": "frontend",
+  "source_url": "https://react.dev/learn",
+  "final_url": "https://react.dev/learn",
+  "authority": "primary",
+  "retrieved_at": "2026-08-23T18:49:09.532Z",
+  "content_sha256": "233c689eadbd807870479273e314e6e94bd9eaaba2c53c70efc614f8502b86fa",
+  "metadata_sha256": "709a79a2d5c4cdb4a70c87d565d97875bdbe2a1bd91128b8846fc3fa3c4cd110",
+  "http_status": 200,
+  "title": "Quick Start – React",
+  "description": "",
+  "headings": [
+    "GET STARTED",
+    "LEARN REACT",
+    "Quick Start",
+    "You will learn",
+    "Creating and nesting components",
+    "Writing markup with JSX",
+    "Adding styles",
+    "Displaying data",
+    "Conditional rendering",
+    "Rendering lists",
+    "Responding to events",
+    "Updating the screen",
+    "Using Hooks",
+    "Sharing data between components",
+    "Next Steps",
+    "On this page"
+  ],
+  "redirect_hops": [
+    "https://react.dev/learn"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}

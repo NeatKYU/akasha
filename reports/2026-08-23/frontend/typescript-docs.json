@@ -1,0 +1,27 @@
+{
+  "source_id": "typescript-docs",
+  "role": "frontend",
+  "source_url": "https://www.typescriptlang.org/docs/",
+  "final_url": "https://www.typescriptlang.org/docs/",
+  "authority": "primary",
+  "retrieved_at": "2026-08-23T18:49:15.794Z",
+  "content_sha256": "458e645945f29aad97abe77e7b733e093c546e3372fad763c26e913a4cdc417f",
+  "metadata_sha256": "2b231891e228ad6d0c9f424bdc292a57f4eed696e486a7dd2653eaec209f49e1",
+  "http_status": 200,
+  "title": "TypeScript: The starting point for learning TypeScript",
+  "description": "Find TypeScript starter projects: from Angular to React or Node.js and CLIs.",
+  "headings": [
+    "TypeScript Documentation",
+    "Learning Resources",
+    "Customize",
+    "Popular Documentation Pages",
+    "Using TypeScript",
+    "Community"
+  ],
+  "redirect_hops": [
+    "https://www.typescriptlang.org/docs/"
+  ],
+  "storage_mode": "metadata-only",
+  "body_stored": false,
+  "trust": "untrusted-external-data"
+}
