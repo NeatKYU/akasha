@@ -1,0 +1,128 @@
+{
+  "R01": {
+    "source": "quality-final",
+    "run_id": "10-r2-B-rep3",
+    "condition": "B",
+    "batch": "B2",
+    "task_id": "r2"
+  },
+  "R02": {
+    "source": "quality-first-ab",
+    "run_id": "06-r3-B-rep2",
+    "condition": "B",
+    "batch": "B1",
+    "task_id": "r3"
+  },
+  "R03": {
+    "source": "quality-first-ab",
+    "run_id": "02-r2-B-rep1",
+    "condition": "B",
+    "batch": "B1",
+    "task_id": "r2"
+  },
+  "R04": {
+    "source": "quality-first-ab",
+    "run_id": "03-r3-B-rep1",
+    "condition": "B",
+    "batch": "B1",
+    "task_id": "r3"
+  },
+  "R05": {
+    "source": "quality-first-ab",
+    "run_id": "11-r3-B-rep3",
+    "condition": "B",
+    "batch": "B1",
+    "task_id": "r3"
+  },
+  "R06": {
+    "source": "quality-first-ab",
+    "run_id": "10-r2-B-rep3",
+    "condition": "B",
+    "batch": "B1",
+    "task_id": "r2"
+  },
+  "R07": {
+    "source": "quality-final",
+    "run_id": "07-r2-B-rep2",
+    "condition": "B",
+    "batch": "B2",
+    "task_id": "r2"
+  },
+  "R08": {
+    "source": "quality-first-ab",
+    "run_id": "12-r3-A-rep3",
+    "condition": "A",
+    "batch": "A",
+    "task_id": "r3"
+  },
+  "R09": {
+    "source": "quality-final",
+    "run_id": "11-r3-B-rep3",
+    "condition": "B",
+    "batch": "B2",
+    "task_id": "r3"
+  },
+  "R10": {
+    "source": "quality-final",
+    "run_id": "02-r2-B-rep1",
+    "condition": "B",
+    "batch": "B2",
+    "task_id": "r2"
+  },
+  "R11": {
+    "source": "quality-final",
+    "run_id": "06-r3-B-rep2",
+    "condition": "B",
+    "batch": "B2",
+    "task_id": "r3"
+  },
+  "R12": {
+    "source": "quality-final",
+    "run_id": "03-r3-B-rep1",
+    "condition": "B",
+    "batch": "B2",
+    "task_id": "r3"
+  },
+  "R13": {
+    "source": "quality-first-ab",
+    "run_id": "01-r2-A-rep1",
+    "condition": "A",
+    "batch": "A",
+    "task_id": "r2"
+  },
+  "R14": {
+    "source": "quality-first-ab",
+    "run_id": "04-r3-A-rep1",
+    "condition": "A",
+    "batch": "A",
+    "task_id": "r3"
+  },
+  "R15": {
+    "source": "quality-first-ab",
+    "run_id": "09-r2-A-rep3",
+    "condition": "A",
+    "batch": "A",
+    "task_id": "r2"
+  },
+  "R16": {
+    "source": "quality-first-ab",
+    "run_id": "05-r3-A-rep2",
+    "condition": "A",
+    "batch": "A",
+    "task_id": "r3"
+  },
+  "R17": {
+    "source": "quality-first-ab",
+    "run_id": "07-r2-B-rep2",
+    "condition": "B",
+    "batch": "B1",
+    "task_id": "r2"
+  },
+  "R18": {
+    "source": "quality-first-ab",
+    "run_id": "08-r2-A-rep2",
+    "condition": "A",
+    "batch": "A",
+    "task_id": "r2"
+  }
+}

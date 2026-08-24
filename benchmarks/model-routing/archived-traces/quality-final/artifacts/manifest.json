@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "runtime": "Codex CLI",
+  "cli_version": "codex-cli 0.147.0",
+  "baseline_commit": "92c3cbd0256f9000c06e23a01f03bc2a6293039f",
+  "candidate_commit": "2e027c89a27ae81146e8d57f906f38ed9b57326b",
+  "model": "gpt-5.6-terra",
+  "effort": "medium",
+  "repetitions": 3,
+  "schedule": [
+    {
+      "repetition": 1,
+      "taskId": "r2",
+      "condition": "A"
+    },
+    {
+      "repetition": 1,
+      "taskId": "r2",
+      "condition": "B"
+    },
+    {
+      "repetition": 1,
+      "taskId": "r3",
+      "condition": "B"
+    },
+    {
+      "repetition": 1,
+      "taskId": "r3",
+      "condition": "A"
+    },
+    {
+      "repetition": 2,
+      "taskId": "r3",
+      "condition": "A"
+    },
+    {
+      "repetition": 2,
+      "taskId": "r3",
+      "condition": "B"
+    },
+    {
+      "repetition": 2,
+      "taskId": "r2",
+      "condition": "B"
+    },
+    {
+      "repetition": 2,
+      "taskId": "r2",
+      "condition": "A"
+    },
+    {
+      "repetition": 3,
+      "taskId": "r2",
+      "condition": "A"
+    },
+    {
+      "repetition": 3,
+      "taskId": "r2",
+      "condition": "B"
+    },
+    {
+      "repetition": 3,
+      "taskId": "r3",
+      "condition": "B"
+    },
+    {
+      "repetition": 3,
+      "taskId": "r3",
+      "condition": "A"
+    }
+  ],
+  "prompt_policy": "task.txt prefixed with literal $akasha; byte-identical across conditions",
+  "isolation": "--ignore-user-config plus project-local .agents skill/roles-or-agents/knowledge"
+}

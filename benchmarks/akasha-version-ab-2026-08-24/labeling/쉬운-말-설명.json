@@ -1,0 +1,232 @@
+{
+  "taskIntro": {
+    "r2": "삭제 확인 팝업 컴포넌트 하나(components/Dialog.tsx)를 고친 변경입니다. 겉보기 동작은 그대로인데, 접근성 장치가 여러 개 뜯겨 나갔습니다.",
+    "r3": "프로젝트 생성 기능 하나를 고치면서 API·DB 스키마·배포 설정·테스트 네 곳이 같이 바뀐 변경입니다."
+  },
+  "keys": {
+    "r2-K1": {
+      "title": "열기 버튼이 진짜 버튼에서 그냥 네모칸으로 바뀜",
+      "before": "<button type=\"button\" onClick={() => setOpen(true)}>\n  Delete project\n</button>",
+      "after": "<div className=\"open-control\" onClick={() => setOpen(true)}>\n  Delete project\n</div>",
+      "what": "\"Delete project\"를 누르는 요소가 button에서 div로 바뀌었습니다. 브라우저는 button이면 탭 키로 이동하고 엔터·스페이스로 누를 수 있게 알아서 해주지만, div에는 아무것도 안 해줍니다. 마우스로만 누를 수 있고, 키보드만 쓰는 사람은 이 팝업을 아예 열 수 없습니다.",
+      "cover": "\"열기 버튼이 div로 바뀌어서 키보드로 조작할 수 없다\"는 취지를 지적했으면 커버입니다.",
+      "watch": null,
+      "hints": [
+        "open-control",
+        "키보드",
+        "Delete project",
+        "div"
+      ]
+    },
+    "r2-K2": {
+      "title": "스크린리더에게 \"이건 팝업\"이라고 알려주던 표시가 통째로 삭제됨",
+      "before": "<div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"dialog-title\" className=\"dialog\">\n  <h2 id=\"dialog-title\">Delete project?</h2>",
+      "after": "<div className=\"dialog\">\n  <h2>Delete project?</h2>",
+      "what": "화면을 못 보는 사람이 쓰는 스크린리더에게 \"이건 팝업창이고, 제목은 이것이고, 뒤쪽은 못 만진다\"고 알려주던 표시 세 개가 전부 지워졌습니다. 이제 스크린리더 입장에서는 그냥 의미 없는 네모 상자입니다. 팝업이 떴다는 사실조차 전달되지 않습니다.",
+      "cover": "role=\"dialog\" · aria-modal · aria-labelledby 중 하나라도 사라진 것을 지적했거나, \"스크린리더가 팝업으로 인식하지 못한다\"는 취지를 말했으면 커버입니다.",
+      "watch": "주의 — \"alertdialog가 제거됐다\"고 썼으면 그건 거짓입니다. 원래부터 alertdialog는 없었습니다(함정 r2-T2).",
+      "hints": [
+        "aria-modal",
+        "role=\"dialog\"",
+        "aria-labelledby",
+        "스크린리더",
+        "dialog-title"
+      ]
+    },
+    "r2-K3": {
+      "title": "확인(Confirm) 버튼도 똑같이 네모칸으로 바뀜",
+      "before": "<button type=\"button\" onClick={() => setOpen(false)}>\n  Confirm\n</button>",
+      "after": "<div className=\"confirm\" onClick={() => setOpen(false)}>\n  Confirm\n</div>",
+      "what": "K1과 같은 문제가 삭제를 확정하는 \"Confirm\" 버튼에도 일어났습니다. 키보드만 쓰는 사람은 팝업을 열 수도, 삭제를 확정할 수도 없습니다. 별개의 요소이므로 별개의 지적입니다.",
+      "cover": "확인·Confirm 쪽 요소도 따로 짚었으면 커버입니다. 열기 버튼만 지적하고 확인 버튼을 언급하지 않았으면 미커버입니다.",
+      "watch": null,
+      "hints": [
+        "Confirm",
+        "확인",
+        "confirm"
+      ]
+    },
+    "r2-C1": {
+      "title": "'use client'는 그대로 두는 게 맞다 — 잘 돼 있는 부분",
+      "before": null,
+      "after": "'use client';   // 파일 맨 위, 이번 변경에서 건드리지 않음",
+      "what": "Next.js에서 'use client'는 \"이 화면 조각은 브라우저에서 돌아간다\"는 표시입니다. 이 팝업은 열림·닫힘 상태를 기억하고 클릭에 반응해야 하니 브라우저에서 돌아가는 게 맞습니다. 즉 이건 문제가 아니라 제대로 돼 있는 부분이고, 이번 변경에서 건드리지도 않았습니다.\n\n이 항목이 정답지에 있는 이유는, 아카샤가 \"여기는 근거상 문제없다\"고 짚어주면 크레딧을 주기 위해서입니다. 잘못을 찾는 능력만이 아니라 멀쩡한 걸 멀쩡하다고 말하는 능력도 보는 겁니다.",
+      "cover": "\"'use client'는 이 컴포넌트에 적절하다\"는 취지로 근거를 대며 확인했으면 커버입니다. 아예 언급하지 않았어도 감점이 아닙니다 — 이 항목만 선택입니다.",
+      "watch": "주의 — \"'use client' 때문에 이번에 문제가 생겼다\"고 썼으면 그건 틀린 판정입니다. 안 바뀐 줄이니까요.",
+      "noteOnly": true,
+      "hints": [
+        "use client",
+        "server-client-boundary"
+      ]
+    },
+    "r3-K1": {
+      "title": "프로젝트 주인을 서버가 정하다가, 요청 보낸 쪽이 정하도록 바뀜",
+      "before": "ownerId: 'authenticated-user-id',",
+      "after": "ownerId: body.userId,",
+      "what": "원래는 서버가 \"로그인한 사람\"을 프로젝트 주인으로 박아넣었습니다. 이제는 요청에 적혀 온 userId를 그대로 씁니다. 즉 아무나 남의 아이디를 적어 보내면 그 사람 이름으로 프로젝트가 만들어집니다. 로그인 여부와 무관하게 주인을 마음대로 정할 수 있게 된 겁니다.",
+      "cover": "\"클라이언트가 보낸 userId를 그대로 믿으면 안 된다\", \"인가 확인이 없다\", \"소유자를 요청자가 정할 수 있다\" 중 어느 취지든 지적했으면 커버입니다.",
+      "watch": null,
+      "hints": [
+        "body.userId",
+        "userId",
+        "소유자",
+        "인가"
+      ]
+    },
+    "r3-K2": {
+      "title": "DB에서 \"한 사람당 프로젝트 하나\" 제약이 사라짐 — 확정된 사실 (분류 무관)",
+      "before": "ownerId   String @unique",
+      "after": "ownerId   String",
+      "what": "@unique는 DB에게 \"이 칸에 같은 값이 두 번 들어오면 거부해라\"라고 시키는 표시입니다. 이게 빠졌으니 이제 한 사람이 프로젝트를 여러 개 가질 수 있습니다.\n\n**판정 기준이 바뀌었습니다.** 예전에는 \"위반\"이라고 불러야 정답이었는데, 판정 근거 문서가 \"제거 자체를 무조건 위반으로 단정하지 말라\"고 명시하고 있습니다. 문서가 금지한 걸 정답으로 요구한 제 실수였습니다.\n\n이제는 **분류를 따지지 않습니다.** \"중복이 허용된다\"는 효과를 짚었는지만 봅니다.",
+      "cover": "\"@unique가 빠져서 중복이 허용된다\"는 효과를 코드 근거와 함께 말했으면 커버입니다. 위반·근거 있는 확인·근거 없음 중 무엇으로 분류했든 상관없습니다.",
+      "watch": "주의 — \"마이그레이션 근거가 없다\"는 말만 있고 중복 허용 효과를 안 말했으면 그건 K3이고 K2는 미커버입니다. 효과 서술이 있어야 K2입니다.",
+      "hints": [
+        "@unique",
+        "unique",
+        "중복"
+      ],
+      "revised": "판정 기준이 final-3에서 바뀌었습니다. 이 항목만 다시 봐주세요."
+    },
+    "r3-K3": {
+      "title": "그게 의도인지, 이미 쌓인 데이터는 어떻게 할지가 없다 — 모르는 부분에 대한 지적",
+      "before": null,
+      "after": "(schema.prisma 변경에 딸린 설명·마이그레이션이 없음)",
+      "what": "K2가 \"이렇게 바뀌었다\"는 사실이라면, 이건 \"그래서 이게 의도한 변경인지, 이미 DB에 들어 있는 데이터는 괜찮은지, 마이그레이션은 어떻게 할 건지 알 수 없다\"는 지적입니다.\n\n핵심은 이걸 확정된 위반이라고 단정하면 안 된다는 겁니다. 의도된 설계 변경일 수도 있으니까요. \"판단할 근거가 부족하다\", \"확인이 필요하다\"로 분리해야 맞습니다.",
+      "cover": "마이그레이션·기존 데이터·의도 확인이 필요하다는 취지를 (확정 위반이 아니라 근거 부족·확인 필요로) 말했으면 커버입니다.",
+      "watch": "주의 — \"마이그레이션이 없는 것은 이번 변경이 저지른 위반\"이라고 단정했으면 미커버이고 오탐 후보입니다.",
+      "noteOnly": true,
+      "hints": [
+        "마이그레이션",
+        "migration",
+        "기존 데이터",
+        "의도"
+      ]
+    },
+    "r3-K4": {
+      "title": "배포 자동화 권한이 읽기 전용에서 전부 열림으로 바뀜",
+      "before": "permissions:\n  contents: read",
+      "after": "permissions: write-all",
+      "what": "GitHub 자동 배포가 저장소에 대해 원래는 읽기만 할 수 있었습니다. 이제 뭐든 쓸 수 있게 전부 열렸습니다. 이 자동화가 한 번 뚫리면, 예전엔 읽히는 데서 끝났을 피해가 이제는 코드를 마음대로 바꿔치기당하는 데까지 갑니다. 필요한 만큼만 권한을 주는 원칙에서 후퇴한 겁니다.",
+      "cover": "write-all이 과한 권한이다 / 최소 권한 원칙에 어긋난다는 취지면 커버입니다.",
+      "watch": null,
+      "hints": [
+        "write-all",
+        "permissions",
+        "최소 권한"
+      ]
+    },
+    "r3-K5": {
+      "title": "남의 코드를 정확한 버전으로 못 박아뒀던 게 이름표로 풀림",
+      "before": "- uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+      "after": "- uses: actions/checkout@v4",
+      "what": "배포할 때 남이 만든 도구(actions/checkout)를 가져다 씁니다. 원래는 그 도구의 정확한 버전을 긴 해시로 못 박아뒀습니다. 이제는 \"v4\"라는 이름표만 씁니다.\n\n이름표는 나중에 다른 코드를 가리키도록 옮겨질 수 있습니다. 우리 쪽은 아무것도 안 바꿨는데 어느 날 갑자기 다른 코드가 우리 배포 과정에서 실행될 수 있다는 뜻입니다.",
+      "cover": "해시로 고정해뒀던 것이 풀린 게 후퇴라는 취지면 커버입니다. 원래 고정돼 있었다는 사실을 짚는 것이 핵심입니다.",
+      "watch": null,
+      "hints": [
+        "@v4",
+        "checkout",
+        "SHA",
+        "고정"
+      ]
+    },
+    "r3-K6": {
+      "title": "테스트가 사용자가 보는 이름 대신 CSS 클래스로 요소를 찾게 바뀜",
+      "before": "await page.getByRole('button', { name: 'New project' }).click();\nawait page.getByLabel('Project name').fill('Alpha');",
+      "after": "await page.locator('.new-project').click();\nawait page.locator('input').fill('Alpha');",
+      "what": "원래 테스트는 \"'New project'라는 이름의 버튼\"처럼 사용자가 실제로 보고 인식하는 방식으로 요소를 찾았습니다. 이제는 .new-project 같은 CSS 클래스 이름으로 찾습니다.\n\n두 가지가 나빠집니다. 디자인만 바꿔도 테스트가 깨지고, 반대로 버튼 이름이 엉망이 되거나 라벨이 사라져도 테스트는 멀쩡히 통과합니다. 사용자가 못 쓰게 된 걸 테스트가 못 잡습니다.",
+      "cover": "역할·라벨 기반에서 CSS 선택자로 후퇴한 것을 지적했으면 커버입니다.",
+      "watch": null,
+      "hints": [
+        "locator",
+        "getByRole",
+        "CSS",
+        "클래스"
+      ]
+    },
+    "r3-K7": {
+      "title": "무조건 3초 기다리기가 새로 들어옴",
+      "before": null,
+      "after": "await page.waitForTimeout(3000);",
+      "what": "\"3초 그냥 기다려\"가 추가됐습니다. 조건 없이 시간만 세는 방식이라, 서버가 느린 날엔 3초로 모자라 테스트가 실패하고 빠른 날엔 쓸데없이 3초를 버립니다. 테스트 결과가 날마다 들쭉날쭉해지는 전형적인 원인입니다.",
+      "cover": "고정 대기가 불안정하다 / flaky 원인이라는 취지면 커버입니다.",
+      "watch": null,
+      "hints": [
+        "waitForTimeout",
+        "3000",
+        "고정 대기"
+      ]
+    },
+    "r3-K8": {
+      "title": "화면에 나타날 때까지 기다렸다 확인하던 걸, 즉시 개수 세기로 바꿈",
+      "before": "await expect(page.getByRole('row', { name: /Alpha/ })).toBeVisible();",
+      "after": "expect(await page.locator('.project-row').count()).toBe(1);",
+      "what": "원래 방식은 \"그 줄이 화면에 나타날 때까지 기다렸다가 확인\"이었습니다. 새 방식은 \"지금 당장 몇 개인지 세서 1개인지 비교\"입니다.\n\n아직 화면에 그려지지 않았으면 그냥 실패합니다. 바로 위의 3초 기다리기가 들어간 이유이기도 합니다 — 기다리는 기능을 없애놓고 시간으로 때운 겁니다.",
+      "cover": "재시도 없이 즉시 단언해서 불안정하다는 취지면 커버입니다. K6·K7·K8을 한 문단에 묶어 썼어도 각각 언급됐으면 각각 커버입니다.",
+      "watch": null,
+      "hints": [
+        "count()",
+        "toBeVisible",
+        "재시도",
+        "즉시"
+      ]
+    }
+  },
+  "traps": {
+    "r2-T1": {
+      "title": "포커스 가둠·Escape·포커스 복귀가 없다",
+      "what": "팝업이 떴을 때 탭 키가 팝업 밖으로 새지 않게 가두거나, Escape로 닫거나, 닫은 뒤 원래 자리로 포커스를 돌려주는 기능이 없습니다. 맞는 지적이긴 한데 — 변경 전에도 없었습니다. 이번 변경이 저지른 일이 아닙니다.",
+      "signal": "포커스 가둠·Escape 부재를 \"이번 변경이 도입한 위반\"으로 보고했으면 체크",
+      "hints": [
+        "포커스",
+        "focus",
+        "Escape"
+      ]
+    },
+    "r2-T2": {
+      "title": "alertdialog나 aria-describedby가 \"제거됐다\"는 주장",
+      "what": "삭제 확인 같은 파괴적 창에는 alertdialog가 있으면 좋습니다. 그런데 이 코드에는 변경 전에도 alertdialog가 없었습니다. \"제거됐다\"고 쓰면 없던 일을 지어낸 겁니다. \"원래부터 없다\"는 관찰은 괜찮습니다.",
+      "signal": "alertdialog 또는 aria-describedby가 제거·삭제됐다고 서술했으면 체크",
+      "hints": [
+        "alertdialog",
+        "describedby"
+      ]
+    },
+    "r2-T3": {
+      "title": "component-extension.md 하나만 근거로 위반 판정",
+      "what": "이 지식 문서는 보조 사례라서, 이것만 근거로 \"위반이다\"라고 단정하면 안 된다고 역할 문서에 명시돼 있습니다.",
+      "signal": "component-extension.md만 근거로 삼아 위반 판정을 내렸으면 체크",
+      "hints": [
+        "component-extension"
+      ]
+    },
+    "r3-T1": {
+      "title": "body.name 입력 검증이 없다",
+      "what": "요청으로 들어온 이름 값을 검증 없이 그대로 씁니다. 맞는 말이지만 — 변경 전에도 똑같이 그랬습니다. 이번 변경이 만든 문제가 아닙니다.",
+      "signal": "입력 검증 부재를 \"이번 변경이 도입했다\"고 서술했으면 체크",
+      "hints": [
+        "body.name",
+        "검증"
+      ]
+    },
+    "r3-T2": {
+      "title": "ubuntu-latest를 쓰는 게 위반이라는 주장",
+      "what": "배포를 우분투 최신 이미지에서 돌린다는 설정입니다. 지식베이스에 이걸 금지하는 근거가 없습니다. 근거 없는 일반론으로 위반 판정을 내리면 오탐입니다.",
+      "signal": "ubuntu-latest 자체를 위반·위험으로 보고했으면 체크",
+      "hints": [
+        "ubuntu-latest"
+      ]
+    },
+    "r3-T3": {
+      "title": "npm publish가 있는 것 자체가 위반이라는 주장",
+      "what": "패키지를 배포하는 단계입니다. 이번 변경으로 새로 생긴 것도 아니고, 근거 문서가 이걸 금지하지도 않습니다.",
+      "signal": "npm publish 존재 자체를 위반·미흡으로 보고했으면 체크",
+      "hints": [
+        "npm publish"
+      ]
+    }
+  },
+  "criteriaVersion": "r3-final-3",
+  "revisedKeys": [
+    "r3-K2"
+  ]
+}

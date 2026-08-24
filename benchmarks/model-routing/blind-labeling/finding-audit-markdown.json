@@ -1,0 +1,89 @@
+{
+  "version": "final-1",
+  "method": "비계약(Markdown) 응답 12건의 finding→키 매핑. 기계 채점 불가 범위이므로 AI가 원문에서 추출하고 사람이 13문항 검수로 확정한 판정이다(초안 검수 방식 — 앵커링 한계는 보고서 참조). verdict: 키ID=커버 기여 / FP / OK=키 밖이지만 타당(감점·가점 없음) / 언급-미커버=결함을 언급했으나 위반 분류 실패.",
+  "grounding_note": "근거 적합성은 인용 근거 문서가 키의 expected_knowledge_any_of에 있으면 적합. Markdown 응답은 문서명을 프로즈로 표기하므로 문서명 기준으로 판정.",
+  "responses": {
+    "R03": { "task": "r2", "run": "quality-first-ab:02-r2-B-rep1", "findings": [
+      { "n": 1, "verdict": "r2-K1", "grounding": "적합", "quote": "열기 컨트롤을 <button>에서 클릭 핸들러만 있는 <div>로 변경 — 키보드 조작 불가" },
+      { "n": 2, "verdict": "r2-K2", "grounding": "적합", "quote": "role=\"dialog\", aria-modal=\"true\", 레이블 연결을 제거" },
+      { "n": 3, "verdict": "r2-K3", "grounding": "적합", "quote": "확인 컨트롤을 <button>에서 <div>로 변경" },
+      { "n": 4, "verdict": "OK", "quote": "alertdialog — 기존 코드에도 없었으므로 새 위반으로 확정할 근거 없음 (trap 회피 모범)" } ] },
+    "R06": { "task": "r2", "run": "quality-first-ab:10-r2-B-rep3", "findings": [
+      { "n": 1, "verdict": "언급-미커버(r2-K1)", "quote": "button을 div.open-control로 변경 — 배정 문서만으로 위반 확정 불가 (사람 확정 Q1: 0점)" },
+      { "n": 2, "verdict": "언급-미커버(r2-K2)", "quote": "role/aria-modal/제목 연결 제거 — 규범 위반 확정 불가" },
+      { "n": 3, "verdict": "언급-미커버(r2-K3)", "quote": "확인 button을 div.confirm으로 변경 — 규범 근거 미배정" } ] },
+    "R13": { "task": "r2", "run": "quality-first-ab:01-r2-A-rep1", "findings": [
+      { "n": 1, "verdict": "r2-K1+r2-K3", "grounding": "적합", "quote": "클릭 핸들러만 가진 div(9-11, 18-20)로 키보드 조작 불가 — 한 finding이 두 키 커버" },
+      { "n": 2, "verdict": "언급-미커버(r2-K2)", "quote": "role/aria 제거를 '근거 있는 확인' 섹션에 서술 (사람 확정 Q2: 0점)" },
+      { "n": 3, "verdict": "r2-C1", "grounding": "적합", "quote": "'use client' 경계 유지 확인" },
+      { "n": 4, "verdict": "OK", "quote": "포커스·Escape는 파일만으로 확인 불가 — 근거없음 처리 (trap 회피)" } ] },
+    "R15": { "task": "r2", "run": "quality-first-ab:09-r2-A-rep3", "findings": [
+      { "n": 1, "verdict": "r2-K1+r2-K3", "grounding": "적합", "quote": "클릭 핸들러만 있는 div 두 개는 키보드로 조작 불가 (wcag-conformance)" },
+      { "n": 2, "verdict": "r2-K2+FP(r2-T2)", "grounding": "부적합(경계)", "quote": "alertdialog 역할·경고문 연결·모달 의미를 '제거' — alertdialog·경고문 연결은 원래 없었음 (사람 확정 Q3: FP)" },
+      { "n": 3, "verdict": "FP(r2-T1)", "quote": "포커스 이동·트랩·Escape·복귀 미구현을 위반으로 (사람 확정 Q4: FP)" } ] },
+    "R17": { "task": "r2", "run": "quality-first-ab:07-r2-B-rep2", "findings": [
+      { "n": 1, "verdict": "r2-K1", "grounding": "적합", "quote": "버튼을 클릭 전용 div로 — introduced_by_diff 명시" },
+      { "n": 2, "verdict": "r2-K2", "grounding": "적합", "quote": "role/aria-modal/aria-labelledby 제거" },
+      { "n": 3, "verdict": "r2-K3", "grounding": "적합", "quote": "확인 동작도 클릭 전용 div" },
+      { "n": 4, "verdict": "OK", "quote": "포커스류는 diff 직접 증거 없음 → 위반 판정 안 함 (trap 회피)" } ] },
+    "R18": { "task": "r2", "run": "quality-first-ab:08-r2-A-rep2", "findings": [
+      { "n": 1, "verdict": "r2-K1+r2-K3", "grounding": "적합", "quote": "클릭 핸들러만 가진 div로 열기·확인 구현" },
+      { "n": 2, "verdict": "r2-K2", "grounding": "적합", "quote": "role/aria-modal/이름 연결 제거" },
+      { "n": 3, "verdict": "FP", "quote": "alertdialog·aria-describedby 없음 — '이전에도 있던 문제로 보임'이라 쓰고 위반 표에 배치 (사람 확정 Q5)" },
+      { "n": 4, "verdict": "FP(r2-T1)", "quote": "포커스류 없음 — '새로 생긴 문제 아님'이라 쓰고 위반 표에 배치 (사람 확정 Q6)" } ] },
+    "R02": { "task": "r3", "run": "quality-first-ab:06-r3-B-rep2", "findings": [
+      { "n": 1, "verdict": "r3-K1", "grounding": "적합", "quote": "ownerId가 인증 주체 상수에서 body.userId로 — 서버 측 인가·소유권 확인 없음" },
+      { "n": 2, "verdict": "r3-K4", "grounding": "적합", "quote": "contents: read가 write-all로 확대" },
+      { "n": 3, "verdict": "r3-K5", "grounding": "적합", "quote": "checkout이 40자 SHA에서 @v4 태그로" },
+      { "n": 4, "verdict": "r3-K6", "grounding": "적합", "quote": "role/label locator를 .new-project·input·.save로 대체" },
+      { "n": 5, "verdict": "r3-K7", "grounding": "적합", "quote": "waitForTimeout(3000)" },
+      { "n": 6, "verdict": "r3-K8", "grounding": "적합", "quote": "Alpha 행 표시 검증이 전체 개수 1개 확인으로" },
+      { "n": 7, "verdict": "r3-K3(관대)", "quote": "@unique 제거의 무결성 여부 판정 근거 없음 — 공백 분리 (사람 확정 Q13: 부분 인정)" } ] },
+    "R04": { "task": "r3", "run": "quality-first-ab:03-r3-B-rep1", "findings": [
+      { "n": 1, "verdict": "r3-K1", "grounding": "적합", "quote": "ownerId를 body.userId로 — 임의 소유자 지정 가능" },
+      { "n": 2, "verdict": "r3-K4", "grounding": "적합", "quote": "contents: read → write-all" },
+      { "n": 3, "verdict": "r3-K5", "grounding": "적합", "quote": "SHA → checkout@v4" },
+      { "n": 4, "verdict": "r3-K6", "grounding": "적합", "quote": "role/label locator를 CSS selector로" },
+      { "n": 5, "verdict": "r3-K7", "grounding": "적합", "quote": "waitForTimeout(3000)" },
+      { "n": 6, "verdict": "r3-K8", "grounding": "적합", "quote": "즉시 count() 검사" },
+      { "n": 7, "verdict": "r3-K3(관대)", "quote": "@unique 제거 무결성 판정 불가 — 공백 분리" } ] },
+    "R05": { "task": "r3", "run": "quality-first-ab:11-r3-B-rep3", "findings": [
+      { "n": 1, "verdict": "r3-K1", "grounding": "적합", "quote": "ownerId가 body.userId로 — 접근통제 결함" },
+      { "n": 2, "verdict": "OK", "quote": "추가된 userId에 검증 없음 — 새 입력 한정 지적 (사람 확정 Q7: 감점 아님)" },
+      { "n": 3, "verdict": "r3-K4", "grounding": "적합", "quote": "write-all" },
+      { "n": 4, "verdict": "r3-K5", "grounding": "적합", "quote": "고정 SHA에서 v4 태그로" },
+      { "n": 5, "verdict": "r3-K6", "grounding": "적합", "quote": "role/label locator를 CSS selector로" },
+      { "n": 6, "verdict": "r3-K7", "grounding": "적합", "quote": "waitForTimeout(3000)" },
+      { "n": 7, "verdict": "r3-K8", "grounding": "적합", "quote": "행 수 즉시 확인 — 병렬·순서 의존 실패 가능" },
+      { "n": 8, "verdict": "r3-K3(관대)", "quote": "@unique 제거 판정 기준 없음 — 공백 분리" } ] },
+    "R08": { "task": "r3", "run": "quality-first-ab:12-r3-A-rep3", "findings": [
+      { "n": 1, "verdict": "r3-K1", "grounding": "적합", "quote": "body.userId를 소유자로 저장 — 소유권 검증 없음" },
+      { "n": 2, "verdict": "FP(r3-T1)", "quote": "name과 userId를 검증 없이 사용 — name 검증 부재는 base에도 있었음 (사람 확정 Q8①)" },
+      { "n": 3, "verdict": "FP", "quote": "ORM 결과를 DTO 필터링 없이 반환 — diff에서 바뀌지 않은 동작 (사람 확정 Q8②)" },
+      { "n": 4, "verdict": "r3-K4", "grounding": "적합", "quote": "write-all" },
+      { "n": 5, "verdict": "r3-K5", "grounding": "적합", "quote": "SHA 고정을 mutable v4로" },
+      { "n": 6, "verdict": "r3-K6", "grounding": "적합", "quote": "역할·라벨 locator를 CSS로" },
+      { "n": 7, "verdict": "r3-K7", "grounding": "적합", "quote": "waitForTimeout(3000)" },
+      { "n": 8, "verdict": "r3-K8", "grounding": "적합", "quote": "가시성 대신 개수만 확인" },
+      { "n": 9, "verdict": "r3-K3(관대)", "quote": "@unique 판단 기준 없음 — 공백 분리" } ] },
+    "R14": { "task": "r3", "run": "quality-first-ab:04-r3-A-rep1", "findings": [
+      { "n": 1, "verdict": "r3-K4", "grounding": "적합", "quote": "write-all — 최소 권한 위반" },
+      { "n": 2, "verdict": "r3-K5", "grounding": "적합", "quote": "@v4는 변경 가능한 태그 — 단 base가 SHA였다는 후퇴 프레임 없음(메모)" },
+      { "n": 3, "verdict": "r3-K1", "grounding": "적합", "quote": "요청의 userId를 ownerId로 저장 — 인가/소유권 경계 위반" },
+      { "n": 4, "verdict": "FP(r3-T1)", "quote": "name·userId 검증 없음 (사람 확정 Q9)" },
+      { "n": 5, "verdict": "r3-K6", "grounding": "적합", "quote": ".new-project·input·.save CSS 결합" },
+      { "n": 6, "verdict": "r3-K7", "grounding": "적합", "quote": "고정 3초 대기" },
+      { "n": 7, "verdict": "r3-K8", "grounding": "적합", "quote": "행 수만 확인 — Alpha 표시 미검증" },
+      { "n": 8, "verdict": "r3-K3(관대)", "quote": "@unique 판단 기준 없음 — 공백 분리" },
+      { "n": 9, "verdict": "OK", "quote": "npm publish 권한은 판정 불가 처리 (r3-T3 회피)" } ] },
+    "R16": { "task": "r3", "run": "quality-first-ab:05-r3-A-rep2", "findings": [
+      { "n": 1, "verdict": "r3-K1", "grounding": "적합", "quote": "본문 userId를 소유자로 신뢰" },
+      { "n": 2, "verdict": "FP(r3-T1)", "quote": "name·userId 검증 없이 영속화 (사람 확정 Q10)" },
+      { "n": 3, "verdict": "r3-K4", "grounding": "적합", "quote": "워크플로 전체 write-all" },
+      { "n": 4, "verdict": "r3-K5", "grounding": "적합", "quote": "고정 SHA를 mutable v4로" },
+      { "n": 5, "verdict": "r3-K6", "grounding": "적합", "quote": "역할·라벨 대신 CSS class locator" },
+      { "n": 6, "verdict": "r3-K7", "grounding": "적합", "quote": "waitForTimeout(3000)" },
+      { "n": 7, "verdict": "r3-K8", "grounding": "적합", "quote": "즉시 count() — web-first 아님" },
+      { "n": 8, "verdict": "r3-K3(관대)", "quote": "@unique 판단 기준 없음 — 공백 분리" } ] }
+  }
+}

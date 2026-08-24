@@ -1,0 +1,203 @@
+<meta charset="utf-8">
+<title>아카샤 채점 검수</title>
+<style>
+  :root {
+    --bg: #faf9f7; --card: #ffffff; --ink: #1a1a1a; --sub: #6b6b6b; --line: #e5e1da;
+    --ok: #1a7f4e; --ok-bg: #e6f4ec; --no: #b3362a; --no-bg: #faeae8;
+    --ask: #8a5a00; --ask-bg: #fdf3dd; --accent: #2f5fa8; --accent-bg: #e9f0fa;
+    --quote-bg: #f4f2ee;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #191919; --card: #222222; --ink: #ececec; --sub: #9a9a9a; --line: #3a3a3a;
+      --ok: #5dbd8b; --ok-bg: #1d3328; --no: #e08074; --no-bg: #3a2422;
+      --ask: #e0b25c; --ask-bg: #38301c; --accent: #7ea9e0; --accent-bg: #1f2c3e;
+      --quote-bg: #2a2a2a;
+    }
+  }
+  body { background: var(--bg); color: var(--ink); font-family: "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif; line-height: 1.65; margin: 0; padding: 2rem 1rem 4rem; }
+  main { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin: 0 0 .3rem; }
+  h2 { font-size: 1.15rem; margin: 2.2rem 0 .7rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
+  h3 { font-size: 1rem; margin: 1.4rem 0 .4rem; }
+  .sub { color: var(--sub); font-size: .9rem; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.2rem; margin: .8rem 0; }
+  .chip { display: inline-block; border-radius: 999px; padding: .05rem .6rem; font-size: .8rem; font-weight: 600; margin: .1rem .15rem .1rem 0; white-space: nowrap; }
+  .ok { background: var(--ok-bg); color: var(--ok); }
+  .no { background: var(--no-bg); color: var(--no); }
+  .ask { background: var(--ask-bg); color: var(--ask); }
+  .id { background: var(--accent-bg); color: var(--accent); font-weight: 700; }
+  blockquote { background: var(--quote-bg); border-left: 3px solid var(--line); margin: .5rem 0; padding: .45rem .8rem; font-size: .88rem; border-radius: 0 6px 6px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: .85rem; }
+  .tablewrap { overflow-x: auto; }
+  th, td { border: 1px solid var(--line); padding: .35rem .55rem; text-align: left; vertical-align: top; }
+  th { background: var(--quote-bg); }
+  code { background: var(--quote-bg); padding: .05rem .3rem; border-radius: 4px; font-size: .85em; }
+  .lean { font-weight: 700; }
+  .howto li { margin-bottom: .3rem; }
+  .qtitle { font-weight: 700; }
+  .small { font-size: .85rem; }
+</style>
+<main>
+
+<h1>아카샤 채점 검수</h1>
+<p class="sub">18개 답안을 제가 정답 키 기준으로 초안 채점했습니다. 선님은 아래 <b>질문 13개</b>에만 답하시면 라벨링이 끝납니다. 나머지 확실한 판정은 훑어보고 이상하면 지적해주세요.</p>
+
+<div class="card howto">
+  <b>답하는 방법</b>
+  <ul>
+    <li>제 제안이 다 맞으면 채팅에 <b>“전부 제안대로”</b> 한 마디면 됩니다.</li>
+    <li>일부만 다르면 번호로: 예) <b>“Q3은 FP 아님, Q13은 인정, 나머지 제안대로”</b></li>
+    <li>확실 판정(✅/❌)이 틀렸으면: 예) <b>“R09의 K3은 미커버로”</b></li>
+  </ul>
+</div>
+
+<h2>확인 필요 질문 (13개)</h2>
+<p class="sub">각 질문에는 제 제안(기울임 없이 <span class="lean">굵게</span>)이 있습니다. 동의하면 넘어가면 됩니다.</p>
+
+<div class="card">
+  <div class="qtitle">Q1 · <span class="chip id">R06</span> (r2) — 결함 3개를 다 언급했지만 전부 “위반 아님”으로 분류</div>
+  <blockquote>위반: 없음. 선택된 접근성 문서는 APG(정보 제공용)여서 … 규범적 “위반”으로 확정할 근거가 배정 범위에 없었습니다.</blockquote>
+  <p class="small">버튼→div, role 제거, 확인 버튼 문제를 표에 다 적었지만 전부 “지식베이스에 근거 없음”으로 내렸습니다. 검토의 임무는 위반을 잡는 것이므로 —</p>
+  <p class="lean">제안: K1·K2·K3 모두 미커버 (언급했어도 위반 분류 실패 = recall 실패)</p>
+</div>
+
+<div class="card">
+  <div class="qtitle">Q2 · <span class="chip id">R13</span> (r2) — role/aria 제거를 “근거 있는 확인” 섹션에 서술</div>
+  <blockquote>기존 role="dialog", aria-modal, aria-labelledby가 제거되었습니다. … 이것만으로 규범적 “위반”으로 판정하지 않았습니다.</blockquote>
+  <p class="lean">제안: K2 미커버 (제거 사실은 정확히 봤지만 위반으로 분류하지 못함)</p>
+</div>
+
+<div class="card">
+  <div class="qtitle">Q3 · <span class="chip id">R15</span> (r2) — 없었던 alertdialog를 “제거했다”고 서술</div>
+  <blockquote>삭제 확인 흐름에서 alertdialog 역할, 제목 연결, 경고문 설명 연결, 모달 의미를 <b>제거했습니다</b>.</blockquote>
+  <p class="small">alertdialog와 경고문 연결(aria-describedby)은 변경 전에도 없었습니다. 같은 문장에 실제 제거된 것(제목 연결·모달 의미)도 섞여 있어서 K2는 커버로 인정하되 —</p>
+  <p class="lean">제안: trap T2 발생 (허위 “제거” 서술 = FP 1건)</p>
+</div>
+
+<div class="card">
+  <div class="qtitle">Q4 · <span class="chip id">R15</span> (r2) — 원래 없던 포커스/Escape를 위반으로 판정</div>
+  <blockquote>열 때 포커스 이동, Tab/Shift+Tab 순환, Escape 닫기 … 구현되어 있지 않습니다. <i>(위반 표에 배치)</i></blockquote>
+  <p class="lean">제안: trap T1 발생 (변경 전에도 없던 것을 이번 변경의 위반으로 = FP 1건)</p>
+</div>
+
+<div class="card">
+  <div class="qtitle">Q5 · <span class="chip id">R18</span> (r2) — “이전에도 있던 문제”라고 쓰면서 위반 표에 배치 ①</div>
+  <blockquote>alertdialog 역할 및 … aria-describedby가 없습니다. 이 문제는 이번 변경 이전에도 있었던 것으로 보입니다. <i>(위반 표에 배치)</i></blockquote>
+  <p class="small">본문은 pre-existing이라고 인정하는데 분류는 위반입니다. 섹션 배치가 곧 분류라고 보면 —</p>
+  <p class="lean">제안: FP 1건 (관대하게 보면 세이프 — 선님 판단에 맡깁니다)</p>
+</div>
+
+<div class="card">
+  <div class="qtitle">Q6 · <span class="chip id">R18</span> (r2) — 같은 패턴 ②: 포커스 트랩 부재를 위반 표에 배치</div>
+  <blockquote>포커스 이동, Tab/Shift+Tab 트랩, Escape 닫기 … 가 없습니다. 이 역시 이번 diff에서 새로 생긴 문제는 아닙니다. <i>(위반 표에 배치)</i></blockquote>
+  <p class="lean">제안: trap T1 발생 (Q5와 같은 기준으로 판정해주세요)</p>
+</div>
+
+<div class="card">
+  <div class="qtitle">Q7 · <span class="chip id">R05</span> (r3) — 새로 추가된 userId의 검증 부재를 위반으로</div>
+  <blockquote>추가된 JSON userId에 파싱 뒤 검증 단계가 없습니다.</blockquote>
+  <p class="small">trap T1은 “base에도 있던 body.name 검증 부재”를 잡는 함정인데, 이 응답은 <b>diff가 새로 추가한 userId만</b> 지적했습니다. 새 입력의 검증 부재는 introduced로 변명 가능하므로 —</p>
+  <p class="lean">제안: T1 아님 (OK-기타로 인정)</p>
+</div>
+
+<div class="card">
+  <div class="qtitle">Q8 · <span class="chip id">R08</span> (r3) — base에도 있던 문제 2개를 위반으로</div>
+  <blockquote>① name과 userId를 검증 없이 DB 생성에 사용합니다. ② ORM 생성 결과를 DTO 필터링 없이 그대로 반환합니다.</blockquote>
+  <p class="small">①은 name까지 묶었으므로(name은 base에도 검증 없이 사용) trap 대상이고, ②의 응답 반환 방식은 diff에서 아예 안 바뀌었습니다.</p>
+  <p class="lean">제안: ① T1 발생 + ② FP 1건 (합계 FP 2건)</p>
+</div>
+
+<div class="card">
+  <div class="qtitle">Q9 · <span class="chip id">R14</span> (r3) — “name·userId 검증 없음”을 위반으로</div>
+  <p class="lean">제안: T1 발생 (Q8-①과 같은 유형, name 포함)</p>
+</div>
+
+<div class="card">
+  <div class="qtitle">Q10 · <span class="chip id">R16</span> (r3) — “name·userId 검증 없이 영속화”를 위반으로</div>
+  <p class="lean">제안: T1 발생 (같은 유형)</p>
+</div>
+
+<div class="card">
+  <div class="qtitle">Q11 · <span class="chip id">R11</span> (r3) — ownerId 문제를 ‘입력 검증’ 프레임으로만 잡음</div>
+  <blockquote>외부 JSON 입력이 검증 없이 저장 경로에 사용됨 <i>(위반)</i> … 인증 주체와 객체 소유자의 일치 여부를 판정할 인가 모델 기준은 제공하지 않는다 <i>(공백)</i></blockquote>
+  <p class="small">정답 K1의 핵심인 “인가 상실”은 공백으로 미루고, 같은 줄을 검증 문제로만 위반 처리했습니다. 같은 결함 위치를 잡긴 했으므로 —</p>
+  <p class="lean">제안: K1 커버 인정, 단 근거 적합성은 ‘부적합’ (엄격하게 미커버로 보셔도 됩니다)</p>
+</div>
+
+<div class="card">
+  <div class="qtitle">Q12 · <span class="chip id">R11</span> (r3) — count()/격리 문제를 공백으로만 처리</div>
+  <blockquote>… 현재 파일 범위만으로 seed/cleanup 유무를 확정할 수 없어 위반으로 확정하지 않았다.</blockquote>
+  <p class="small">K8(web-first 후퇴)의 정답 분류는 위반입니다. toBeVisible → 즉시 count()로 바뀐 건 diff에 명백한데 위반 확정을 거부했으므로 —</p>
+  <p class="lean">제안: K8 미커버 (R06의 Q1과 같은 기준)</p>
+</div>
+
+<div class="card">
+  <div class="qtitle">Q13 · <b>정책 질문</b> (r3 공통) — @unique 공백 처리를 K3 커버로 인정할까?</div>
+  <p class="small">K2(@unique 제거 = 중복 허용 효과 확정)는 <b>18건 전원 실패</b>입니다 — 이 판정용 지식 문서가 측정 시점에 아직 없었으므로 예상된 결과이고, 버전 간 차이를 만들지 않습니다. 문제는 K3(migration·cardinality 근거 공백 분리): R09·R12는 “카디널리티 계약·기존 데이터 미제공”을 명시해 확실 커버인데, R02·R04·R05·R08·R14·R16은 “판정 기준이 없다”고 뭉뚱그려 공백 처리만 했습니다.</p>
+  <p class="lean">제안: 관대 인정 (공백으로 분리한 행위 자체를 커버로) — 엄격하게 가면 6건 모두 K3 미커버가 됩니다. 하나만 골라주세요.</p>
+</div>
+
+<h2>요약 (초안 기준)</h2>
+<p class="sub">“커버”는 확실 판정만 센 값입니다. ⚠️는 위 질문의 답에 따라 바뀝니다.</p>
+<div class="tablewrap"><table>
+  <tr><th>ID</th><th>task</th><th>커버(확실)</th><th>FP</th><th>비고</th></tr>
+  <tr><td>R01</td><td>r2</td><td>3/3 +C1</td><td>0</td><td>클린</td></tr>
+  <tr><td>R03</td><td>r2</td><td>3/3</td><td>0</td><td>클린 · alertdialog 함정을 모범적으로 회피</td></tr>
+  <tr><td>R06</td><td>r2</td><td>0/3 ⚠️Q1</td><td>0</td><td>전부 “위반 아님”으로 후퇴 — 최대 recall 실패 후보</td></tr>
+  <tr><td>R07</td><td>r2</td><td>3/3</td><td>0</td><td>클린</td></tr>
+  <tr><td>R10</td><td>r2</td><td>3/3 +C1</td><td>0</td><td>클린 · 만점 후보</td></tr>
+  <tr><td>R13</td><td>r2</td><td>2/3 ⚠️Q2 +C1</td><td>0</td><td>K2를 ‘확인’으로 오분류</td></tr>
+  <tr><td>R15</td><td>r2</td><td>3/3</td><td>⚠️Q3·Q4 (최대 2)</td><td>허위 ‘제거’ 서술 + pre-existing 위반화</td></tr>
+  <tr><td>R17</td><td>r2</td><td>3/3</td><td>0</td><td>클린</td></tr>
+  <tr><td>R18</td><td>r2</td><td>3/3</td><td>⚠️Q5·Q6 (최대 2)</td><td>pre-existing 항목을 위반 표에 배치</td></tr>
+  <tr><td>R02</td><td>r3</td><td>6/8 ⚠️Q13</td><td>0</td><td>K2 미커버(전원 공통)</td></tr>
+  <tr><td>R04</td><td>r3</td><td>6/8 ⚠️Q13</td><td>0</td><td>〃</td></tr>
+  <tr><td>R05</td><td>r3</td><td>6/8 ⚠️Q13</td><td>⚠️Q7</td><td>userId 검증 위반은 변명 가능</td></tr>
+  <tr><td>R08</td><td>r3</td><td>6/8 ⚠️Q13</td><td>⚠️Q8 (최대 2)</td><td>pre-existing 위반화 2건 후보</td></tr>
+  <tr><td>R09</td><td>r3</td><td>7/8</td><td>0</td><td>K3 명시 분리 · 최상위 후보</td></tr>
+  <tr><td>R11</td><td>r3</td><td>3/8 ⚠️Q11·Q12·Q13</td><td>0</td><td>K6 누락 · 가장 약한 r3 응답</td></tr>
+  <tr><td>R12</td><td>r3</td><td>7/8</td><td>0</td><td>K3 명시 분리 · 최상위 후보</td></tr>
+  <tr><td>R14</td><td>r3</td><td>6/8 ⚠️Q13</td><td>⚠️Q9</td><td>K5는 후퇴 프레임 없이 일반론(커버는 인정)</td></tr>
+  <tr><td>R16</td><td>r3</td><td>6/8 ⚠️Q13</td><td>⚠️Q10</td><td>〃 유형</td></tr>
+</table></div>
+
+<h2>확실 판정의 근거 (훑어보기용)</h2>
+<p class="sub">전 응답 공통으로 확실한 것만 요약합니다. 원문 전문은 <code>라벨링-시트-r2.md</code> / <code>라벨링-시트-r3.md</code>에 있습니다.</p>
+
+<div class="card">
+  <h3>r2에서 확실 커버로 처리한 것</h3>
+  <p class="small">R01·R03·R07·R10·R13(K1·K3)·R15·R17·R18은 모두 아래 3종 위반을 diff 근거와 함께 정확히 지적했습니다:</p>
+  <span class="chip ok">K1 열기 button→div</span>
+  <span class="chip ok">K2 role/aria 제거</span>
+  <span class="chip ok">K3 확인 button→div</span>
+  <blockquote>예 (R17): “버튼을 클릭 전용 &lt;div&gt;로 변경해 키보드 조작이 불가능합니다 … role="dialog", aria-modal="true", aria-labelledby를 제거하여 …” — 3건 모두 introduced_by_diff로 명시</blockquote>
+  <p class="small">C1('use client' 적절 확인)은 R01·R10·R13만 있음 — 선택 크레딧이라 나머지는 감점 아님.</p>
+</div>
+
+<div class="card">
+  <h3>r3에서 확실 커버로 처리한 것</h3>
+  <p class="small">R02·R04·R05·R08·R09·R12·R14·R16은 아래 6종을 정확히 지적했습니다 (R09는 tests 3건을 finding 하나로 묶었지만 각각 언급):</p>
+  <span class="chip ok">K1 ownerId=body.userId 인가</span>
+  <span class="chip ok">K4 write-all</span>
+  <span class="chip ok">K5 SHA→@v4</span>
+  <span class="chip ok">K6 CSS locator</span>
+  <span class="chip ok">K7 waitForTimeout</span>
+  <span class="chip ok">K8 즉시 count()</span>
+  <p class="small">전원 공통 미커버: <span class="chip no">K2 @unique 중복 허용 효과</span> — 당시 지식 문서 부재로 예상된 패턴 (버전 비교에 영향 없음).</p>
+  <p class="small">R11만 예외적으로 약함: K6(locator) 언급 자체가 없고, K1·K8을 공백으로 미룸.</p>
+</div>
+
+<div class="card">
+  <h3>트랩을 모범적으로 회피한 사례 (참고)</h3>
+  <blockquote>R03: “alertdialog 적용 여부 — 기존 코드에도 해당 역할은 없었으므로, 이번 diff가 새로 도입한 위반이라고 확정할 근거가 없습니다.”</blockquote>
+  <blockquote>R10: “포커스 진입·Tab 순환·Escape … 변경 전부터 구현되지 않았을 수 있으나 … 현재 변경의 위반으로 판정하지 않았다.”</blockquote>
+  <blockquote>R14: npm publish를 위반이 아니라 “판정할 수 없음”으로 분류 (T3 회피).</blockquote>
+</div>
+
+<div class="card">
+  <b>끝나면</b>
+  <p class="small">채팅에 답을 주시면 제가 <code>draft-scores.json</code>을 확정본으로 갱신하고, finding-key 채점기를 만들어 regex 채점기와 사람 라벨 일치도를 비교한 뒤, 합의된 통과/기각 기준으로 판정해 Codex에 전달합니다. <b>blind-map 파일은 그때까지 열지 마세요.</b></p>
+</div>
+
+</main>

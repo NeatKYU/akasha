@@ -1,0 +1,1325 @@
+[
+  {
+    "run_id": "01-r2-A-rep1",
+    "task_id": "r2",
+    "condition": "A",
+    "matcher": "matcher-3",
+    "key_version": "final-1",
+    "keys_scored": [
+      "r2-K1",
+      "r2-K2",
+      "r2-K3",
+      "r2-C1"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "baseline",
+      "subject_hash": "5f7a0f1fc9c4d4eb573cb78a6a70085e1b17428c046a8b8c9aef55b8700f434c",
+      "subject_full_tree_hash": "dd10d3119259173485f4ad48289a54a8220d024a32556652aa568a44fc751109",
+      "subject_declared_version": "0.14.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/benchmarks/model-routing/archived-traces/quality-final/A/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "02-r2-B-rep1",
+    "task_id": "r2",
+    "condition": "B",
+    "matcher": "matcher-3",
+    "key_version": "final-1",
+    "keys_scored": [
+      "r2-K1",
+      "r2-K2",
+      "r2-K3",
+      "r2-C1"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "candidate",
+      "subject_hash": "aa3b4333c352dad38d4ca0c713117517f3d5a2c258b9f99cda187ddeb2d5e461",
+      "subject_full_tree_hash": "1083740a7de5660a75832dddfddcd231290b36535386e9666af349967b6d4aca",
+      "subject_declared_version": "0.15.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": true,
+    "perKey": {
+      "r2-K1": true,
+      "r2-K2": true,
+      "r2-K3": true,
+      "r2-C1": true
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:15",
+        "matched_keys": [
+          "r2-K2"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:10",
+        "matched_keys": [
+          "r2-K1"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:18",
+        "matched_keys": [
+          "r2-K3"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 3,
+        "classification": "근거 있는 확인",
+        "location": "components/Dialog.tsx:1",
+        "matched_keys": [
+          "r2-C1"
+        ],
+        "grounding": null
+      },
+      {
+        "index": 4,
+        "classification": "지식베이스에 근거 없음",
+        "location": "components/Dialog.tsx:18",
+        "matched_keys": [],
+        "grounding": null
+      }
+    ]
+  },
+  {
+    "run_id": "03-r3-B-rep1",
+    "task_id": "r3",
+    "condition": "B",
+    "matcher": "matcher-3",
+    "key_version": "final-3",
+    "keys_scored": [
+      "r3-K1",
+      "r3-K2",
+      "r3-K3",
+      "r3-K4",
+      "r3-K5",
+      "r3-K6",
+      "r3-K7",
+      "r3-K8"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "candidate",
+      "subject_hash": "aa3b4333c352dad38d4ca0c713117517f3d5a2c258b9f99cda187ddeb2d5e461",
+      "subject_full_tree_hash": "1083740a7de5660a75832dddfddcd231290b36535386e9666af349967b6d4aca",
+      "subject_declared_version": "0.15.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": true,
+    "perKey": {
+      "r3-K1": true,
+      "r3-K4": true,
+      "r3-K5": true,
+      "r3-K6": true,
+      "r3-K7": true,
+      "r3-K8": true,
+      "r3-K3": true,
+      "r3-K2": true
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": "app/api/projects/route.ts:9",
+        "matched_keys": [
+          "r3-K1"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": ".github/workflows/release.yml:3",
+        "matched_keys": [
+          "r3-K4"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "위반",
+        "location": ".github/workflows/release.yml:8",
+        "matched_keys": [
+          "r3-K5"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 3,
+        "classification": "근거 있는 확인",
+        "location": "prisma/schema.prisma:4",
+        "matched_keys": [
+          "r3-K2"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 4,
+        "classification": "지식베이스에 근거 없음",
+        "location": "prisma/schema.prisma:4",
+        "matched_keys": [
+          "r3-K3"
+        ],
+        "grounding": null
+      },
+      {
+        "index": 5,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:5",
+        "matched_keys": [
+          "r3-K6"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 6,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:8",
+        "matched_keys": [
+          "r3-K7"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 7,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:9",
+        "matched_keys": [
+          "r3-K8"
+        ],
+        "grounding": "적합"
+      }
+    ]
+  },
+  {
+    "run_id": "04-r3-A-rep1",
+    "task_id": "r3",
+    "condition": "A",
+    "matcher": "matcher-3",
+    "key_version": "final-3",
+    "keys_scored": [
+      "r3-K1",
+      "r3-K2",
+      "r3-K3",
+      "r3-K4",
+      "r3-K5",
+      "r3-K6",
+      "r3-K7",
+      "r3-K8"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "baseline",
+      "subject_hash": "5f7a0f1fc9c4d4eb573cb78a6a70085e1b17428c046a8b8c9aef55b8700f434c",
+      "subject_full_tree_hash": "dd10d3119259173485f4ad48289a54a8220d024a32556652aa568a44fc751109",
+      "subject_declared_version": "0.14.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/benchmarks/model-routing/archived-traces/quality-final/A/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "05-r3-A-rep2",
+    "task_id": "r3",
+    "condition": "A",
+    "matcher": "matcher-3",
+    "key_version": "final-3",
+    "keys_scored": [
+      "r3-K1",
+      "r3-K2",
+      "r3-K3",
+      "r3-K4",
+      "r3-K5",
+      "r3-K6",
+      "r3-K7",
+      "r3-K8"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "baseline",
+      "subject_hash": "5f7a0f1fc9c4d4eb573cb78a6a70085e1b17428c046a8b8c9aef55b8700f434c",
+      "subject_full_tree_hash": "dd10d3119259173485f4ad48289a54a8220d024a32556652aa568a44fc751109",
+      "subject_declared_version": "0.14.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/benchmarks/model-routing/archived-traces/quality-final/A/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "06-r3-B-rep2",
+    "task_id": "r3",
+    "condition": "B",
+    "matcher": "matcher-3",
+    "key_version": "final-3",
+    "keys_scored": [
+      "r3-K1",
+      "r3-K2",
+      "r3-K3",
+      "r3-K4",
+      "r3-K5",
+      "r3-K6",
+      "r3-K7",
+      "r3-K8"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "candidate",
+      "subject_hash": "aa3b4333c352dad38d4ca0c713117517f3d5a2c258b9f99cda187ddeb2d5e461",
+      "subject_full_tree_hash": "1083740a7de5660a75832dddfddcd231290b36535386e9666af349967b6d4aca",
+      "subject_declared_version": "0.15.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": true,
+    "perKey": {
+      "r3-K1": false,
+      "r3-K4": false,
+      "r3-K5": false,
+      "r3-K6": true,
+      "r3-K7": true,
+      "r3-K8": true,
+      "r3-K3": true,
+      "r3-K2": false
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:8",
+        "matched_keys": [
+          "r3-K7"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:5-7",
+        "matched_keys": [
+          "r3-K6"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:9",
+        "matched_keys": [
+          "r3-K8"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 3,
+        "classification": "지식베이스에 근거 없음",
+        "location": ".github/workflows/release.yml:4,9",
+        "matched_keys": [],
+        "grounding": null
+      },
+      {
+        "index": 4,
+        "classification": "지식베이스에 근거 없음",
+        "location": "app/api/projects/route.ts:11",
+        "matched_keys": [],
+        "grounding": null
+      },
+      {
+        "index": 5,
+        "classification": "지식베이스에 근거 없음",
+        "location": "prisma/schema.prisma:4",
+        "matched_keys": [
+          "r3-K3"
+        ],
+        "grounding": null
+      }
+    ]
+  },
+  {
+    "run_id": "07-r2-B-rep2",
+    "task_id": "r2",
+    "condition": "B",
+    "matcher": "matcher-3",
+    "key_version": "final-1",
+    "keys_scored": [
+      "r2-K1",
+      "r2-K2",
+      "r2-K3",
+      "r2-C1"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "candidate",
+      "subject_hash": "aa3b4333c352dad38d4ca0c713117517f3d5a2c258b9f99cda187ddeb2d5e461",
+      "subject_full_tree_hash": "1083740a7de5660a75832dddfddcd231290b36535386e9666af349967b6d4aca",
+      "subject_declared_version": "0.15.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": true,
+    "perKey": {
+      "r2-K1": true,
+      "r2-K2": true,
+      "r2-K3": true,
+      "r2-C1": true
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:10,18",
+        "matched_keys": [
+          "r2-K1",
+          "r2-K3"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:15-16",
+        "matched_keys": [
+          "r2-K2"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "근거 있는 확인",
+        "location": "components/Dialog.tsx:1",
+        "matched_keys": [
+          "r2-C1"
+        ],
+        "grounding": null
+      }
+    ]
+  },
+  {
+    "run_id": "08-r2-A-rep2",
+    "task_id": "r2",
+    "condition": "A",
+    "matcher": "matcher-3",
+    "key_version": "final-1",
+    "keys_scored": [
+      "r2-K1",
+      "r2-K2",
+      "r2-K3",
+      "r2-C1"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "baseline",
+      "subject_hash": "5f7a0f1fc9c4d4eb573cb78a6a70085e1b17428c046a8b8c9aef55b8700f434c",
+      "subject_full_tree_hash": "dd10d3119259173485f4ad48289a54a8220d024a32556652aa568a44fc751109",
+      "subject_declared_version": "0.14.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/benchmarks/model-routing/archived-traces/quality-final/A/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "09-r2-A-rep3",
+    "task_id": "r2",
+    "condition": "A",
+    "matcher": "matcher-3",
+    "key_version": "final-1",
+    "keys_scored": [
+      "r2-K1",
+      "r2-K2",
+      "r2-K3",
+      "r2-C1"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "baseline",
+      "subject_hash": "5f7a0f1fc9c4d4eb573cb78a6a70085e1b17428c046a8b8c9aef55b8700f434c",
+      "subject_full_tree_hash": "dd10d3119259173485f4ad48289a54a8220d024a32556652aa568a44fc751109",
+      "subject_declared_version": "0.14.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/benchmarks/model-routing/archived-traces/quality-final/A/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "10-r2-B-rep3",
+    "task_id": "r2",
+    "condition": "B",
+    "matcher": "matcher-3",
+    "key_version": "final-1",
+    "keys_scored": [
+      "r2-K1",
+      "r2-K2",
+      "r2-K3",
+      "r2-C1"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "candidate",
+      "subject_hash": "aa3b4333c352dad38d4ca0c713117517f3d5a2c258b9f99cda187ddeb2d5e461",
+      "subject_full_tree_hash": "1083740a7de5660a75832dddfddcd231290b36535386e9666af349967b6d4aca",
+      "subject_declared_version": "0.15.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": true,
+    "perKey": {
+      "r2-K1": true,
+      "r2-K2": true,
+      "r2-K3": true,
+      "r2-C1": false
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:10",
+        "matched_keys": [
+          "r2-K1"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:15-16",
+        "matched_keys": [
+          "r2-K2"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:18",
+        "matched_keys": [
+          "r2-K3"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 3,
+        "classification": "지식베이스에 근거 없음",
+        "location": "components/Dialog.tsx",
+        "matched_keys": [],
+        "grounding": null
+      }
+    ]
+  },
+  {
+    "run_id": "11-r3-B-rep3",
+    "task_id": "r3",
+    "condition": "B",
+    "matcher": "matcher-3",
+    "key_version": "final-3",
+    "keys_scored": [
+      "r3-K1",
+      "r3-K2",
+      "r3-K3",
+      "r3-K4",
+      "r3-K5",
+      "r3-K6",
+      "r3-K7",
+      "r3-K8"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "candidate",
+      "subject_hash": "aa3b4333c352dad38d4ca0c713117517f3d5a2c258b9f99cda187ddeb2d5e461",
+      "subject_full_tree_hash": "1083740a7de5660a75832dddfddcd231290b36535386e9666af349967b6d4aca",
+      "subject_declared_version": "0.15.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": true,
+    "perKey": {
+      "r3-K1": true,
+      "r3-K4": true,
+      "r3-K5": true,
+      "r3-K6": true,
+      "r3-K7": true,
+      "r3-K8": true,
+      "r3-K3": true,
+      "r3-K2": true
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": ".github/workflows/release.yml:3",
+        "matched_keys": [
+          "r3-K4"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": ".github/workflows/release.yml:8",
+        "matched_keys": [
+          "r3-K5"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "위반",
+        "location": "app/api/projects/route.ts:9",
+        "matched_keys": [
+          "r3-K1"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 3,
+        "classification": "위반",
+        "location": "app/api/projects/route.ts:9",
+        "matched_keys": [],
+        "grounding": null
+      },
+      {
+        "index": 4,
+        "classification": "근거 있는 확인",
+        "location": "prisma/schema.prisma:4",
+        "matched_keys": [
+          "r3-K2"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 5,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:5",
+        "matched_keys": [
+          "r3-K6"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 6,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:8",
+        "matched_keys": [
+          "r3-K7",
+          "r3-K8"
+        ],
+        "grounding": "적합"
+      }
+    ]
+  },
+  {
+    "run_id": "12-r3-A-rep3",
+    "task_id": "r3",
+    "condition": "A",
+    "matcher": "matcher-3",
+    "key_version": "final-3",
+    "keys_scored": [
+      "r3-K1",
+      "r3-K2",
+      "r3-K3",
+      "r3-K4",
+      "r3-K5",
+      "r3-K6",
+      "r3-K7",
+      "r3-K8"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "baseline",
+      "subject_hash": "5f7a0f1fc9c4d4eb573cb78a6a70085e1b17428c046a8b8c9aef55b8700f434c",
+      "subject_full_tree_hash": "dd10d3119259173485f4ad48289a54a8220d024a32556652aa568a44fc751109",
+      "subject_declared_version": "0.14.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/benchmarks/model-routing/archived-traces/quality-final/A/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "13-r3-A-rep4",
+    "task_id": "r3",
+    "condition": "A",
+    "matcher": "matcher-3",
+    "key_version": "final-3",
+    "keys_scored": [
+      "r3-K1",
+      "r3-K2",
+      "r3-K3",
+      "r3-K4",
+      "r3-K5",
+      "r3-K6",
+      "r3-K7",
+      "r3-K8"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "baseline",
+      "subject_hash": "5f7a0f1fc9c4d4eb573cb78a6a70085e1b17428c046a8b8c9aef55b8700f434c",
+      "subject_full_tree_hash": "dd10d3119259173485f4ad48289a54a8220d024a32556652aa568a44fc751109",
+      "subject_declared_version": "0.14.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/benchmarks/model-routing/archived-traces/quality-final/A/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "14-r3-B-rep4",
+    "task_id": "r3",
+    "condition": "B",
+    "matcher": "matcher-3",
+    "key_version": "final-3",
+    "keys_scored": [
+      "r3-K1",
+      "r3-K2",
+      "r3-K3",
+      "r3-K4",
+      "r3-K5",
+      "r3-K6",
+      "r3-K7",
+      "r3-K8"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "candidate",
+      "subject_hash": "aa3b4333c352dad38d4ca0c713117517f3d5a2c258b9f99cda187ddeb2d5e461",
+      "subject_full_tree_hash": "1083740a7de5660a75832dddfddcd231290b36535386e9666af349967b6d4aca",
+      "subject_declared_version": "0.15.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": true,
+    "perKey": {
+      "r3-K1": false,
+      "r3-K4": true,
+      "r3-K5": true,
+      "r3-K6": true,
+      "r3-K7": true,
+      "r3-K8": true,
+      "r3-K3": true,
+      "r3-K2": true
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": ".github/workflows/release.yml:3",
+        "matched_keys": [
+          "r3-K4"
+        ],
+        "grounding": "부적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": ".github/workflows/release.yml:8",
+        "matched_keys": [
+          "r3-K5"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "근거 있는 확인",
+        "location": "prisma/schema.prisma:4",
+        "matched_keys": [
+          "r3-K2"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 3,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:5-7",
+        "matched_keys": [
+          "r3-K6"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 4,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:8",
+        "matched_keys": [
+          "r3-K7"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 5,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:9",
+        "matched_keys": [
+          "r3-K8"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 6,
+        "classification": "지식베이스에 근거 없음",
+        "location": "app/api/projects/route.ts:9",
+        "matched_keys": [],
+        "grounding": null
+      },
+      {
+        "index": 7,
+        "classification": "지식베이스에 근거 없음",
+        "location": "prisma/schema.prisma:4",
+        "matched_keys": [
+          "r3-K3"
+        ],
+        "grounding": null
+      }
+    ]
+  },
+  {
+    "run_id": "15-r2-B-rep4",
+    "task_id": "r2",
+    "condition": "B",
+    "matcher": "matcher-3",
+    "key_version": "final-1",
+    "keys_scored": [
+      "r2-K1",
+      "r2-K2",
+      "r2-K3",
+      "r2-C1"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "candidate",
+      "subject_hash": "aa3b4333c352dad38d4ca0c713117517f3d5a2c258b9f99cda187ddeb2d5e461",
+      "subject_full_tree_hash": "1083740a7de5660a75832dddfddcd231290b36535386e9666af349967b6d4aca",
+      "subject_declared_version": "0.15.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": true,
+    "perKey": {
+      "r2-K1": true,
+      "r2-K2": true,
+      "r2-K3": true,
+      "r2-C1": false
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:10",
+        "matched_keys": [
+          "r2-K1"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:14",
+        "matched_keys": [
+          "r2-K2"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:17",
+        "matched_keys": [
+          "r2-K3"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 3,
+        "classification": "근거 있는 확인",
+        "location": "components/Dialog.tsx:10,17",
+        "matched_keys": [],
+        "grounding": null
+      }
+    ]
+  },
+  {
+    "run_id": "16-r2-A-rep4",
+    "task_id": "r2",
+    "condition": "A",
+    "matcher": "matcher-3",
+    "key_version": "final-1",
+    "keys_scored": [
+      "r2-K1",
+      "r2-K2",
+      "r2-K3",
+      "r2-C1"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "baseline",
+      "subject_hash": "5f7a0f1fc9c4d4eb573cb78a6a70085e1b17428c046a8b8c9aef55b8700f434c",
+      "subject_full_tree_hash": "dd10d3119259173485f4ad48289a54a8220d024a32556652aa568a44fc751109",
+      "subject_declared_version": "0.14.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/benchmarks/model-routing/archived-traces/quality-final/A/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "17-r2-A-rep5",
+    "task_id": "r2",
+    "condition": "A",
+    "matcher": "matcher-3",
+    "key_version": "final-1",
+    "keys_scored": [
+      "r2-K1",
+      "r2-K2",
+      "r2-K3",
+      "r2-C1"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "baseline",
+      "subject_hash": "5f7a0f1fc9c4d4eb573cb78a6a70085e1b17428c046a8b8c9aef55b8700f434c",
+      "subject_full_tree_hash": "dd10d3119259173485f4ad48289a54a8220d024a32556652aa568a44fc751109",
+      "subject_declared_version": "0.14.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/benchmarks/model-routing/archived-traces/quality-final/A/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "18-r2-B-rep5",
+    "task_id": "r2",
+    "condition": "B",
+    "matcher": "matcher-3",
+    "key_version": "final-1",
+    "keys_scored": [
+      "r2-K1",
+      "r2-K2",
+      "r2-K3",
+      "r2-C1"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "candidate",
+      "subject_hash": "aa3b4333c352dad38d4ca0c713117517f3d5a2c258b9f99cda187ddeb2d5e461",
+      "subject_full_tree_hash": "1083740a7de5660a75832dddfddcd231290b36535386e9666af349967b6d4aca",
+      "subject_declared_version": "0.15.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": true,
+    "perKey": {
+      "r2-K1": true,
+      "r2-K2": true,
+      "r2-K3": true,
+      "r2-C1": true
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:15-16",
+        "matched_keys": [
+          "r2-K2"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:10",
+        "matched_keys": [
+          "r2-K1"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:18",
+        "matched_keys": [
+          "r2-K3"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 3,
+        "classification": "근거 있는 확인",
+        "location": "components/Dialog.tsx:1-6",
+        "matched_keys": [
+          "r2-C1"
+        ],
+        "grounding": null
+      }
+    ]
+  },
+  {
+    "run_id": "19-r3-B-rep5",
+    "task_id": "r3",
+    "condition": "B",
+    "matcher": "matcher-3",
+    "key_version": "final-3",
+    "keys_scored": [
+      "r3-K1",
+      "r3-K2",
+      "r3-K3",
+      "r3-K4",
+      "r3-K5",
+      "r3-K6",
+      "r3-K7",
+      "r3-K8"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "candidate",
+      "subject_hash": "aa3b4333c352dad38d4ca0c713117517f3d5a2c258b9f99cda187ddeb2d5e461",
+      "subject_full_tree_hash": "1083740a7de5660a75832dddfddcd231290b36535386e9666af349967b6d4aca",
+      "subject_declared_version": "0.15.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": true,
+    "perKey": {
+      "r3-K1": true,
+      "r3-K4": true,
+      "r3-K5": true,
+      "r3-K6": true,
+      "r3-K7": true,
+      "r3-K8": true,
+      "r3-K3": true,
+      "r3-K2": true
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": "app/api/projects/route.ts:9",
+        "matched_keys": [
+          "r3-K1"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": ".github/workflows/release.yml:3",
+        "matched_keys": [
+          "r3-K4"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "위반",
+        "location": ".github/workflows/release.yml:8",
+        "matched_keys": [
+          "r3-K5"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 3,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:5",
+        "matched_keys": [
+          "r3-K6"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 4,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:8",
+        "matched_keys": [
+          "r3-K7"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 5,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:9",
+        "matched_keys": [
+          "r3-K8"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 6,
+        "classification": "지식베이스에 근거 없음",
+        "location": "prisma/schema.prisma:4",
+        "matched_keys": [
+          "r3-K3",
+          "r3-K2"
+        ],
+        "grounding": "적합"
+      }
+    ]
+  },
+  {
+    "run_id": "20-r3-A-rep5",
+    "task_id": "r3",
+    "condition": "A",
+    "matcher": "matcher-3",
+    "key_version": "final-3",
+    "keys_scored": [
+      "r3-K1",
+      "r3-K2",
+      "r3-K3",
+      "r3-K4",
+      "r3-K5",
+      "r3-K6",
+      "r3-K7",
+      "r3-K8"
+    ],
+    "provenance": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "baseline",
+      "subject_hash": "5f7a0f1fc9c4d4eb573cb78a6a70085e1b17428c046a8b8c9aef55b8700f434c",
+      "subject_full_tree_hash": "dd10d3119259173485f4ad48289a54a8220d024a32556652aa568a44fc751109",
+      "subject_declared_version": "0.14.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/benchmarks/model-routing/archived-traces/quality-final/A/akasha",
+      "plugin_commit": "dfb4a4d",
+      "git_describe": "kb-2026-W32-7f7354c-70-gdfb4a4d-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "beae5d51009723534fe0cf2da1ea68125b525e077a6263928d7da41704085f36",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "a81e9fd2aba809488a4e23629fc9043f3250db3d832d231a9f0a3a15c537e85e",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-1",
+      "key_scorer_matcher_version": "matcher-2",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "scorable": false,
+    "reason": "not-json"
+  }
+]

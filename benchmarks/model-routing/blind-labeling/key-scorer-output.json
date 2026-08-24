@@ -1,0 +1,520 @@
+[
+  {
+    "run_id": "01-r2-A-rep1",
+    "task_id": "r2",
+    "condition": "A",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "02-r2-B-rep1",
+    "task_id": "r2",
+    "condition": "B",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "03-r3-B-rep1",
+    "task_id": "r3",
+    "condition": "B",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "04-r3-A-rep1",
+    "task_id": "r3",
+    "condition": "A",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "05-r3-A-rep2",
+    "task_id": "r3",
+    "condition": "A",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "06-r3-B-rep2",
+    "task_id": "r3",
+    "condition": "B",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "07-r2-B-rep2",
+    "task_id": "r2",
+    "condition": "B",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "08-r2-A-rep2",
+    "task_id": "r2",
+    "condition": "A",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "09-r2-A-rep3",
+    "task_id": "r2",
+    "condition": "A",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "10-r2-B-rep3",
+    "task_id": "r2",
+    "condition": "B",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "11-r3-B-rep3",
+    "task_id": "r3",
+    "condition": "B",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "12-r3-A-rep3",
+    "task_id": "r3",
+    "condition": "A",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "01-r2-A-rep1",
+    "task_id": "r2",
+    "condition": "A",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "02-r2-B-rep1",
+    "task_id": "r2",
+    "condition": "B",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": true,
+    "perKey": {
+      "r2-K1": true,
+      "r2-K2": true,
+      "r2-K3": true,
+      "r2-C1": true
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:10",
+        "matched_keys": [
+          "r2-K1"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:15-16",
+        "matched_keys": [
+          "r2-K2"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:18",
+        "matched_keys": [
+          "r2-K3"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 3,
+        "classification": "근거 있는 확인",
+        "location": "components/Dialog.tsx:1-6",
+        "matched_keys": [
+          "r2-C1"
+        ],
+        "grounding": null
+      }
+    ]
+  },
+  {
+    "run_id": "03-r3-B-rep1",
+    "task_id": "r3",
+    "condition": "B",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": true,
+    "perKey": {
+      "r3-K1": true,
+      "r3-K4": true,
+      "r3-K5": true,
+      "r3-K6": true,
+      "r3-K7": true,
+      "r3-K8": true,
+      "r3-K3": true
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": "app/api/projects/route.ts:9",
+        "matched_keys": [
+          "r3-K1"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": ".github/workflows/release.yml:3",
+        "matched_keys": [
+          "r3-K4"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "위반",
+        "location": ".github/workflows/release.yml:8",
+        "matched_keys": [
+          "r3-K5"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 3,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:5",
+        "matched_keys": [
+          "r3-K6"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 4,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:8",
+        "matched_keys": [
+          "r3-K7"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 5,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:9",
+        "matched_keys": [
+          "r3-K8"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 6,
+        "classification": "지식베이스에 근거 없음",
+        "location": "prisma/schema.prisma:Project.ownerId",
+        "matched_keys": [
+          "r3-K3"
+        ],
+        "grounding": null
+      }
+    ]
+  },
+  {
+    "run_id": "04-r3-A-rep1",
+    "task_id": "r3",
+    "condition": "A",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "05-r3-A-rep2",
+    "task_id": "r3",
+    "condition": "A",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "06-r3-B-rep2",
+    "task_id": "r3",
+    "condition": "B",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": true,
+    "perKey": {
+      "r3-K1": true,
+      "r3-K4": true,
+      "r3-K5": true,
+      "r3-K6": false,
+      "r3-K7": true,
+      "r3-K8": false,
+      "r3-K3": true
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": ".github/workflows/release.yml:3",
+        "matched_keys": [
+          "r3-K4"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": ".github/workflows/release.yml:8",
+        "matched_keys": [
+          "r3-K5"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "위반",
+        "location": "app/api/projects/route.ts:9",
+        "matched_keys": [
+          "r3-K1"
+        ],
+        "grounding": "부적합"
+      },
+      {
+        "index": 3,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:8",
+        "matched_keys": [
+          "r3-K7"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 4,
+        "classification": "지식베이스에 근거 없음",
+        "location": "prisma/schema.prisma:4",
+        "matched_keys": [
+          "r3-K3"
+        ],
+        "grounding": null
+      }
+    ]
+  },
+  {
+    "run_id": "07-r2-B-rep2",
+    "task_id": "r2",
+    "condition": "B",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": true,
+    "perKey": {
+      "r2-K1": true,
+      "r2-K2": true,
+      "r2-K3": true,
+      "r2-C1": false
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:10-12",
+        "matched_keys": [
+          "r2-K1"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:15-16",
+        "matched_keys": [
+          "r2-K2"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:19-21",
+        "matched_keys": [
+          "r2-K3"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 3,
+        "classification": "근거 있는 확인",
+        "location": "components/Dialog.tsx:10, components/Dialog.tsx:19",
+        "matched_keys": [],
+        "grounding": null
+      },
+      {
+        "index": 4,
+        "classification": "지식베이스에 근거 없음",
+        "location": "components/Dialog.tsx:10-21",
+        "matched_keys": [],
+        "grounding": null
+      }
+    ]
+  },
+  {
+    "run_id": "08-r2-A-rep2",
+    "task_id": "r2",
+    "condition": "A",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "09-r2-A-rep3",
+    "task_id": "r2",
+    "condition": "A",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  },
+  {
+    "run_id": "10-r2-B-rep3",
+    "task_id": "r2",
+    "condition": "B",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": true,
+    "perKey": {
+      "r2-K1": true,
+      "r2-K2": true,
+      "r2-K3": true,
+      "r2-C1": true
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:10",
+        "matched_keys": [
+          "r2-K1"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:15-17",
+        "matched_keys": [
+          "r2-K2"
+        ],
+        "grounding": "부적합"
+      },
+      {
+        "index": 2,
+        "classification": "위반",
+        "location": "components/Dialog.tsx:18",
+        "matched_keys": [
+          "r2-K3"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 3,
+        "classification": "근거 있는 확인",
+        "location": "components/Dialog.tsx:1,5-6",
+        "matched_keys": [
+          "r2-C1"
+        ],
+        "grounding": null
+      },
+      {
+        "index": 4,
+        "classification": "지식베이스에 근거 없음",
+        "location": "components/Dialog.tsx:10,15,18",
+        "matched_keys": [],
+        "grounding": null
+      }
+    ]
+  },
+  {
+    "run_id": "11-r3-B-rep3",
+    "task_id": "r3",
+    "condition": "B",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": true,
+    "perKey": {
+      "r3-K1": true,
+      "r3-K4": true,
+      "r3-K5": true,
+      "r3-K6": true,
+      "r3-K7": true,
+      "r3-K8": true,
+      "r3-K3": true
+    },
+    "finding_audit": [
+      {
+        "index": 0,
+        "classification": "위반",
+        "location": "app/api/projects/route.ts:9",
+        "matched_keys": [
+          "r3-K1"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 1,
+        "classification": "위반",
+        "location": ".github/workflows/release.yml:3",
+        "matched_keys": [
+          "r3-K4"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 2,
+        "classification": "위반",
+        "location": ".github/workflows/release.yml:8",
+        "matched_keys": [
+          "r3-K5"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 3,
+        "classification": "위반",
+        "location": "tests/projects.spec.ts:5-9",
+        "matched_keys": [
+          "r3-K6",
+          "r3-K7",
+          "r3-K8"
+        ],
+        "grounding": "적합"
+      },
+      {
+        "index": 4,
+        "classification": "지식베이스에 근거 없음",
+        "location": "prisma/schema.prisma:4",
+        "matched_keys": [
+          "r3-K3"
+        ],
+        "grounding": null
+      }
+    ]
+  },
+  {
+    "run_id": "12-r3-A-rep3",
+    "task_id": "r3",
+    "condition": "A",
+    "matcher": "key-final-1/matcher-1",
+    "scorable": false,
+    "reason": "not-json"
+  }
+]
