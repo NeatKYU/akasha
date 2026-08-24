@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { analyzeRecords } from './analyze-model-routing-eval.mjs';
 import { analyzeAkashaRouting } from './analyze-akasha-routing-ab.mjs';
-import { classifyError, scoreRubricLayers, scoreText, validateAkashaReview } from './model-routing-lib.mjs';
+import { classifyError, CONTRACT_VALIDATOR_VERSION, scoreRubricLayers, scoreText, validateAkashaReview } from './model-routing-lib.mjs';
 import { combineHashes, gitProvenance, hashFiles, hashPluginSubject, hashTree, PLUGIN_READ_DIRS } from './provenance.mjs';
 import { assertRuleCoverage, MATCHER_VERSION, scoreResponse } from './akasha-key-scorer.mjs';
 
@@ -272,6 +272,27 @@ assert.equal(analyzeAkashaRouting(mixedScope).decision_reason, 'provenance_gate'
 assert.equal(analyzeAkashaRouting(passingRows).provenance.consistent, null);
 assert.equal(analyzeAkashaRouting(passingRows).decision, 'promote');
 
+
+// --- 역할 축소가 계약을 통과하지 못한다 (실측: 06-r3-B-rep2) ---
+const withRoutes = (routes) => JSON.stringify({ ...JSON.parse(validReview), model_routes: routes });
+const okRoute = { role: 'qa', mode: 'inherit', model: 'inherited', reasoning_effort: 'inherited', reason: 'E2E 변경', risk_signals: ['flaky'] };
+assert.equal(validateAkashaReview(withRoutes([okRoute])).valid, true);
+// 여러 역할을 한 항목으로 묶으면 위반
+assert.equal(validateAkashaReview(withRoutes([{ ...okRoute, role: 'platform/security/data/backend' }])).valid, false);
+assert.match(
+  validateAkashaReview(withRoutes([{ ...okRoute, role: 'platform,security' }])).errors.join('\n'),
+  /must name exactly one role/
+);
+// 위험 신호를 적어놓고 실행하지 않으면 위반
+assert.match(
+  validateAkashaReview(withRoutes([{ ...okRoute, spawned: false }])).errors.join('\n'),
+  /declares risk_signals but was not spawned/
+);
+// 위험 신호 없이 spawn 실패를 보고하는 것은 허용 (모델 라우팅 계약의 역할 누락 보고)
+assert.equal(validateAkashaReview(withRoutes([{ ...okRoute, spawned: false, risk_signals: [] }])).valid, true);
+assert.equal(validateAkashaReview(withRoutes([null])).valid, false);
+assert.equal(validateAkashaReview(withRoutes([{ mode: 'inherit' }])).valid, false);
+assert.equal(CONTRACT_VALIDATOR_VERSION, 'akasha-contract-2');
 
 // --- 정답 키 ↔ 채점기 규칙 대조 (r3-K2가 키에만 있고 규칙에 없던 실제 사례) ---
 const keyUrl = (name) => new URL(`../benchmarks/model-routing/answer-keys/${name}.json`, import.meta.url);

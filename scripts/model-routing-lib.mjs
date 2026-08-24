@@ -14,7 +14,7 @@ export const ERROR_TYPES = new Set([
 
 // scorer 규칙 버전. provenance에 기록되며, 규칙을 바꾸면 함께 올린다.
 export const REGEX_SCORER_VERSION = 'regex-rubric-1';
-export const CONTRACT_VALIDATOR_VERSION = 'akasha-contract-1';
+export const CONTRACT_VALIDATOR_VERSION = 'akasha-contract-2';
 
 export function scoreText(task, text) {
   const items = task.rubric.map((item) => {
@@ -105,6 +105,22 @@ export function validateAkashaReview(text, {
   if (requireParentFields) {
     if (!Array.isArray(value?.model_routes)) errors.push('model_routes must be an array');
     if (!Array.isArray(value?.fallbacks)) errors.push('fallbacks must be an array');
+  }
+  // 역할 축소가 조용히 통과하지 못하게 한다. 실측 사례: 부모가 4개 역할을 한 항목으로 묶고
+  // spawned:false로 처리해 5역할 과업을 1역할로 줄였는데 exit 0 + 계약 유효로 통과했다.
+  for (const [index, route] of (Array.isArray(value?.model_routes) ? value.model_routes : []).entries()) {
+    if (!route || typeof route !== 'object' || Array.isArray(route)) {
+      errors.push(`model_routes[${index}] must be an object`);
+      continue;
+    }
+    if (typeof route.role !== 'string' || route.role.length === 0) {
+      errors.push(`model_routes[${index}].role must be a non-empty string`);
+    } else if (/[/,]/u.test(route.role)) {
+      errors.push(`model_routes[${index}].role must name exactly one role: ${route.role}`);
+    }
+    if (route.spawned === false && Array.isArray(route.risk_signals) && route.risk_signals.length > 0) {
+      errors.push(`model_routes[${index}] declares risk_signals but was not spawned: ${route.role}`);
+    }
   }
   const diffByPath = new Map();
   let currentDiffPath = null;
