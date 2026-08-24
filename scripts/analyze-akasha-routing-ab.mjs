@@ -10,6 +10,42 @@ function meanValue(rows, key) {
   return rows.reduce((sum, row) => sum + key(row), 0) / rows.length;
 }
 
+// 값이 없는 레코드(레이어 분리 이전 실행, 항목 없는 레이어)는 평균에서 제외한다.
+function optionalMean(rows, key) {
+  const values = rows.map(key).filter((value) => typeof value === 'number' && Number.isFinite(value));
+  return values.length === 0 ? null : values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+// 한 배치가 같은 대상·같은 측정 도구로 실행됐는지 확인한다. 섞여 있으면 조건 간 차이를
+// 조건에 귀속할 수 없다(이전 A/B에서 후보 상태가 기록되지 않아 귀속이 막힌 문제).
+export function summarizeProvenance(records) {
+  const stamps = records.map((row) => row.provenance).filter(Boolean);
+  const distinct = (key) => [...new Set(stamps.map((stamp) => stamp[key] ?? null))];
+  const scopes = [...new Set(records.map((row) => row.quality_score_scope ?? 'unrecorded'))];
+  if (stamps.length === 0) {
+    return { stamped_records: 0, unstamped_records: records.length, consistent: null, quality_score_scopes: scopes };
+  }
+  const subjectHashes = distinct('subject_hash');
+  const harnessHashes = distinct('harness_hash');
+  const fixtureHashes = distinct('fixtures_hash');
+  return {
+    stamped_records: stamps.length,
+    unstamped_records: records.length - stamps.length,
+    consistent: stamps.length === records.length
+      && subjectHashes.length === 1 && harnessHashes.length === 1 && fixtureHashes.length === 1 && scopes.length === 1,
+    subject_hashes: subjectHashes,
+    subject_runtime_matches_worktree: distinct('subject_runtime_matches_worktree'),
+    harness_hashes: harnessHashes,
+    fixtures_hashes: fixtureHashes,
+    plugin_commits: distinct('plugin_commit'),
+    git_dirty_tracked: distinct('git_dirty_tracked'),
+    rubric_layout_versions: distinct('rubric_layout_version'),
+    key_scorer_matcher_versions: distinct('key_scorer_matcher_version'),
+    codex_cli_versions: distinct('codex_cli_version'),
+    quality_score_scopes: scopes,
+  };
+}
+
 function summarize(rows) {
   if (rows.length === 0) return null;
   const mean = (key) => rows.reduce((sum, row) => sum + key(row), 0) / rows.length;
@@ -19,6 +55,8 @@ function summarize(rows) {
     exact_models_rate: round(mean((row) => Number(row.exact_models))),
     quality_contract_rate: round(mean((row) => Number(row.quality_contract_valid === true))),
     quality_mean: round(mean((row) => row.quality_score_regex)),
+    contract_regex_mean: round(optionalMean(rows, (row) => row.contract_score_regex)),
+    false_positive_guard_mean: round(optionalMean(rows, (row) => row.false_positive_guard_score)),
     tokens_p50: percentile(rows.map((row) => row.total_usage.total_tokens), 0.5),
     wall_ms_p50: percentile(rows.map((row) => row.wall_ms), 0.5),
     estimated_api_cost_usd_p50: round(percentile(rows.map((row) => row.estimated_api_cost_usd), 0.5), 6),
@@ -31,9 +69,11 @@ export function analyzeAkashaRouting(records) {
     || (row.exit_code !== 0 && (row.total_usage?.total_tokens ?? 0) === 0 && row.final_message === '');
   const valid = records.filter((row) => !isInfraInvalid(row));
   const result = {
-    schema_version: 1,
+    schema_version: 2,
     total_records: records.length,
     infra_invalid_records: records.length - valid.length,
+    quality_metric: 'quality_score_regex (task rubric only; 계약은 quality_contract_valid로 별도 게이트)',
+    provenance: summarizeProvenance(records),
     tasks: {},
     decision: 'keep_inherit',
     decision_reason: null,
@@ -78,6 +118,12 @@ export function analyzeAkashaRouting(records) {
     }
   }
   const decisions = Object.values(result.tasks).map((task) => task.decision);
+  // 한 배치 안에서 대상·측정 도구가 섞였으면 조건 차이를 조건에 귀속할 수 없으므로 승격하지 않는다.
+  if (result.provenance.consistent === false) {
+    result.decision = 'keep_inherit';
+    result.decision_reason = 'provenance_gate';
+    return result;
+  }
   if (decisions.every((decision) => decision === 'promote')) {
     result.decision = 'promote';
     result.decision_reason = 'all_tasks_passed';

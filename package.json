@@ -14,6 +14,7 @@
     "eval:model-routing:blind": "node scripts/export-model-routing-blind.mjs",
     "eval:model-routing:integration": "node scripts/run-akasha-routing-ab.mjs",
     "eval:model-routing:integration:analyze": "node scripts/analyze-akasha-routing-ab.mjs",
-    "version:set": "node scripts/set-version.mjs"
+    "version:set": "node scripts/set-version.mjs",
+    "eval:akasha-version-ab": "node scripts/run-akasha-version-ab.mjs"
   }
 }

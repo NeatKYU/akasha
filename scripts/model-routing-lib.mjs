@@ -12,6 +12,10 @@ export const ERROR_TYPES = new Set([
   'quality_gate',
 ]);
 
+// scorer 규칙 버전. provenance에 기록되며, 규칙을 바꾸면 함께 올린다.
+export const REGEX_SCORER_VERSION = 'regex-rubric-1';
+export const CONTRACT_VALIDATOR_VERSION = 'akasha-contract-1';
+
 export function scoreText(task, text) {
   const items = task.rubric.map((item) => {
     const required = item.all_of ?? [];
@@ -21,6 +25,16 @@ export function scoreText(task, text) {
     return { id: item.id, passed };
   });
   return { items, score: items.filter((item) => item.passed).length / items.length };
+}
+
+// 과업 품질과 계약 준수는 다른 축이므로 한 점수로 합산하지 않는다. rubric을 레이어별로
+// 따로 채점해서, 어느 레이어가 움직였는지 사후에 분리할 수 있게 한다.
+// 항목이 없는 레이어는 0/0을 0점으로 만들지 않고 score를 null로 둔다.
+export function scoreRubricLayers(layers, text) {
+  return Object.fromEntries(Object.entries(layers).map(([name, rubric]) => [
+    name,
+    rubric.length === 0 ? { items: [], score: null } : scoreText({ rubric }, text),
+  ]));
 }
 
 const REVIEW_CLASSIFICATIONS = new Set(['위반', '근거 있는 확인', '지식베이스에 근거 없음']);

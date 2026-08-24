@@ -1,0 +1,202 @@
+{
+  "task_id": "r3",
+  "version": "final-3",
+  "status": "사람 확정 — Sun, 아카샤 답안지 채점 artifact 13/13 문항 검수 (2026-08-24). final-2(2026-08-24): r3-K2를 채점 대상으로 복원. final-3(2026-08-24): r3-K2의 기대 분류 결함을 수정. final-2까지는 `위반` 분류를 요구했으나 판정 근거 문서 knowledge/data/unique-constraint-integrity.md가 \"제거 자체를 무조건 위반으로 단정하지 말고 의도한 cardinality 계약과 일치하는지 확인한다\"고 명시한다. 문서가 금지한 분류를 정답으로 요구한 키 작성 오류였다. K2는 분류를 따지지 않고 중복 허용 확정 효과를 diff 증거와 함께 서술했는지로만 판정한다. 이후 변경은 버전을 올려야 한다.",
+  "source_of_truth": "integration-fixtures/r3/ base vs changed 대조 (2026-08-24)",
+  "expected_findings": [
+    {
+      "key_id": "r3-K1",
+      "required": true,
+      "path": "app/api/projects/route.ts",
+      "topic": "소유자를 클라이언트 입력 body.userId로 지정 — 인증된 주체 기반 인가 상실",
+      "expected_classification": "위반",
+      "expected_change_status": "introduced_by_diff",
+      "evidence_tokens": {
+        "removed": [
+          "'authenticated-user-id'"
+        ],
+        "added": [
+          "body.userId"
+        ]
+      },
+      "expected_knowledge_any_of": [
+        "knowledge/security/authorization-checks.md",
+        "knowledge/backend/server-action-boundary.md",
+        "knowledge/backend/rest-api-security.md"
+      ],
+      "match_hint": "ownerId/userId 신뢰 문제를 지적하면 커버"
+    },
+    {
+      "key_id": "r3-K2",
+      "required": true,
+      "path": "prisma/schema.prisma",
+      "topic": "ownerId @unique 제거 — owner당 project 중복 허용으로 cardinality 계약 변화 (확정 효과, 분류 무관)",
+      "expected_classification": "분류 무관 — 위반·근거 있는 확인·지식베이스에 근거 없음 중 무엇이든 인정. 근거 문서가 제거 자체의 위반 단정을 금지하므로 분류를 정답 조건으로 두지 않는다",
+      "expected_change_status": "introduced_by_diff",
+      "evidence_tokens": {
+        "removed": [
+          "@unique"
+        ],
+        "added": []
+      },
+      "expected_knowledge_any_of": [
+        "knowledge/data/unique-constraint-integrity.md"
+      ],
+      "match_hint": "중복 허용 확정 효과를 diff 증거(@unique 제거)와 함께 서술하면 커버. 분류는 따지지 않는다. 효과 서술 없이 migration·의도 근거 부족만 말했으면 K3이고 K2는 미커버."
+    },
+    {
+      "key_id": "r3-K3",
+      "required": true,
+      "path": "prisma/schema.prisma",
+      "topic": "migration·cardinality 의도·기존 데이터 근거 부재 — 확정 위반이 아니라 공백/근거 요구로 분리",
+      "expected_classification": "지식베이스에 근거 없음 또는 knowledge_gaps 항목",
+      "expected_change_status": "ambiguous 또는 해당 없음",
+      "evidence_tokens": {
+        "removed": [],
+        "added": []
+      },
+      "expected_knowledge_any_of": [
+        "knowledge/data/unique-constraint-integrity.md"
+      ],
+      "match_hint": "K2(확정 효과)와 이 항목(근거 공백)을 분리하면 커버. migration 부재를 introduced_by_diff 위반으로 단정하면 이 항목은 미커버이고 FP 검토"
+    },
+    {
+      "key_id": "r3-K4",
+      "required": true,
+      "path": ".github/workflows/release.yml",
+      "topic": "permissions가 contents: read에서 write-all로 후퇴 — 최소 권한 위반",
+      "expected_classification": "위반",
+      "expected_change_status": "introduced_by_diff",
+      "evidence_tokens": {
+        "removed": [
+          "contents: read"
+        ],
+        "added": [
+          "permissions: write-all"
+        ]
+      },
+      "expected_knowledge_any_of": [
+        "knowledge/platform/actions-workflow-hardening.md"
+      ],
+      "match_hint": "write-all 최소 권한 문제를 지적하면 커버"
+    },
+    {
+      "key_id": "r3-K5",
+      "required": true,
+      "path": ".github/workflows/release.yml",
+      "topic": "checkout SHA 고정에서 @v4 가변 태그로 후퇴",
+      "expected_classification": "위반",
+      "expected_change_status": "introduced_by_diff",
+      "evidence_tokens": {
+        "removed": [
+          "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
+        ],
+        "added": [
+          "actions/checkout@v4"
+        ]
+      },
+      "expected_knowledge_any_of": [
+        "knowledge/platform/actions-workflow-hardening.md",
+        "knowledge/security/actions-secret-handling.md"
+      ],
+      "match_hint": "SHA 고정 상실을 지적하면 커버. base가 SHA 고정이었다는 사실이 핵심(단순 '@v4는 가변'이 아니라 후퇴)"
+    },
+    {
+      "key_id": "r3-K6",
+      "required": true,
+      "path": "tests/projects.spec.ts",
+      "topic": "역할·라벨 locator에서 CSS class locator로 후퇴",
+      "expected_classification": "위반",
+      "expected_change_status": "introduced_by_diff",
+      "evidence_tokens": {
+        "removed": [
+          "getByRole"
+        ],
+        "added": [
+          ".new-project"
+        ]
+      },
+      "expected_knowledge_any_of": [
+        "knowledge/qa/e2e-test-baseline.md"
+      ],
+      "match_hint": "사용자 관점 locator 상실을 지적하면 커버"
+    },
+    {
+      "key_id": "r3-K7",
+      "required": true,
+      "path": "tests/projects.spec.ts",
+      "topic": "waitForTimeout(3000) 고정 대기 도입 — flaky 위험",
+      "expected_classification": "위반",
+      "expected_change_status": "introduced_by_diff",
+      "evidence_tokens": {
+        "removed": [],
+        "added": [
+          "waitForTimeout(3000)"
+        ]
+      },
+      "expected_knowledge_any_of": [
+        "knowledge/qa/e2e-test-baseline.md"
+      ],
+      "match_hint": "고정 대기/flaky를 지적하면 커버"
+    },
+    {
+      "key_id": "r3-K8",
+      "required": true,
+      "path": "tests/projects.spec.ts",
+      "topic": "web-first assertion(toBeVisible)에서 즉시 count()==1 단언으로 후퇴",
+      "expected_classification": "위반",
+      "expected_change_status": "introduced_by_diff",
+      "evidence_tokens": {
+        "removed": [
+          "toBeVisible"
+        ],
+        "added": [
+          "count()"
+        ]
+      },
+      "expected_knowledge_any_of": [
+        "knowledge/qa/e2e-test-baseline.md"
+      ],
+      "match_hint": "재시도 없는 즉시 단언 문제를 지적하면 커버. K6·K7·K8은 한 finding으로 묶여도 각각 언급되면 모두 커버"
+    }
+  ],
+  "expected_confirmations": [],
+  "traps": [
+    {
+      "trap_id": "r3-T1",
+      "topic": "body.name 입력 검증 부재",
+      "correct_handling": "base에도 검증 없이 body.name을 사용했음 → pre_existing. introduced_by_diff 위반으로 단정하면 FP",
+      "fp_signal": "입력 검증 부재를 이번 변경이 도입했다고 서술"
+    },
+    {
+      "trap_id": "r3-T2",
+      "topic": "ubuntu-latest 러너 위반 주장",
+      "correct_handling": "지식베이스에 근거 없는 일반론 — 위반 판정이면 FP",
+      "fp_signal": "ubuntu-latest 자체를 위반·위험으로 보고"
+    },
+    {
+      "trap_id": "r3-T3",
+      "topic": "npm publish 자체 위반 주장",
+      "correct_handling": "publish 단계 자체는 diff로 도입되지 않았고 근거 문서도 이를 금지하지 않음 — 위반 판정이면 FP",
+      "fp_signal": "npm publish 존재 자체를 위반·미흡으로 보고"
+    }
+  ],
+  "notes": "부모 finding 상한 8 = 필수 키 8개(K1~K8). 상한 때문에 K3가 knowledge_gaps 배열로 이동하는 것은 정상 커버로 인정.",
+  "scoring_history": [
+    {
+      "version": "final-1",
+      "scored_keys": 7,
+      "note": "r3-K2 제외 (오프라인 재채점 한정). 과거 커버리지 수치의 분모는 7키다."
+    },
+    {
+      "version": "final-2",
+      "scored_keys": 8,
+      "note": "r3-K2 포함. 단 `위반` 분류를 요구해 근거 문서와 모순됐다. 이 버전으로 낸 K2 수치는 무효다."
+    },
+    {
+      "version": "final-3",
+      "scored_keys": 8,
+      "note": "r3-K2를 분류 무관으로 수정. final-2의 K2 판정과 직접 비교하지 않는다."
+    }
+  ]
+}

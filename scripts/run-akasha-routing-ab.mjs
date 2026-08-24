@@ -3,17 +3,37 @@ import { appendFile, cp, mkdir, mkdtemp, readFile, readdir, stat, writeFile } fr
 import path from 'node:path';
 import os from 'node:os';
 import { randomUUID } from 'node:crypto';
-import { classifyError, estimateCost, parseCodexJsonl, scoreText, validateAkashaReview } from './model-routing-lib.mjs';
+import {
+  classifyError,
+  CONTRACT_VALIDATOR_VERSION,
+  estimateCost,
+  parseCodexJsonl,
+  REGEX_SCORER_VERSION,
+  scoreRubricLayers,
+  validateAkashaReview,
+} from './model-routing-lib.mjs';
+import { MATCHER_VERSION as KEY_SCORER_MATCHER_VERSION } from './akasha-key-scorer.mjs';
+import {
+  combineHashes,
+  gitProvenance,
+  hashFiles,
+  hashTree,
+  PROVENANCE_SCHEMA_VERSION,
+  resolvePluginRuntime,
+  tryCommandOutput,
+} from './provenance.mjs';
 
 const redact = (text) => text.replace(/(authorization|api[_-]?key|token)(["'=: ]+)[^\s"']+/giu, '$1$2[REDACTED]');
 
 function parseArgs(argv) {
-  const args = { output: null, repetitions: 3 };
+  const args = { output: null, repetitions: 3, snapshot: true, dryRun: false };
   for (let index = 0; index < argv.length; index += 1) {
     if (argv[index] === '--output') args.output = argv[++index];
     else if (argv[index] === '--repetitions') args.repetitions = Number(argv[++index]);
+    else if (argv[index] === '--no-snapshot') args.snapshot = false;
+    else if (argv[index] === '--dry-run') args.dryRun = true;
     else if (argv[index] === '--help') {
-      console.log('Usage: node scripts/run-akasha-routing-ab.mjs --output DIR [--repetitions N]');
+      console.log('Usage: node scripts/run-akasha-routing-ab.mjs --output DIR [--repetitions N] [--no-snapshot] [--dry-run]');
       process.exit(0);
     } else throw new Error(`Unknown argument: ${argv[index]}`);
   }
@@ -26,27 +46,31 @@ const repoRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), '
 const fixtureSourceRoot = path.join(repoRoot, 'benchmarks/model-routing/integration-fixtures');
 const taskCatalog = JSON.parse(await readFile(path.join(repoRoot, 'benchmarks/model-routing/tasks.json'), 'utf8'));
 const configCatalog = JSON.parse(await readFile(path.join(repoRoot, 'benchmarks/model-routing/configs.json'), 'utf8'));
-const diffContractRubric = [
+// 계약 준수는 quality_contract_valid로 이미 독립 gate가 있으므로 품질 점수에 합산하지 않는다.
+// quality_score_regex는 tasks.json rubric만으로 계산해 과거 A/B와 같은 정의를 유지하고,
+// 계약·오탐 항목은 각각 별도 레이어로 기록한다(레이어를 바꾸면 아래 버전을 올린다).
+const RUBRIC_LAYOUT_VERSION = 'layers-1/task-only-quality';
+const contractRubric = [
   { id: 'diff-evidence', all_of: ['diff_evidence', 'introduced_by_diff'] },
   { id: 'knowledge-selection', all_of: ['knowledge_selection', 'paths', 'exception'] },
 ];
-const qualityTask = {
-  r2: {
-    ...taskCatalog.find((task) => task.id === 'l2-dialog-review'),
-    rubric: [
-      ...taskCatalog.find((task) => task.id === 'l2-dialog-review').rubric,
-      ...diffContractRubric,
-      { id: 'no-alertdialog-removal-false-positive', none_of: ['alertdialog[^\\n]{0,80}(제거|삭제|없애)'] },
-    ],
-  },
-  r3: {
-    ...taskCatalog.find((task) => task.id === 'l3-cross-layer-review'),
-    rubric: [
-      ...taskCatalog.find((task) => task.id === 'l3-cross-layer-review').rubric,
-      ...diffContractRubric,
-    ],
-  },
+const falsePositiveRubric = {
+  r2: [{ id: 'no-alertdialog-removal-false-positive', none_of: ['alertdialog[^\\n]{0,80}(제거|삭제|없애)'] }],
+  r3: [],
 };
+const qualityTask = {
+  r2: taskCatalog.find((task) => task.id === 'l2-dialog-review'),
+  r3: taskCatalog.find((task) => task.id === 'l3-cross-layer-review'),
+};
+const rubricLayers = Object.fromEntries(['r2', 'r3'].map((taskId) => [taskId, {
+  task: qualityTask[taskId].rubric,
+  contract: contractRubric,
+  false_positive: falsePositiveRubric[taskId],
+}]));
+const rubricLayerIds = Object.fromEntries(Object.entries(rubricLayers).map(([taskId, layers]) => [
+  taskId,
+  Object.fromEntries(Object.entries(layers).map(([name, rubric]) => [name, rubric.map((item) => item.id)])),
+]));
 const fixtures = {};
 const expectedRoles = {
   r2: ['design', 'frontend'],
@@ -101,6 +125,130 @@ for (const taskId of ['r2', 'r3']) {
   }
   fixtures[taskId] = taskRoot;
 }
+
+// --- provenance 스탬프 ---
+// 측정 대상(plugin)과 측정 도구(runner·scorer·fixture·정답 키)를 내용 해시로 고정한다.
+// codex가 실제로 읽는 사본은 marketplace cache이므로 작업 트리와 따로 해싱하고,
+// 둘이 갈라진 상태에서 잰 수치를 나중에 구분할 수 있게 일치 여부를 남긴다.
+const packageManifest = JSON.parse(await readFile(path.join(repoRoot, 'package.json'), 'utf8'));
+const marketplaceCatalog = JSON.parse(await readFile(path.join(repoRoot, '.agents/plugins/marketplace.json'), 'utf8'));
+const pluginEntry = marketplaceCatalog.plugins.find((entry) => entry.name === 'akasha') ?? marketplaceCatalog.plugins[0];
+const pluginWorktreeDir = path.resolve(repoRoot, pluginEntry.source.path);
+const answerKeyDir = path.join(repoRoot, 'benchmarks/model-routing/answer-keys');
+const harnessFiles = [
+  'scripts/run-akasha-routing-ab.mjs',
+  'scripts/model-routing-lib.mjs',
+  'scripts/analyze-akasha-routing-ab.mjs',
+  'scripts/akasha-key-scorer.mjs',
+  'scripts/provenance.mjs',
+  'benchmarks/model-routing/tasks.json',
+  'benchmarks/model-routing/configs.json',
+];
+const pluginRuntime = await resolvePluginRuntime({
+  plugin: pluginEntry.name,
+  marketplace: marketplaceCatalog.name,
+  version: packageManifest.version,
+});
+const [gitState, pluginWorktreeTree, pluginRuntimeTree, fixtureTree, answerKeyTree, harnessTree, codexVersion] = await Promise.all([
+  gitProvenance(repoRoot),
+  hashTree(pluginWorktreeDir),
+  hashTree(pluginRuntime.cache_dir),
+  hashTree(fixtureSourceRoot),
+  hashTree(answerKeyDir),
+  hashFiles(repoRoot, harnessFiles),
+  tryCommandOutput('codex', ['--version']),
+]);
+const harnessHash = combineHashes({
+  scripts: harnessTree.hash,
+  fixtures: fixtureTree.hash,
+  answer_keys: answerKeyTree.hash,
+});
+let snapshotRelative = null;
+if (cli.snapshot) {
+  const snapshotRoot = path.join(outputRoot, 'snapshot');
+  await mkdir(snapshotRoot, { recursive: true });
+  await cp(pluginRuntimeTree.exists ? pluginRuntime.cache_dir : pluginWorktreeDir, path.join(snapshotRoot, 'plugin'), { recursive: true });
+  await cp(fixtureSourceRoot, path.join(snapshotRoot, 'integration-fixtures'), { recursive: true });
+  if (answerKeyTree.exists) await cp(answerKeyDir, path.join(snapshotRoot, 'answer-keys'), { recursive: true });
+  for (const relative of harnessFiles) {
+    const destination = path.join(snapshotRoot, relative);
+    await mkdir(path.dirname(destination), { recursive: true });
+    await cp(path.join(repoRoot, relative), destination, { force: true });
+  }
+  snapshotRelative = 'snapshot';
+}
+const provenance = {
+  schema_version: PROVENANCE_SCHEMA_VERSION,
+  captured_at: new Date().toISOString(),
+  host: { platform: process.platform, arch: process.arch, node: process.version },
+  git: gitState,
+  subject: {
+    plugin: `${pluginEntry.name}@${marketplaceCatalog.name}`,
+    declared_version: packageManifest.version,
+    resolution: pluginRuntime.resolution,
+    cli: pluginRuntime.cli,
+    cli_available: pluginRuntime.cli_available,
+    worktree: pluginWorktreeTree,
+    runtime_cache: pluginRuntimeTree,
+    runtime_matches_worktree: pluginRuntimeTree.exists ? pluginRuntimeTree.hash === pluginWorktreeTree.hash : null,
+    snapshot: snapshotRelative,
+  },
+  harness: {
+    hash: harnessHash,
+    scripts: harnessTree,
+    fixtures: fixtureTree,
+    answer_keys: answerKeyTree,
+  },
+  scoring: {
+    quality_score_scope: 'task_rubric_only',
+    rubric_layout_version: RUBRIC_LAYOUT_VERSION,
+    rubric_layer_ids: rubricLayerIds,
+    regex_scorer_version: REGEX_SCORER_VERSION,
+    contract_validator_version: CONTRACT_VALIDATOR_VERSION,
+    key_scorer_matcher_version: KEY_SCORER_MATCHER_VERSION,
+  },
+  execution: {
+    codex_cli_version: codexVersion.ok ? codexVersion.stdout : null,
+    root_model: 'gpt-5.6-terra',
+    root_effort: 'medium',
+    sandbox: 'read-only',
+    approval_policy: 'never',
+    repetitions: cli.repetitions,
+  },
+};
+// 레코드에는 목록 없이 식별자만 싣는다. 전체 manifest는 provenance.json에 있다.
+const provenanceStamp = {
+  schema_version: PROVENANCE_SCHEMA_VERSION,
+  plugin_commit: gitState.commit_short,
+  git_describe: gitState.describe,
+  git_dirty_tracked: gitState.dirty_tracked,
+  subject_hash: pluginRuntimeTree.exists ? pluginRuntimeTree.hash : pluginWorktreeTree.hash,
+  subject_source: pluginRuntimeTree.exists ? 'runtime_cache' : 'worktree',
+  subject_worktree_hash: pluginWorktreeTree.hash,
+  subject_runtime_hash: pluginRuntimeTree.exists ? pluginRuntimeTree.hash : null,
+  subject_runtime_matches_worktree: provenance.subject.runtime_matches_worktree,
+  harness_hash: harnessHash,
+  fixtures_hash: fixtureTree.hash,
+  answer_keys_hash: answerKeyTree.exists ? answerKeyTree.hash : null,
+  rubric_layout_version: RUBRIC_LAYOUT_VERSION,
+  regex_scorer_version: REGEX_SCORER_VERSION,
+  contract_validator_version: CONTRACT_VALIDATOR_VERSION,
+  key_scorer_matcher_version: KEY_SCORER_MATCHER_VERSION,
+  codex_cli_version: provenance.execution.codex_cli_version,
+};
+await writeFile(path.join(outputRoot, 'provenance.json'), `${JSON.stringify(provenance, null, 2)}\n`, { mode: 0o600 });
+console.log(JSON.stringify({
+  provenance: {
+    subject_hash: provenanceStamp.subject_hash,
+    subject_source: provenanceStamp.subject_source,
+    runtime_matches_worktree: provenanceStamp.subject_runtime_matches_worktree,
+    git_describe: gitState.describe,
+    modified_tracked: gitState.modified_count,
+    untracked: gitState.untracked_count,
+    harness_hash: harnessHash,
+    snapshot: snapshotRelative,
+  },
+}));
 
 async function recentSessionFiles(directory, sinceMs, output = []) {
   let entries;
@@ -202,7 +350,8 @@ async function runOne(taskId, condition, repetition) {
   const parsed = parseCodexJsonl(stdout);
   const children = await childSessions(parsed.threadId, startedAt.getTime());
   const totalUsage = addUsage(parsed.usage, children);
-  const quality = scoreText(qualityTask[taskId], parsed.finalMessage);
+  const layers = scoreRubricLayers(rubricLayers[taskId], parsed.finalMessage);
+  const quality = layers.task;
   const expected = expectedRoles[taskId];
   const qualityContract = validateAkashaReview(parsed.finalMessage, {
     defaultKnowledgeLimit: expected.length * 2,
@@ -230,8 +379,10 @@ async function runOne(taskId, condition, repetition) {
     qualityScore: quality.score,
   });
   const record = {
-    schema_version: 1,
+    schema_version: 2,
     run_id: runId,
+    provenance: provenanceStamp,
+    command_argv: ['codex', ...args],
     task_id: taskId,
     condition,
     repetition,
@@ -250,8 +401,14 @@ async function runOne(taskId, condition, repetition) {
     children,
     exact_roles: exactRoles,
     exact_models: exactModels,
+    quality_score_scope: 'task_rubric_only',
     quality_score_regex: quality.score,
     rubric_items: quality.items,
+    contract_score_regex: layers.contract.score,
+    contract_rubric_items: layers.contract.items,
+    false_positive_guard_score: layers.false_positive.score,
+    false_positive_rubric_items: layers.false_positive.items,
+    rubric_layer_ids: rubricLayerIds[taskId],
     quality_contract_valid: qualityContract.valid,
     quality_contract_errors: qualityContract.errors,
     error_type: errorType,
@@ -265,7 +422,7 @@ async function runOne(taskId, condition, repetition) {
   await writeFile(path.join(runsRoot, `${runId}.stdout.jsonl`), redact(stdout), { mode: 0o600 });
   await writeFile(path.join(runsRoot, `${runId}.stderr.txt`), redact(stderr), { mode: 0o600 });
   await appendFile(path.join(outputRoot, 'raw.jsonl'), `${JSON.stringify(record)}\n`, { mode: 0o600 });
-  console.log(JSON.stringify({ run_id: runId, task: taskId, condition, roles: actualRoles, exact_roles: exactRoles, exact_models: exactModels, quality: quality.score, tokens: totalUsage.total_tokens, wall_ms: record.wall_ms, error_type: errorType, internal_errors: record.internal_errors }));
+  console.log(JSON.stringify({ run_id: runId, task: taskId, condition, roles: actualRoles, exact_roles: exactRoles, exact_models: exactModels, quality: quality.score, contract_regex: layers.contract.score, contract_valid: qualityContract.valid, tokens: totalUsage.total_tokens, wall_ms: record.wall_ms, error_type: errorType, internal_errors: record.internal_errors }));
   return record;
 }
 
@@ -274,7 +431,11 @@ for (let repetition = 1; repetition <= cli.repetitions; repetition += 1) {
   const conditions = repetition % 2 === 1 ? ['inherit', 'routed'] : ['routed', 'inherit'];
   for (const taskId of ['r2', 'r3']) for (const condition of conditions) schedule.push({ taskId, condition, repetition });
 }
-await writeFile(path.join(outputRoot, 'manifest.json'), `${JSON.stringify({ created_at: new Date().toISOString(), repetitions: cli.repetitions, schedule }, null, 2)}\n`);
+await writeFile(path.join(outputRoot, 'manifest.json'), `${JSON.stringify({ created_at: new Date().toISOString(), repetitions: cli.repetitions, provenance: provenanceStamp, schedule }, null, 2)}\n`);
+if (cli.dryRun) {
+  console.log(JSON.stringify({ dry_run: true, output: outputRoot, planned_runs: schedule.length }));
+  process.exit(0);
+}
 let completedRuns = 0;
 let abortedDueTo = null;
 for (const item of schedule) {
