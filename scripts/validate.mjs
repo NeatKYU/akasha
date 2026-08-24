@@ -295,6 +295,55 @@ async function validateAgentContract(roleTexts) {
       return `## ${name}\n${body}`;
     }).join('\n\n');
 
+    assert(
+      shared.includes('해당 여부가 애매하면 읽지 않고 지식 공백으로 남긴다'),
+      `${label} must skip ambiguous knowledge instead of over-reading`
+    );
+    assert(
+      shared.includes('기억으로 경로를 재구성하거나 존재하지 않는 옛 경로로 대체하지 않는다'),
+      `${label} must reject stale or invented knowledge paths`
+    );
+    assert(
+      shared.includes('역할별 선택 문서는 기본 최대 2개다'),
+      `${label} must cap default knowledge selection at two documents`
+    );
+    assert(
+      shared.includes('3번째 문서를 읽고 `knowledge_selection.exception`'),
+      `${label} must audit the third-document exception`
+    );
+    assert(
+      shared.includes('4개 이상은 읽지 않는다'),
+      `${label} must prohibit four or more knowledge reads`
+    );
+    assert(
+      shared.includes('`diff_evidence`') && shared.includes('`change_status`'),
+      `${label} must require structured diff evidence for findings`
+    );
+    assert(
+      shared.includes('`path`, `removed_tokens`, `added_tokens`') && shared.includes('최소 토큰을 그대로 복사한다'),
+      `${label} must require exact removed and added diff tokens`
+    );
+    assert(
+      shared.includes('80자 이하의 가장 짧고 고유한 리터럴'),
+      `${label} must keep diff evidence tokens short and stable`
+    );
+    assert(
+      shared.includes('`introduced_by_diff`') && shared.includes('`not_in_diff`'),
+      `${label} must distinguish direct changes from findings outside the diff`
+    );
+    assert(
+      shared.includes('변경 전에도 없었다면 `pre_existing`이다'),
+      `${label} must keep pre-existing missing behavior out of introduced violations`
+    );
+    assert(
+      shared.includes('최상위 `knowledge_selection`은 `paths`와 `exception`을 포함한다'),
+      `${label} must report the actual knowledge selection`
+    );
+    assert(
+      shared.includes('Markdown 자유서술이 아니라 `findings`, `knowledge_gaps`'),
+      `${label} must return the code-review result as one structured JSON object`
+    );
+
     if (baseline === null) baseline = { roleName, shared };
     else {
       assert(
@@ -475,8 +524,38 @@ async function validateAkashaSkillContract() {
     'Akasha skill must supply scoped diffs to shell-less subagents'
   );
   assert(
-    skillText.includes('해당하는 문서만 골라 읽는다'),
-    'Akasha skill must scope child knowledge reads to the relevant documents'
+    skillText.includes('`selected_knowledge_paths`만 읽는다'),
+    'Akasha skill must restrict child knowledge reads to parent-selected paths'
+  );
+  assert(
+    skillText.includes('역할별 기본 상한은 2개다') && skillText.includes('4개 이상은 읽지 않는다'),
+    'Akasha skill must cap default knowledge reads at two and prohibit four or more'
+  );
+  assert(
+    skillText.includes('애매하면 선택하지 않는다'),
+    'Akasha skill must skip ambiguous knowledge selection'
+  );
+  assert(
+    skillText.includes('경로는 역할 문서 항목에서 그대로 복사하고') &&
+      skillText.includes('존재하지\n않는 경로를 전달하지 않는다'),
+    'Akasha skill must verify selected knowledge paths before spawning'
+  );
+  assert(
+    skillText.includes('`change_status: introduced_by_diff`') && skillText.includes('`diff_evidence`'),
+    'Akasha skill must verify direct diff evidence before accepting a violation'
+  );
+  assert(
+    skillText.includes('최상위 `knowledge_selection`'),
+    'Akasha skill must return an auditable knowledge selection record'
+  );
+  assert(
+    skillText.includes('코드 변경 검토의 부모와 서브에이전트는 JSON 객체 하나만 반환한다') &&
+      skillText.includes('Markdown 머리말·요약·코드 설명을 객체 앞뒤에 붙이지 않는다'),
+    'Akasha skill must enforce one machine-checkable JSON response for code reviews'
+  );
+  assert(
+    skillText.includes('반환 직전에 필수 최상위 필드, finding 필드, diff 증거 조건을 자체 검사'),
+    'Akasha parent must self-check the quality contract before returning'
   );
 }
 

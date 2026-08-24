@@ -3,7 +3,7 @@ import { appendFile, cp, mkdir, mkdtemp, readFile, readdir, stat, writeFile } fr
 import path from 'node:path';
 import os from 'node:os';
 import { randomUUID } from 'node:crypto';
-import { classifyError, estimateCost, parseCodexJsonl, scoreText } from './model-routing-lib.mjs';
+import { classifyError, estimateCost, parseCodexJsonl, scoreText, validateAkashaReview } from './model-routing-lib.mjs';
 
 const redact = (text) => text.replace(/(authorization|api[_-]?key|token)(["'=: ]+)[^\s"']+/giu, '$1$2[REDACTED]');
 
@@ -26,9 +26,26 @@ const repoRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), '
 const fixtureSourceRoot = path.join(repoRoot, 'benchmarks/model-routing/integration-fixtures');
 const taskCatalog = JSON.parse(await readFile(path.join(repoRoot, 'benchmarks/model-routing/tasks.json'), 'utf8'));
 const configCatalog = JSON.parse(await readFile(path.join(repoRoot, 'benchmarks/model-routing/configs.json'), 'utf8'));
+const diffContractRubric = [
+  { id: 'diff-evidence', all_of: ['diff_evidence', 'introduced_by_diff'] },
+  { id: 'knowledge-selection', all_of: ['knowledge_selection', 'paths', 'exception'] },
+];
 const qualityTask = {
-  r2: taskCatalog.find((task) => task.id === 'l2-dialog-review'),
-  r3: taskCatalog.find((task) => task.id === 'l3-cross-layer-review'),
+  r2: {
+    ...taskCatalog.find((task) => task.id === 'l2-dialog-review'),
+    rubric: [
+      ...taskCatalog.find((task) => task.id === 'l2-dialog-review').rubric,
+      ...diffContractRubric,
+      { id: 'no-alertdialog-removal-false-positive', none_of: ['alertdialog[^\\n]{0,80}(제거|삭제|없애)'] },
+    ],
+  },
+  r3: {
+    ...taskCatalog.find((task) => task.id === 'l3-cross-layer-review'),
+    rubric: [
+      ...taskCatalog.find((task) => task.id === 'l3-cross-layer-review').rubric,
+      ...diffContractRubric,
+    ],
+  },
 };
 const fixtures = {};
 const expectedRoles = {
@@ -145,6 +162,7 @@ async function runOne(taskId, condition, repetition) {
   const runId = `${taskId}-${condition}-${repetition}-${randomUUID().slice(0, 8)}`;
   const taskRoot = fixtures[taskId];
   const taskText = await readFile(path.join(taskRoot, 'task.txt'), 'utf8');
+  const scopedDiff = await commandOutput('git', ['diff'], taskRoot);
   const childEffort = taskId === 'r2' ? 'medium' : 'high';
   const override = condition === 'routed'
     ? `선택한 모든 child에 model gpt-5.5와 reasoning_effort ${childEffort}를 명시적으로 적용하세요.`
@@ -186,6 +204,12 @@ async function runOne(taskId, condition, repetition) {
   const totalUsage = addUsage(parsed.usage, children);
   const quality = scoreText(qualityTask[taskId], parsed.finalMessage);
   const expected = expectedRoles[taskId];
+  const qualityContract = validateAkashaReview(parsed.finalMessage, {
+    defaultKnowledgeLimit: expected.length * 2,
+    maxKnowledgeLimit: expected.length * 3,
+    maxFindings: 8,
+    diffText: scopedDiff,
+  });
   const actualRoles = children.map((item) => item.role).filter(Boolean).sort();
   const exactRoles = JSON.stringify(actualRoles) === JSON.stringify([...expected].sort());
   const expectedChildModel = condition === 'routed' ? 'gpt-5.5' : 'gpt-5.6-terra';
@@ -194,6 +218,7 @@ async function runOne(taskId, condition, repetition) {
   const rootCost = costOf(parsed.usage, 'gpt-5.6-terra') ?? 0;
   const childCost = children.reduce((sum, item) => sum + (costOf(item.usage, item.model) ?? 0), 0);
   const internalErrors = parsed.errors.length + children.reduce((sum, item) => sum + item.error_count, 0)
+    + qualityContract.errors.length
     + (/(internal error|agent thread limit|timeout_ms)/iu.test(stderr) ? 1 : 0);
   const errorType = classifyError({
     timedOut,
@@ -227,6 +252,8 @@ async function runOne(taskId, condition, repetition) {
     exact_models: exactModels,
     quality_score_regex: quality.score,
     rubric_items: quality.items,
+    quality_contract_valid: qualityContract.valid,
+    quality_contract_errors: qualityContract.errors,
     error_type: errorType,
     infra_invalid: errorType === 'external_dependency',
     internal_errors: errorType === 'orchestration_internal' ? internalErrors : 0,

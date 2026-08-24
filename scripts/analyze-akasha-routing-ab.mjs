@@ -17,6 +17,7 @@ function summarize(rows) {
     runs: rows.length,
     exact_roles_rate: round(mean((row) => Number(row.exact_roles))),
     exact_models_rate: round(mean((row) => Number(row.exact_models))),
+    quality_contract_rate: round(mean((row) => Number(row.quality_contract_valid === true))),
     quality_mean: round(mean((row) => row.quality_score_regex)),
     tokens_p50: percentile(rows.map((row) => row.total_usage.total_tokens), 0.5),
     wall_ms_p50: percentile(rows.map((row) => row.wall_ms), 0.5),
@@ -53,7 +54,9 @@ export function analyzeAkashaRouting(records) {
     }
     const task = result.tasks[taskId];
     const powered = baseline?.runs >= 3 && candidate?.runs >= 3;
-    const safe = candidate?.internal_errors === 0 && candidate?.exact_models_rate === 1 && candidate?.exact_roles_rate === 1;
+    const contractSafe = routed.length > 0 && routed.every((row) => row.quality_contract_valid === true);
+    const safe = candidate?.internal_errors === 0 && candidate?.exact_models_rate === 1
+      && candidate?.exact_roles_rate === 1 && contractSafe;
     const baselineQualityRaw = inherit.length ? meanValue(inherit, (row) => row.quality_score_regex) : null;
     const candidateQualityRaw = routed.length ? meanValue(routed, (row) => row.quality_score_regex) : null;
     const qualityPass = baselineQualityRaw !== null && candidateQualityRaw !== null
@@ -65,6 +68,7 @@ export function analyzeAkashaRouting(records) {
     ] : [];
     const efficiencyPass = rawEfficiencyChanges.some((value) => value <= -15);
     if (!powered) task.decision_reason = 'underpowered';
+    else if (!contractSafe) task.decision_reason = 'quality_contract_gate';
     else if (!safe) task.decision_reason = 'safety_gate';
     else if (!qualityPass) task.decision_reason = 'quality_gate';
     else if (!efficiencyPass) task.decision_reason = 'efficiency_gate';

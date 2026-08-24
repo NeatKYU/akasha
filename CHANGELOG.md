@@ -2,6 +2,22 @@
 
 이 프로젝트는 [Semantic Versioning](https://semver.org/)을 따릅니다.
 
+## [0.15.0] - 2026-08-21
+
+### 변경
+
+- 코드 변경의 `위반` 판정에 scoped diff의 `diff_evidence`와 `change_status`를 필수화
+- 애매한 지식 문서는 기본적으로 건너뛰고, 역할별 기본 선택을 최대 2개로 제한
+- 독립적인 고위험 판정에만 3번째 문서를 허용하고 선택 예외를 구조화해 기록
+- 부모가 선택한 `selected_knowledge_paths`만 자식이 읽도록 역할 packet 계약 강화
+- PostgreSQL 고유 제약 문서를 추가해 UNIQUE 제거의 중복 허용 효과와 cardinality·migration 공백을 분리
+- 코드 변경 검토 결과를 단일 JSON 객체로 고정하고, diff token·지식 경로·출력 수 상한을 runtime에서 검증
+
+### 검증
+
+- 역할 공용 절의 품질 계약과 SKILL.md의 선택·diff 증거 계약을 정적 검사로 강제
+- Akasha 통합 품질 rubric에 diff evidence, knowledge selection, 알려진 UI 오탐 방지 항목 추가
+
 ## [0.14.0] - 2026-08-19
 
 ### 추가

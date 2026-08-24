@@ -1,7 +1,8 @@
 // akasha/ 의 변화를 분류해 필요한 SemVer 등급을 정하고, 실제로 올린 등급과 대조한다.
 // 규칙은 docs/versioning.md 를 따른다. 배포되는 것은 akasha/ 뿐이므로 그 밖의 변경은 등급에 영향이 없다.
 import { execFileSync } from 'node:child_process';
-import { ROOT } from './lib.mjs';
+import { readFileSync } from 'node:fs';
+import { ROOT, resolveContained } from './lib.mjs';
 
 const LEVELS = ['none', 'patch', 'minor', 'major'];
 const rank = (level) => LEVELS.indexOf(level);
@@ -33,10 +34,15 @@ try {
 }
 
 // HEAD 와 워킹트리 변경을 모두 본다. 커밋 전에도 필요한 등급을 알 수 있어야 한다.
-const status = git('diff', '--name-status', '-M', mergeBase, '--', 'akasha')
+const trackedStatus = git('diff', '--name-status', '-M', mergeBase, '--', 'akasha')
   .split('\n')
   .filter(Boolean)
   .map((line) => line.split('\t'));
+const untrackedStatus = git('ls-files', '--others', '--exclude-standard', '--', 'akasha')
+  .split('\n')
+  .filter(Boolean)
+  .map((file) => ['A', file]);
+const status = [...trackedStatus, ...untrackedStatus];
 
 if (status.length === 0) {
   console.log('akasha/ 변경 없음 — 버전을 올리지 않습니다.');
@@ -68,7 +74,7 @@ for (const [code, from, to] of status) {
   } else if (from.endsWith('SKILL.md')) {
     const before = git('show', `${mergeBase}:${from}`);
     const nameOf = (text) => text.match(/^name:\s*(.+)$/m)?.[1]?.trim();
-    const after = git('show', `HEAD:${from}`);
+    const after = readFileSync(resolveContained(ROOT, ...from.split('/')), 'utf8');
     if (nameOf(before) !== nameOf(after)) raise('major', `스킬 name 변경: ${nameOf(before)} → ${nameOf(after)}`);
     else raise('patch', '스킬 내용 수정');
   }
@@ -85,7 +91,7 @@ const bumpOf = (before, after) => {
 };
 
 const before = versionOf(mergeBase);
-const after = JSON.parse(git('show', 'HEAD:package.json')).version;
+const after = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
 const actual = bumpOf(before, after);
 
 console.log(`base ${base} (${mergeBase.slice(0, 7)}) ${before} → HEAD ${after}`);

@@ -1,11 +1,93 @@
 import assert from 'node:assert/strict';
 import { analyzeRecords } from './analyze-model-routing-eval.mjs';
 import { analyzeAkashaRouting } from './analyze-akasha-routing-ab.mjs';
-import { classifyError, scoreText } from './model-routing-lib.mjs';
+import { classifyError, scoreText, validateAkashaReview } from './model-routing-lib.mjs';
 
 const task = { rubric: [{ id: 'a', all_of: ['부모', '상속'] }, { id: 'b', all_of: ['자동', '아닙'] }, { id: 'c', none_of: ['무조건 위반'] }] };
 assert.equal(scoreText(task, '부모 설정을 상속하며 자동 변경은 아닙니다.').score, 1);
 assert.equal(scoreText(task, '부모 설정을 상속하며 자동 변경은 아닙니다. 무조건 위반').score, 2 / 3);
+const qualityContractTask = {
+  rubric: [
+    { id: 'direct-change', all_of: ['diff_evidence', 'introduced_by_diff'] },
+    { id: 'selection', all_of: ['knowledge_selection', 'paths', 'exception'] },
+    { id: 'no-false-removal', none_of: ['alertdialog[^\\n]{0,80}(제거|삭제|없애)'] },
+  ],
+};
+assert.equal(
+  scoreText(qualityContractTask, 'diff_evidence: button -> div\nchange_status: introduced_by_diff\nknowledge_selection: { paths: [], exception: null }').score,
+  1
+);
+assert.equal(
+  scoreText(qualityContractTask, 'alertdialog 속성이 제거됨').score,
+  0
+);
+const validReview = JSON.stringify({
+  findings: [{
+    classification: '위반',
+    location: 'components/Dialog.tsx:10',
+    diff_evidence: {
+      path: 'components/Dialog.tsx',
+      removed_tokens: ['<button>'],
+      added_tokens: ['<div>'],
+    },
+    change_status: 'introduced_by_diff',
+    basis: 'keyboard regression',
+    knowledge_path: 'knowledge/design/modal-dialog-accessibility.md',
+    source_url: 'https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/',
+  }],
+  knowledge_gaps: [],
+  knowledge_selection: { paths: ['knowledge/design/modal-dialog-accessibility.md'], exception: null },
+  model_routes: [],
+  fallbacks: [],
+});
+assert.equal(validateAkashaReview(validReview).valid, true);
+const validDiff = 'diff --git a/components/Dialog.tsx b/components/Dialog.tsx\n-<button>\n+<div>';
+assert.equal(validateAkashaReview(validReview, { diffText: validDiff }).valid, true);
+assert.equal(validateAkashaReview(validReview, {
+  diffText: 'diff --git a/components/Dialog.tsx b/components/Dialog.tsx\n-<button>\n+<span>',
+}).valid, false);
+assert.equal(validateAkashaReview(validReview, {
+  diffText: 'diff --git a/real/file.ts b/real/file.ts\n-<button>\n+<div>',
+}).valid, false);
+assert.equal(validateAkashaReview('not-json').valid, false);
+assert.equal(validateAkashaReview(JSON.stringify({ ...JSON.parse(validReview), findings: [null] })).valid, false);
+assert.equal(validateAkashaReview(JSON.stringify({
+  ...JSON.parse(validReview),
+  findings: Array.from({ length: 6 }, () => JSON.parse(validReview).findings[0]),
+})).valid, false);
+assert.equal(validateAkashaReview(JSON.stringify({
+  ...JSON.parse(validReview),
+  knowledge_selection: {
+    paths: ['knowledge/design/modal-dialog-accessibility.md', 'knowledge/b.md', 'knowledge/c.md'],
+    exception: null,
+  },
+})).valid, false);
+assert.equal(validateAkashaReview(JSON.stringify({
+  ...JSON.parse(validReview),
+  knowledge_selection: {
+    paths: ['knowledge/design/modal-dialog-accessibility.md', 'knowledge/b.md', 'knowledge/c.md'],
+    exception: {
+      reason_code: 'independent_high_risk_finding',
+      reason: 'separate auth boundary',
+      path: 'knowledge/c.md',
+    },
+  },
+})).valid, true);
+assert.equal(validateAkashaReview(JSON.stringify({
+  ...JSON.parse(validReview),
+  knowledge_selection: {
+    paths: ['knowledge/design/modal-dialog-accessibility.md', 'knowledge/b.md', 'knowledge/c.md'],
+    exception: {
+      reason_code: 'independent_high_risk_finding',
+      reason: 'separate auth boundary',
+      path: 'knowledge/not-selected.md',
+    },
+  },
+})).valid, false);
+assert.equal(validateAkashaReview(JSON.stringify({
+  ...JSON.parse(validReview),
+  findings: [{ ...JSON.parse(validReview).findings[0], change_status: 'not_in_diff' }],
+})).valid, false);
 assert.equal(classifyError({ timedOut: true, exitCode: 1, stderr: '', stdoutErrors: [], observedModel: null, requestedModel: 'x', qualityScore: 0 }), 'timeout');
 assert.equal(classifyError({ timedOut: false, exitCode: 1, stderr: 'model is not available', stdoutErrors: [], observedModel: null, requestedModel: 'x', qualityScore: 0 }), 'unsupported');
 assert.equal(classifyError({ timedOut: false, exitCode: 1, stderr: '', stdoutErrors: ["You've hit your usage limit."], observedModel: null, requestedModel: 'x', qualityScore: 0 }), 'external_dependency');
@@ -52,8 +134,8 @@ assert.equal(integration.tasks.r2.delta.tokens_percent, 20);
 const passingRows = [];
 for (const taskId of ['r2', 'r3']) {
   for (let repetition = 1; repetition <= 3; repetition += 1) {
-    passingRows.push({ task_id: taskId, condition: 'inherit', infra_invalid: false, exact_roles: true, exact_models: true, quality_score_regex: 1, total_usage: { total_tokens: 100 }, wall_ms: 1000, estimated_api_cost_usd: 1, internal_errors: 0 });
-    passingRows.push({ task_id: taskId, condition: 'routed', infra_invalid: false, exact_roles: true, exact_models: true, quality_score_regex: 0.98, total_usage: { total_tokens: 85 }, wall_ms: 1000, estimated_api_cost_usd: 1, internal_errors: 0 });
+    passingRows.push({ task_id: taskId, condition: 'inherit', infra_invalid: false, exact_roles: true, exact_models: true, quality_contract_valid: true, quality_score_regex: 1, total_usage: { total_tokens: 100 }, wall_ms: 1000, estimated_api_cost_usd: 1, internal_errors: 0 });
+    passingRows.push({ task_id: taskId, condition: 'routed', infra_invalid: false, exact_roles: true, exact_models: true, quality_contract_valid: true, quality_score_regex: 0.98, total_usage: { total_tokens: 85 }, wall_ms: 1000, estimated_api_cost_usd: 1, internal_errors: 0 });
   }
 }
 const promoted = analyzeAkashaRouting(passingRows);
@@ -61,6 +143,8 @@ assert.equal(promoted.decision, 'promote');
 assert.equal(promoted.tasks.r2.decision, 'promote');
 const unsafeRows = passingRows.map((row, index) => index === 1 ? { ...row, internal_errors: 1 } : row);
 assert.equal(analyzeAkashaRouting(unsafeRows).tasks.r2.decision_reason, 'safety_gate');
+const invalidContractRows = passingRows.map((row, index) => index === 1 ? { ...row, quality_contract_valid: false } : row);
+assert.equal(analyzeAkashaRouting(invalidContractRows).tasks.r2.decision_reason, 'quality_contract_gate');
 const belowQuality = passingRows.map((row) => row.condition === 'routed' ? { ...row, quality_score_regex: 0.97996 } : row);
 assert.equal(analyzeAkashaRouting(belowQuality).tasks.r2.decision_reason, 'quality_gate');
 const belowEfficiency = passingRows.map((row) => row.condition === 'routed' ? { ...row, total_usage: { total_tokens: 85.005 }, quality_score_regex: 0.98 } : row);

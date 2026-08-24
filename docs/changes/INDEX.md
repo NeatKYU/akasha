@@ -22,6 +22,7 @@
 
 | 버전 | 날짜 | 무엇이 달라졌나 | 측정된 변화 |
 | --- | --- | --- | --- |
+| [0.15.0](0.15.0-quality-first-diff-evidence.md) | 2026-08-21 | diff token·지식 선택 상한·JSON hard gate·UNIQUE 제약 지식 | 초기 후보 정규식 +9.58%p, 총 토큰 −13.22%, 문서 Read −36.54%; 최종 hardening은 smoke 통과 |
 | [0.5.0](0.5.0-agents-consolidation.md) | 2026-08-19 | 역할 문서가 Claude Code 서브에이전트를 겸함 | 부모 라우팅 읽기 −56%, always-on +916 tok, 읽기 전용이 도구 경계로 강제됨 |
 | [0.6.0](0.6.0-selective-knowledge-reads.md) | 2026-08-19 | 담당 지식을 전부 읽지 않고 골라 읽음 | 역할당 문서 수 상한 해제, on-invoke 역할당 +0.3k tok (문서 늘수록 회수) |
 | [0.7.0](0.7.0-review-debt-control.md) | 2026-08-19 | 출처 72건 등록 + 검토 부채 통제 | 카탈로그 28→100, 승격 차단 출처 −73%, 검토 부채 5/12 계측 시작 |

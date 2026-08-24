@@ -51,6 +51,7 @@
 
 ## data
 
+- [고유 제약과 데이터 계약 변경 기준](data/unique-constraint-integrity.md)
 - [통계 갱신 운영 기준](data/statistics-maintenance.md)
 - [플래너 통계 신뢰성 기준](data/planner-statistics.md)
 - [플래너 설정 변경 기준](data/planner-configuration.md)
