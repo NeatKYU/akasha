@@ -23,6 +23,7 @@
 | 버전 | 날짜 | 무엇이 달라졌나 | 측정된 변화 |
 | --- | --- | --- | --- |
 | [0.15.0](0.15.0-quality-first-diff-evidence.md) | 2026-08-21 | diff token·지식 선택 상한·JSON hard gate·UNIQUE 제약 지식 | 20런 재측정에서 판정 불가(r2 0.80항목·r3 0.00항목, 최소 의미 차이 1항목 미달). 문서 Read −41.7%, 총 토큰 r2 +16.7%·r3 −1.1%. 초기 후보 수치 +9.58%p·−13.22%는 재현 안 됨 |
+| [0.16.0+](0.16.0-short-agent-descriptions.md) | 2026-08-25 | 역할 `description`을 세 문장 → 한 문장 | always-on ~1,686 → ~836 tok(−50%, 역할 17개). on-invoke 변화 없음. 대가: 목록의 역할 성격 정보 감소 |
 | [0.16.0](0.16.0-writing-roles.md) | 2026-08-25 | 작가 도메인 역할 7개(worldbuilding·character·plot·staging·continuity·style·reader) + 지식 카드 10장 | 역할 10→17, 지식 문서 +10(primary 2·secondary 8), 출처 부채 0. always-on ~1,039→~1,686 tok(대가). 한글 맞춤법 카드 미완 |
 | [0.15.0+](0.15.0-claude-code-real-run.md) | 2026-08-25 | Claude Code 설치본 실전 실행 2세션, 전사 inspector, `subagent_type` 네임스페이스 문서 수정 | 치환·도구 경계 확정, 환각 0/9(n=2). Read 페이징으로 읽기 예산 초과 4/10, 순수 JSON 3/9(펜스 4·harness 접두어 2). SKILL.md +206 bytes(대가) |
 | [0.15.0+](0.15.0-knowledge-path-recovery.md) | 2026-08-25 | 지식 경로 해석 실패 복구(루트 불변식 + 나열 복구), 종합 단계 지식 재읽기 제거 | 강제 조건 4런에서 복구 B 2/2·A 1/2 실패. `internal_errors` 87→0(전부 codex CLI 버그였음). 토큰은 6배치 전부 판정 불가(MDE 15.7~29.7% > 게이트 요구 15%). 대가: 경로 검증 정착으로 비용 +13.6%(p=0.032, 다중비교 보정 시 미달) |
