@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "experiment": "plugin-version-ab",
+  "total_records": 12,
+  "infra_invalid_records": 0,
+  "quality_metric": "quality_score_regex (task rubric only)",
+  "provenance": {
+    "stamped_records": 12,
+    "unstamped_records": 0,
+    "by_condition": {
+      "A": {
+        "runs": 6,
+        "subject_hashes": [
+          "2d7f11997e761e9143ab8a4f1a7db39a664bd6342f578704218ac7c46d9bb9e8"
+        ]
+      },
+      "B": {
+        "runs": 6,
+        "subject_hashes": [
+          "ec1e91f65cbeb1ef3ec669caac3cd7e016da33aa8d125d6a46b366cc07102737"
+        ]
+      }
+    },
+    "condition_subject_pure": true,
+    "conditions_differ": true,
+    "harness_hashes": [
+      "18c598b2d5e047bb29b219da28f40d0d32174a90bae8ffbafa43b4e08ddf71ec"
+    ],
+    "fixtures_hashes": [
+      "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c"
+    ],
+    "quality_score_scopes": [
+      "task_rubric_only"
+    ],
+    "codex_cli_versions": [
+      "codex-cli 0.147.0"
+    ],
+    "consistent": true
+  },
+  "tasks": {
+    "r2": {
+      "baseline": {
+        "runs": 3,
+        "root_input_tokens_p50": 236059,
+        "root_uncached_input_tokens_p50": 31524,
+        "root_output_tokens_p50": 3199,
+        "total_tokens_p50": 376451,
+        "total_uncached_input_tokens_p50": 51860,
+        "root_share_of_total": 0.6205,
+        "quality_mean": 0.5333,
+        "quality_contract_rate": 0.3333,
+        "exact_roles_rate": 1,
+        "knowledge_documents_read_p50": 4,
+        "grounded_citation_rate": 1,
+        "wall_ms_p50": 102781,
+        "cost_usd_p50": 0.2933015,
+        "internal_errors": 13
+      },
+      "candidate": {
+        "runs": 3,
+        "root_input_tokens_p50": 259710,
+        "root_uncached_input_tokens_p50": 32902,
+        "root_output_tokens_p50": 3511,
+        "total_tokens_p50": 431387,
+        "total_uncached_input_tokens_p50": 63146,
+        "root_share_of_total": 0.6166,
+        "quality_mean": 0.5333,
+        "quality_contract_rate": 1,
+        "exact_roles_rate": 1,
+        "knowledge_documents_read_p50": 3,
+        "grounded_citation_rate": 1,
+        "wall_ms_p50": 111350,
+        "cost_usd_p50": 0.323337,
+        "internal_errors": 5
+      },
+      "delta": {
+        "root_input_percent": 10.02,
+        "root_uncached_percent": 4.37,
+        "total_tokens_percent": 14.59,
+        "cost_percent": 10.24,
+        "wall_percent": 8.34,
+        "quality_points": 0
+      },
+      "verdict": "improvement_measurable",
+      "verdict_reason": "quality_and_accuracy_held"
+    },
+    "r3": {
+      "baseline": {
+        "runs": 3,
+        "root_input_tokens_p50": 371650,
+        "root_uncached_input_tokens_p50": 33249,
+        "root_output_tokens_p50": 5877,
+        "total_tokens_p50": 728110,
+        "total_uncached_input_tokens_p50": 72201,
+        "root_share_of_total": 0.5478,
+        "quality_mean": 0.9167,
+        "quality_contract_rate": 0.6667,
+        "exact_roles_rate": 0.6667,
+        "knowledge_documents_read_p50": 6,
+        "grounded_citation_rate": 1,
+        "wall_ms_p50": 156245,
+        "cost_usd_p50": 0.5022585,
+        "internal_errors": 23
+      },
+      "candidate": {
+        "runs": 3,
+        "root_input_tokens_p50": 378523,
+        "root_uncached_input_tokens_p50": 36507,
+        "root_output_tokens_p50": 6104,
+        "total_tokens_p50": 774084,
+        "total_uncached_input_tokens_p50": 104913,
+        "root_share_of_total": 0.5221,
+        "quality_mean": 0.875,
+        "quality_contract_rate": 0.6667,
+        "exact_roles_rate": 1,
+        "knowledge_documents_read_p50": 9,
+        "grounded_citation_rate": 1,
+        "wall_ms_p50": 173631,
+        "cost_usd_p50": 0.6197805,
+        "internal_errors": 32
+      },
+      "delta": {
+        "root_input_percent": 1.85,
+        "root_uncached_percent": 9.8,
+        "total_tokens_percent": 6.31,
+        "cost_percent": 23.4,
+        "wall_percent": 11.13,
+        "quality_points": -4.17
+      },
+      "verdict": "blocked",
+      "verdict_reason": "quality_regressed"
+    }
+  },
+  "overall": {
+    "baseline": {
+      "runs": 6,
+      "root_input_tokens_p50": 237902,
+      "root_uncached_input_tokens_p50": 31524,
+      "root_output_tokens_p50": 3223,
+      "total_tokens_p50": 402807,
+      "total_uncached_input_tokens_p50": 51926,
+      "root_share_of_total": 0.5842,
+      "quality_mean": 0.725,
+      "quality_contract_rate": 0.5,
+      "exact_roles_rate": 0.8333,
+      "knowledge_documents_read_p50": 4,
+      "grounded_citation_rate": 1,
+      "wall_ms_p50": 102908,
+      "cost_usd_p50": 0.298855,
+      "internal_errors": 36
+    },
+    "candidate": {
+      "runs": 6,
+      "root_input_tokens_p50": 287153,
+      "root_uncached_input_tokens_p50": 32902,
+      "root_output_tokens_p50": 3847,
+      "total_tokens_p50": 436170,
+      "total_uncached_input_tokens_p50": 72214,
+      "root_share_of_total": 0.5694,
+      "quality_mean": 0.7042,
+      "quality_contract_rate": 0.8333,
+      "exact_roles_rate": 1,
+      "knowledge_documents_read_p50": 3,
+      "grounded_citation_rate": 1,
+      "wall_ms_p50": 114424,
+      "cost_usd_p50": 0.35725,
+      "internal_errors": 37
+    },
+    "delta": {
+      "root_input_percent": 20.7,
+      "root_uncached_percent": 4.37,
+      "total_tokens_percent": 8.28,
+      "cost_percent": 19.54,
+      "quality_points": -2.08
+    }
+  }
+}
