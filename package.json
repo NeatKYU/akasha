@@ -15,6 +15,7 @@
     "eval:model-routing:integration": "node scripts/run-akasha-routing-ab.mjs",
     "eval:model-routing:integration:analyze": "node scripts/analyze-akasha-routing-ab.mjs",
     "version:set": "node scripts/set-version.mjs",
-    "eval:akasha-version-ab": "node scripts/run-akasha-version-ab.mjs"
+    "eval:akasha-version-ab": "node scripts/run-akasha-version-ab.mjs",
+    "eval:akasha-version-ab:analyze": "node scripts/analyze-akasha-version-ab.mjs"
   }
 }

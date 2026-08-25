@@ -5,9 +5,10 @@ import os from 'node:os';
 import path from 'node:path';
 import { analyzeRecords } from './analyze-model-routing-eval.mjs';
 import { analyzeAkashaRouting } from './analyze-akasha-routing-ab.mjs';
-import { classifyError, CONTRACT_VALIDATOR_VERSION, scoreRubricLayers, scoreText, validateAkashaReview } from './model-routing-lib.mjs';
+import { classifyError, classifyStderrLines, CONTRACT_VALIDATOR_VERSION, scoreRubricLayers, scoreText, stderrTracingTarget, validateAkashaReview } from './model-routing-lib.mjs';
 import { combineHashes, gitProvenance, hashFiles, hashPluginSubject, hashTree, PLUGIN_READ_DIRS } from './provenance.mjs';
 import { assertRuleCoverage, MATCHER_VERSION, scoreResponse } from './akasha-key-scorer.mjs';
+import { compareMetric, minimumDetectableEffect, permutationTest } from './analyze-akasha-version-ab.mjs';
 
 const task = { rubric: [{ id: 'a', all_of: ['부모', '상속'] }, { id: 'b', all_of: ['자동', '아닙'] }, { id: 'c', none_of: ['무조건 위반'] }] };
 assert.equal(scoreText(task, '부모 설정을 상속하며 자동 변경은 아닙니다.').score, 1);
@@ -351,5 +352,87 @@ const bothAxes = scoreResponse('r3', JSON.stringify({
 }), r3Keys);
 assert.equal(bothAxes.perKey['r3-K2'], true);
 assert.equal(bothAxes.perKey['r3-K3'], true);
+
+// --- stderr 귀속 분류 ---
+// 관측된 codex CLI 버그는 아카샤 탓이 아니므로 게이트에서 빠져야 한다.
+const cliBug = [
+  '2026-08-24T07:53:55.132862Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `supports_parallel_tool_calls` at line 97 column 5',
+  '2026-08-24T07:53:59.112117Z ERROR codex_models_manager::manager: failed to load models cache: missing field `supports_parallel_tool_calls` at line 97 column 5',
+].join('\n');
+const cliOnly = classifyStderrLines(cliBug);
+assert.equal(cliOnly.lines.length, 2);
+assert.equal(cliOnly.runtime.length, 2);
+assert.equal(cliOnly.internal.length, 0);
+assert.equal(cliOnly.external.length, 0);
+
+// tracing target 추출
+assert.equal(stderrTracingTarget('2026-01-01T00:00:00Z ERROR codex_models_manager::manager: boom'), 'codex_models_manager');
+assert.equal(stderrTracingTarget('ERROR some_other_crate::mod: boom'), 'some_other_crate');
+assert.equal(stderrTracingTarget('no error line here'), null);
+
+// 목록에 없는 crate는 계속 internal이다 — 새 유형이 조용히 묻히면 안 된다.
+const unknownCrate = classifyStderrLines('ERROR codex_core::spawn: failed to start agent thread');
+assert.equal(unknownCrate.runtime.length, 0);
+assert.equal(unknownCrate.internal.length, 1);
+
+// 오케스트레이션 오류는 target이 없어도 internal로 남는다.
+const orchestration = classifyStderrLines('agent thread limit reached');
+assert.equal(orchestration.internal.length, 1);
+assert.equal(orchestration.runtime.length, 0);
+
+// 전송 계층은 기존대로 external
+const transport = classifyStderrLines('ERROR codex_models_manager::manager: 503 Service Unavailable');
+assert.equal(transport.external.length, 1);
+assert.equal(transport.runtime.length, 0);
+
+// 섞인 stderr에서 세 갈래가 각각 잡힌다.
+const mixedStderr = classifyStderrLines([
+  'ERROR codex_models_manager::manager: failed to renew cache TTL',
+  'ERROR transport: connection reset by peer',
+  'internal error: contract validation failed',
+  'unrelated info line',
+].join('\n'));
+assert.equal(mixedStderr.lines.length, 3);
+assert.equal(mixedStderr.runtime.length, 1);
+assert.equal(mixedStderr.external.length, 1);
+assert.equal(mixedStderr.internal.length, 1);
+
+// --- 유의성 검정 ---
+// 판정이 이 함수에 걸려 있으므로 값 자체를 고정한다.
+// 완전히 겹치는 두 집단은 구분되지 않는다.
+assert.equal(permutationTest([5, 5, 5, 5], [5, 5, 5, 5]).p, 1);
+
+// 완전히 분리된 두 집단이라도 n=3+3에서 얻을 수 있는 최소 양측 p는 2/C(6,3)=0.1이다.
+// 표본이 작으면 아무리 차이가 커도 0.05 아래로 못 내려간다는 사실을 고정해 둔다.
+const separated = permutationTest([1, 2, 3], [10, 11, 12]);
+assert.equal(separated.p, 0.1);
+assert.equal(separated.exact, true);
+assert.equal(separated.method, 'exact_enumeration');
+
+// 표본이 부족하면 p를 만들어내지 않는다.
+assert.equal(permutationTest([1], [2]).p, null);
+assert.equal(permutationTest([1], [2]).method, 'insufficient_n');
+
+// 결정적이어야 한다 — 같은 입력이면 같은 보고서가 나와야 재현이 성립한다.
+const repeatA = [12, 15, 11, 19, 14, 13, 17, 16, 12, 18];
+const repeatB = [22, 25, 21, 29, 24, 23, 27, 26, 22, 28];
+assert.equal(permutationTest(repeatA, repeatB).p, permutationTest(repeatA, repeatB).p);
+
+// MDE는 분산이 클수록 커진다.
+const tight = minimumDetectableEffect([100, 101, 99, 100, 100], [100, 101, 99, 100, 100]);
+const loose = minimumDetectableEffect([50, 150, 60, 140, 100], [50, 150, 60, 140, 100]);
+assert.ok(loose > tight, 'MDE must grow with variance');
+
+// 관측 차이가 MDE보다 작고 유의하지 않으면 "효과 없음"이 아니라 "판정 불가"다.
+const rowsA = repeatA.map((v) => ({ x: v }));
+const rowsB = repeatA.map((v) => ({ x: v + 1 }));
+const small = compareMetric(rowsA, rowsB, (r) => r.x);
+assert.equal(small.significant, false);
+assert.equal(small.verdict, 'underpowered');
+
+// 유의하고 감소했으면 improved
+const big = compareMetric(repeatB.map((v) => ({ x: v })), repeatA.map((v) => ({ x: v })), (r) => r.x);
+assert.equal(big.significant, true);
+assert.equal(big.verdict, 'improved');
 
 console.log('model-routing eval tests passed');

@@ -15,6 +15,42 @@ export const ERROR_TYPES = new Set([
 // scorer 규칙 버전. provenance에 기록되며, 규칙을 바꾸면 함께 올린다.
 export const REGEX_SCORER_VERSION = 'regex-rubric-1';
 export const CONTRACT_VALIDATOR_VERSION = 'akasha-contract-2';
+export const STDERR_CLASSIFIER_VERSION = 'stderr-attribution-1';
+
+// stderr의 ERROR 줄을 "누구 탓인가"로 나눈다. 승격 게이트가 `internal_errors === 0`을 요구하므로
+// 귀속이 틀리면 게이트가 측정 대상과 무관한 이유로 영구히 닫힌다. 실제로 codex CLI의
+// `failed to renew cache TTL: missing field supports_parallel_tool_calls`가 배치마다 수십 건씩
+// 잡혀 아카샤 탓으로 집계되고 있었다.
+//
+// 분류 기준은 메시지 문구가 아니라 발신 주체다. 문구를 계속 덧붙이는 방식은 진짜 오류까지
+// 가릴 수 있다. Rust tracing 형식(`<ts> ERROR <crate>::<module>: <msg>`)의 crate 이름으로
+// CLI 자체 subsystem을 식별한다.
+const STDERR_ERROR_LINE = /\bERROR\b|internal error|thread limit/iu;
+// 전송·서비스 계층. 원본을 보존한 채 infra_invalid로 빼는 기존 축이다.
+const STDERR_EXTERNAL = /503 Service Unavailable|connection reset|rate.?limit/iu;
+const TRACING_TARGET = /\bERROR\s+([a-z][a-z0-9_]*)(?:::[a-z0-9_:]+)?:/iu;
+
+// CLI 런타임 자체의 하위 시스템. 관측된 것만 넣는다. 목록에 없는 crate는 계속 internal로
+// 집계되므로, 새 유형이 나오면 조용히 묻히지 않고 게이트에서 드러나 판단을 강제한다.
+export const RUNTIME_ERROR_TARGETS = new Set(['codex_models_manager']);
+
+export function stderrTracingTarget(line) {
+  const match = line.match(TRACING_TARGET);
+  return match ? match[1].toLowerCase() : null;
+}
+
+export function classifyStderrLines(stderr) {
+  const lines = (stderr ?? '').split('\n').filter((line) => STDERR_ERROR_LINE.test(line));
+  const external = [];
+  const runtime = [];
+  const internal = [];
+  for (const line of lines) {
+    if (STDERR_EXTERNAL.test(line)) external.push(line);
+    else if (RUNTIME_ERROR_TARGETS.has(stderrTracingTarget(line))) runtime.push(line);
+    else internal.push(line);
+  }
+  return { lines, external, runtime, internal };
+}
 
 export function scoreText(task, text) {
   const items = task.rubric.map((item) => {

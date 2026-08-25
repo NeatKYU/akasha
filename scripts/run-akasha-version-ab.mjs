@@ -10,11 +10,13 @@ import path from 'node:path';
 import os from 'node:os';
 import {
   classifyError,
+  classifyStderrLines,
   CONTRACT_VALIDATOR_VERSION,
   estimateCost,
   parseCodexJsonl,
   REGEX_SCORER_VERSION,
   scoreRubricLayers,
+  STDERR_CLASSIFIER_VERSION,
   validateAkashaReview,
 } from './model-routing-lib.mjs';
 import { MATCHER_VERSION as KEY_SCORER_MATCHER_VERSION } from './akasha-key-scorer.mjs';
@@ -30,10 +32,10 @@ import {
 } from './provenance.mjs';
 
 const USAGE = 'Usage: node scripts/run-akasha-version-ab.mjs --output DIR --baseline PLUGIN_DIR '
-  + '[--candidate PLUGIN_DIR] [--repetitions N] [--start-at N] [--only A|B] [--no-snapshot] [--dry-run]';
+  + '[--candidate PLUGIN_DIR] [--repetitions N] [--start-at N] [--only A|B] [--task r2|r3] [--no-snapshot] [--dry-run]';
 
 function parseArgs(argv) {
-  const args = { output: null, baseline: null, candidate: null, repetitions: 3, startAt: 1, only: null, snapshot: true, dryRun: false };
+  const args = { output: null, baseline: null, candidate: null, repetitions: 3, startAt: 1, only: null, tasks: null, snapshot: true, dryRun: false };
   for (let index = 0; index < argv.length; index += 1) {
     if (argv[index] === '--output') args.output = argv[++index];
     else if (argv[index] === '--baseline') args.baseline = argv[++index];
@@ -41,6 +43,9 @@ function parseArgs(argv) {
     else if (argv[index] === '--repetitions') args.repetitions = Number(argv[++index]);
     else if (argv[index] === '--start-at') args.startAt = Number(argv[++index]);
     else if (argv[index] === '--only') args.only = argv[++index];
+    // 실패가 한 태스크에 몰려 있을 때 그 태스크만 반복해 표본을 모은다. 태스크를 섞으면
+    // 태스크 간 평균 차이가 분산으로 들어가 같은 런 수로도 검정력이 떨어진다.
+    else if (argv[index] === '--task') (args.tasks ??= []).push(argv[++index]);
     else if (argv[index] === '--no-snapshot') args.snapshot = false;
     else if (argv[index] === '--dry-run') args.dryRun = true;
     else if (argv[index] === '--help') {
@@ -51,6 +56,9 @@ function parseArgs(argv) {
   if (!args.output) throw new Error('--output is required');
   if (!args.baseline) throw new Error('--baseline is required (기준선 플러그인 트리 경로)');
   if (args.only && !['A', 'B'].includes(args.only)) throw new Error('--only must be A or B');
+  for (const taskId of args.tasks ?? []) {
+    if (!['r2', 'r3'].includes(taskId)) throw new Error(`--task must be r2 or r3 (got ${taskId})`);
+  }
   return args;
 }
 
@@ -219,6 +227,29 @@ function knowledgeReads(lines) {
   return [...result].sort();
 }
 
+// knowledgeReads 는 도구 호출 입력에 등장한 `knowledge/...md` 문자열을 전부 센다. 그래서
+// 존재하지 않는 파일에 대한 실패한 test -f / sed 도 "읽은 문서"로 잡힌다. 실제로 그런 런이
+// 있었다(없는 문서 2건을 인용하고 "근거 없음"을 반환했는데 지표상 docs=2). 트리에 실재하는
+// 경로만 남겨 지표가 실제 근거를 세게 한다.
+const realKnowledgeCache = new Map();
+async function realKnowledgePaths(condition) {
+  if (realKnowledgeCache.has(condition)) return realKnowledgeCache.get(condition);
+  const root = path.join(conditions[condition].pluginDir, 'knowledge');
+  const found = new Set();
+  async function walk(dir, prefix) {
+    let entries;
+    try { entries = await readdir(dir, { withFileTypes: true }); } catch { return; }
+    for (const entry of entries) {
+      const next = path.join(dir, entry.name);
+      if (entry.isDirectory()) await walk(next, `${prefix}${entry.name}/`);
+      else if (entry.name.endsWith('.md')) found.add(`knowledge/${prefix}${entry.name}`);
+    }
+  }
+  await walk(root, '');
+  realKnowledgeCache.set(condition, found);
+  return found;
+}
+
 async function childSessions(parentThreadId, sinceMs) {
   const results = [];
   const files = await recentSessionFiles(path.join(os.homedir(), '.codex/sessions'), sinceMs - 2_000);
@@ -330,12 +361,14 @@ const provenance = {
     regex_scorer_version: REGEX_SCORER_VERSION,
     contract_validator_version: CONTRACT_VALIDATOR_VERSION,
     key_scorer_matcher_version: KEY_SCORER_MATCHER_VERSION,
+    stderr_classifier_version: STDERR_CLASSIFIER_VERSION,
   },
   execution: {
     codex_cli_version: codexVersion.ok ? codexVersion.stdout : null,
     model,
     effort,
     repetitions: cli.repetitions,
+    tasks: cli.tasks ?? ['r2', 'r3'],
     sandbox: 'read-only',
     isolation: '--ignore-user-config --ignore-rules + 프로젝트 로컬 .agents/(조건별 플러그인 트리 복사)',
     prompt_policy: 'task.txt 앞에 리터럴 $akasha만 붙이며 조건 간 바이트 동일',
@@ -360,13 +393,15 @@ const stampFor = (condition) => ({
   regex_scorer_version: REGEX_SCORER_VERSION,
   contract_validator_version: CONTRACT_VALIDATOR_VERSION,
   key_scorer_matcher_version: KEY_SCORER_MATCHER_VERSION,
+  stderr_classifier_version: STDERR_CLASSIFIER_VERSION,
   codex_cli_version: provenance.execution.codex_cli_version,
 });
 await writeFile(path.join(outputRoot, 'provenance.json'), `${JSON.stringify(provenance, null, 2)}\n`, { mode: 0o600 });
 
 const schedule = [];
 for (let repetition = 1; repetition <= cli.repetitions; repetition += 1) {
-  const taskOrder = repetition % 2 === 1 ? ['r2', 'r3'] : ['r3', 'r2'];
+  const fullOrder = repetition % 2 === 1 ? ['r2', 'r3'] : ['r3', 'r2'];
+  const taskOrder = cli.tasks ? fullOrder.filter((taskId) => cli.tasks.includes(taskId)) : fullOrder;
   for (const taskId of taskOrder) {
     const aFirst = taskId === 'r2' ? repetition % 2 === 1 : repetition % 2 === 0;
     for (const condition of (aFirst ? ['A', 'B'] : ['B', 'A'])) schedule.push({ repetition, taskId, condition });
@@ -443,13 +478,20 @@ for (let index = 0; index < schedule.length; index += 1) {
     diffText: scopedDiff,
   });
   const actualRoles = children.map((child) => child.role).filter(Boolean).sort();
-  const knowledgePaths = [...new Set(children.flatMap((child) => child.knowledge_paths_read))].sort();
+  const mentionedKnowledgePaths = [...new Set(children.flatMap((child) => child.knowledge_paths_read))].sort();
+  const realKnowledge = await realKnowledgePaths(item.condition);
+  const knowledgePaths = mentionedKnowledgePaths.filter((entry) => realKnowledge.has(entry));
+  // 트리에 없는데 시도된 경로. 환각·경로 해석 실패의 직접 증거다.
+  const unresolvedKnowledgePaths = mentionedKnowledgePaths.filter((entry) => !realKnowledge.has(entry));
   const citedPaths = [...new Set(parsed.finalMessage.match(/(?:\.agents\/)?knowledge\/[a-z0-9_./-]+\.md/giu) ?? [])]
     .map((cited) => cited.replace(/^\.agents\//u, ''));
   const grounded = citedPaths.filter((cited) => knowledgePaths.includes(cited));
-  const stderrErrorLines = execution.stderr.split('\n').filter((line) => /\bERROR\b|internal error|thread limit/iu.test(line));
-  const externalWarningLines = stderrErrorLines.filter((line) => /503 Service Unavailable|connection reset|rate.?limit/iu.test(line));
-  const internalErrorLines = stderrErrorLines.filter((line) => !externalWarningLines.includes(line));
+  const stderrClasses = classifyStderrLines(execution.stderr);
+  const stderrErrorLines = stderrClasses.lines;
+  const externalWarningLines = stderrClasses.external;
+  const runtimeErrorLines = stderrClasses.runtime;
+  const internalErrorLines = stderrClasses.internal;
+  // 승격 게이트가 보는 값. CLI 런타임 오류는 측정 대상 밖이므로 여기서 뺀다.
   const internalErrors = parsed.errors.length
     + children.reduce((sum, child) => sum + child.error_count, 0)
     + internalErrorLines.length;
@@ -490,6 +532,11 @@ for (let index = 0; index < schedule.length; index += 1) {
       && children.every((child) => child.model === model && child.effort === effort),
     knowledge_paths_read: knowledgePaths,
     knowledge_documents_read: knowledgePaths.length,
+    knowledge_paths_unresolved: unresolvedKnowledgePaths,
+    knowledge_paths_unresolved_count: unresolvedKnowledgePaths.length,
+    // 역할은 떴는데 지식 문서를 하나도 열지 않은 실행. 자식들이 전부 "지식베이스에 근거
+    // 없음"을 반환해도 계약은 구조상 유효하므로 조용히 정상 응답이 된다. 별도 축으로 센다.
+    knowledge_bypass: actualRoles.length > 0 && knowledgePaths.length === 0,
     cited_knowledge_paths: citedPaths,
     grounded_knowledge_citations: grounded,
     grounded_citation_rate: citedPaths.length ? grounded.length / citedPaths.length : 0,
@@ -506,9 +553,13 @@ for (let index = 0; index < schedule.length; index += 1) {
     error_type: errorType,
     infra_invalid: errorType === 'external_dependency',
     internal_errors: internalErrors,
+    // CLI 런타임 탓으로 분류해 게이트에서 뺀 건수. 숨기지 않고 별도 축으로 계속 보고한다.
+    runtime_errors: runtimeErrorLines.length,
     intermediate_errors: stderrErrorLines.length + parsed.errors.length + children.reduce((sum, child) => sum + child.error_count, 0),
     stderr_error_lines: stderrErrorLines.map(redact),
     external_warning_lines: externalWarningLines.map(redact),
+    runtime_error_lines: runtimeErrorLines.map(redact),
+    internal_error_lines: internalErrorLines.map(redact),
     final_message: parsed.finalMessage,
     stdout_parse_errors: parsed.errors,
     stderr_excerpt: redact(execution.stderr.slice(0, 3_000)),
@@ -519,7 +570,7 @@ for (let index = 0; index < schedule.length; index += 1) {
   await writeFile(path.join(runsRoot, runId, 'stderr.txt'), redact(execution.stderr), { mode: 0o600 });
   await writeFile(path.join(runsRoot, runId, 'record.json'), `${JSON.stringify(record, null, 2)}\n`, { mode: 0o600 });
   await appendFile(path.join(outputRoot, 'raw.jsonl'), `${JSON.stringify(record)}\n`, { mode: 0o600 });
-  process.stdout.write(`DONE ${runId} exit=${record.exit_code} error=${record.error_type} quality=${record.quality_score_regex.toFixed(3)} contract_valid=${record.quality_contract_valid} tokens=${record.total_usage.total_tokens} wall_ms=${record.wall_ms} roles=${record.actual_roles.join(',')} docs=${record.knowledge_documents_read} internal_errors=${record.internal_errors}\n`);
+  process.stdout.write(`DONE ${runId} exit=${record.exit_code} error=${record.error_type} quality=${record.quality_score_regex.toFixed(3)} contract_valid=${record.quality_contract_valid} tokens=${record.total_usage.total_tokens} wall_ms=${record.wall_ms} roles=${record.actual_roles.join(',')} docs=${record.knowledge_documents_read} unresolved=${record.knowledge_paths_unresolved_count} internal_errors=${record.internal_errors} runtime_errors=${record.runtime_errors}${record.knowledge_bypass ? ' KNOWLEDGE_BYPASS' : ''}\n`);
   if (record.infra_invalid || record.timed_out) {
     process.stdout.write(`ABORT ${record.error_type} ${runId}\n`);
     break;
