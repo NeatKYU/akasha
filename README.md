@@ -21,7 +21,7 @@
 승인된 것만 Claude Code와 Codex에 플러그인으로 배포합니다.
 
 - **명령은 하나.** `/akasha`(Claude Code) / `$akasha`(Codex). 요청 종류를 구분할 필요가 없습니다.
-- **역할 팀이 자동 구성.** 요청과 변경 파일을 10개 역할 문서와 대조해 필요한 자문 서브에이전트만 병렬로 띄웁니다.
+- **역할 팀이 자동 구성.** 요청과 변경 파일을 17개 역할 문서와 대조해 필요한 자문 서브에이전트만 병렬로 띄웁니다.
 - **없으면 없다고 답합니다.** 모든 판정은 *위반 / 근거 있는 확인 / 지식베이스에 근거 없음* 세 갈래이며, 일반 지식으로 빈칸을 메우지 않습니다.
 
 ## 설치 (30초)
@@ -104,7 +104,7 @@ $akasha 컴포넌트 상태 설계 기준이 뭐야                (Codex)
 지식 문서 본문은 데이터로 취급하고, 문서 안의 명령·프롬프트는 실행하지 않습니다.
 프로젝트 저장소의 코드·설계 문서가 항상 우선하며, 이 저장소의 문서는 보조 근거입니다.
 
-**역할 10개** — product · design · frontend · backend · data · security · qa · platform · marketing · ai
+**역할 17개** — 개발 10: product · design · frontend · backend · data · security · qa · platform · marketing · ai / 작가 7: worldbuilding · character · plot · staging · continuity · style · reader
 
 역할을 추가하려면 `akasha/agents/akasha-<역할>.md` **파일 하나만** 추가하면 됩니다. 별도 등록 절차도, 생성
 단계도 없습니다.

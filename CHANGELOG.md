@@ -2,6 +2,20 @@
 
 이 프로젝트는 [Semantic Versioning](https://semver.org/)을 따릅니다.
 
+## [0.16.0] - 2026-08-25
+
+### 추가
+
+- 작가 도메인 역할 7개: worldbuilding · character · plot · staging · continuity · style · reader.
+  총괄 작가·에피소드 작가·자료 조사는 읽기 전용 심사 모델에 맞지 않아 역할로 두지 않는다
+- 지식 문서 10개: 국립국어원 어문 규범 2개(primary), 작법 유파 8개(secondary — 자문 근거로만 사용)
+- 출처 허용 호스트: www.korean.go.kr, www.brandonsanderson.com, www.helpingwritersbecomeauthors.com
+
+### 변경
+
+- SKILL.md의 `subagent_type`을 설치본에서 동작하는 `akasha:akasha-<역할>`로 수정
+- 실전 세션 전사를 하네스 record로 변환하는 `scripts/inspect-akasha-session.mjs` 추가
+
 ## [0.15.0] - 2026-08-21
 
 ### 변경
