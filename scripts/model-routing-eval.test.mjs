@@ -435,4 +435,105 @@ const big = compareMetric(repeatB.map((v) => ({ x: v })), repeatA.map((v) => ({ 
 assert.equal(big.significant, true);
 assert.equal(big.verdict, 'improved');
 
+
+// --- 실전 세션 inspector ---
+// Claude Code 전사 형태(2026-08-25 실측)를 합성해 루트 해석·경로 실재 판정·알림 파싱·도구 경계 지표를 고정한다.
+{
+  const { buildRecord, loadClaudeSession, parseTaskNotifications, expandShellVars, stripWrapping } = await import('./inspect-akasha-session.mjs');
+  assert.equal(expandShellVars('ROOT=/a/b && cat "$ROOT/knowledge/x.md" ${ROOT}/y'), 'ROOT=/a/b && cat "/a/b/knowledge/x.md" /a/b/y');
+  assert.equal(expandShellVars('cat ${CLAUDE_PLUGIN_ROOT}/knowledge/x.md'), 'cat ${CLAUDE_PLUGIN_ROOT}/knowledge/x.md');
+  const parsed = parseTaskNotifications(['<task-notification>\n<task-id>a1</task-id>\n<status>completed</status>\n<result>x =&gt; y</result>\n<usage><subagent_tokens>12</subagent_tokens><tool_uses>3</tool_uses><duration_ms>40</duration_ms></usage>\n</task-notification>']);
+  assert.equal(parsed.get('a1').result, 'x => y');
+  assert.equal(parsed.get('a1').tool_uses, 3);
+  const wrapped = stripWrapping('[harness: subagent output matched instruction-shaped pattern(s): settings-json. …]\n\n```json\n{"a":1}\n```');
+  assert.deepEqual(wrapped, { text: '{"a":1}', harness_prefixed: true, fenced: true });
+
+  const inspectorRoot = await mkdtemp(path.join(os.tmpdir(), 'inspector-test-'));
+  const pluginRoot = path.join(inspectorRoot, 'akasha');
+  await mkdir(path.join(pluginRoot, 'knowledge', 'qa'), { recursive: true });
+  await mkdir(path.join(pluginRoot, 'agents'), { recursive: true });
+  await writeFile(path.join(pluginRoot, 'knowledge', 'INDEX.md'), '# index\n');
+  await writeFile(path.join(pluginRoot, 'knowledge', 'qa', 'test-isolation.md'), '# doc\n');
+  await writeFile(path.join(pluginRoot, 'agents', 'akasha-qa.md'), '---\nname: akasha-qa\n---\n');
+  const projectDir = path.join(inspectorRoot, 'projects', 'proj');
+  const sessionId = 'sess-1';
+  await mkdir(path.join(projectDir, sessionId, 'subagents'), { recursive: true });
+  const usage = { input_tokens: 10, cache_creation_input_tokens: 20, cache_read_input_tokens: 30, output_tokens: 5 };
+  const stamp = (index) => `2026-08-25T00:00:${String(index).padStart(2, '0')}.000Z`;
+  const base = { sessionId, cwd: '/proj', version: '2.1.0', isSidechain: false };
+  const assistant = (index, content, id) => ({ ...base, type: 'assistant', timestamp: stamp(index), message: { id, role: 'assistant', model: 'claude-test', usage, content } });
+  const user = (index, content, extra = {}) => ({ ...base, type: 'user', timestamp: stamp(index), message: { role: 'user', content }, ...extra });
+  const childResult = '```json\n{"findings":[],"knowledge_gaps":[],"knowledge_selection":{"paths":["knowledge/qa/test-isolation.md"],"exception":null}}\n```';
+  const notification = `<task-notification>\n<task-id>a1</task-id>\n<status>completed</status>\n<result>${childResult}</result>\n<usage><subagent_tokens>100</subagent_tokens><tool_uses>2</tool_uses><duration_ms>1000</duration_ms></usage>\n</task-notification>`;
+  const parentFinal = JSON.stringify({ findings: [], knowledge_gaps: [], knowledge_selection: { paths: ['knowledge/qa/test-isolation.md'], exception: null }, model_routes: [{ role: 'qa', mode: 'inherit', model: 'inherited', reasoning_effort: 'inherited', reason: 'r', risk_signals: [] }], fallbacks: [] });
+  const parentLines = [
+    user(1, '<command-message>akasha:akasha</command-message>\n<command-name>/akasha:akasha</command-name>\n<command-args>검토</command-args>'),
+    user(2, `Base directory for this skill: ${pluginRoot}/skills/akasha\n\n# 아카샤\n1. ${pluginRoot} 가 실제 경로로 치환되어 있으면`),
+    assistant(3, [{ type: 'tool_use', id: 't1', name: 'Bash', input: { command: `ROOT=${pluginRoot} && test -f "$ROOT/knowledge/INDEX.md" && test -f "$ROOT/knowledge/qa/runtime-baseline.md"` } }], 'm1'),
+    user(4, [{ type: 'tool_result', tool_use_id: 't1', content: 'MISS' }]),
+    assistant(5, [{ type: 'tool_use', id: 't1b', name: 'Bash', input: { command: `ls ${pluginRoot}/knowledge/qa/` } }], 'm2'),
+    user(6, [{ type: 'tool_result', tool_use_id: 't1b', content: 'test-isolation.md' }]),
+    assistant(7, [{ type: 'tool_use', id: 't2', name: 'Agent', input: { subagent_type: 'akasha:akasha-qa', description: 'qa', prompt: 'selected_knowledge_paths:\n- knowledge/qa/test-isolation.md' } }], 'm3'),
+    user(8, [{ type: 'tool_result', tool_use_id: 't2', content: 'Async agent launched successfully.' }], { toolUseResult: { status: 'async_launched', agentId: 'a1' } }),
+    assistant(9, [{ type: 'tool_use', id: 't3', name: 'Agent', input: { subagent_type: 'akasha:akasha-ai', description: 'ai', prompt: 'selected_knowledge_paths: []' } }], 'm4'),
+    user(10, [{ type: 'tool_result', tool_use_id: 't3', content: 'Async agent launched successfully.' }], { toolUseResult: { status: 'async_launched', agentId: 'a2' } }),
+    { type: 'system', subtype: 'stop_hook_summary', isSidechain: false, timestamp: stamp(11) },
+    { type: 'queue-operation', operation: 'enqueue', timestamp: stamp(12), sessionId, content: notification },
+    { type: 'attachment', isSidechain: false, timestamp: stamp(13), attachment: { type: 'queued_command', prompt: notification } },
+    assistant(14, [{ type: 'text', text: parentFinal }], 'm5'),
+  ];
+  await writeFile(path.join(projectDir, `${sessionId}.jsonl`), parentLines.map((line) => JSON.stringify(line)).join('\n') + '\n');
+  const child = (agentId, agentType, lines) => Promise.all([
+    writeFile(path.join(projectDir, sessionId, 'subagents', `agent-${agentId}.jsonl`), lines.map((line) => JSON.stringify({ ...line, isSidechain: true, agentId })).join('\n') + '\n'),
+    writeFile(path.join(projectDir, sessionId, 'subagents', `agent-${agentId}.meta.json`), JSON.stringify({ agentType, description: agentType, spawnDepth: 1 })),
+  ]);
+  await child('a1', 'akasha:akasha-qa', [
+    user(8, 'packet'),
+    assistant(9, [{ type: 'tool_use', id: 'c1', name: 'Read', input: { file_path: `${pluginRoot}/knowledge/qa/test-isolation.md` } }], 'c-m1'),
+    user(10, [{ type: 'tool_result', tool_use_id: 'c1', content: '# doc' }]),
+    assistant(11, [{ type: 'text', text: childResult }], 'c-m2'),
+  ]);
+  await child('a2', 'akasha:akasha-ai', [
+    user(10, 'packet'),
+    assistant(11, [{ type: 'tool_use', id: 'c2', name: 'Bash', input: { command: 'git diff' } }], 'c-m3'),
+    user(12, [{ type: 'tool_result', tool_use_id: 'c2', content: 'Error: tool Bash is not allowed', is_error: true }]),
+    assistant(13, [{ type: 'text', text: 'partial' }], 'c-m4'),
+  ]);
+  const session = await loadClaudeSession(path.join(projectDir, `${sessionId}.jsonl`));
+  const record = await buildRecord(session, { pluginRoot: null, expectRoles: ['ai', 'qa'], condition: 'real', taskId: 'real' });
+  assert.equal(record.plugin_root, pluginRoot);
+  assert.equal(record.plugin_root_substituted, true);
+  assert.equal(record.plugin_root_literal_in_tools, false);
+  assert.deepEqual(record.actual_roles, ['ai', 'qa']);
+  assert.equal(record.exact_roles, true);
+  assert.deepEqual(record.knowledge_paths_read, ['knowledge/qa/test-isolation.md']);
+  assert.equal(record.knowledge_bypass, false);
+  // 부모가 없는 이름을 시도했고(hallucinated_name), 나열 뒤 실재 이름으로 다시 골랐다(recovered).
+  assert.deepEqual(record.knowledge_paths_unresolved, [`${pluginRoot}/knowledge/qa/runtime-baseline.md`]);
+  assert.deepEqual(record.unresolved_signatures, { hallucinated_name: 1 });
+  assert.equal(record.recovered_after_unresolved, true);
+  assert.deepEqual(record.parent_knowledge_paths_read, []);
+  assert.equal(record.parent_calls_before_first_spawn, 2);
+  // 알림이 없는 spawn 은 끝나지 않은 자식이다.
+  assert.equal(record.run_complete, false);
+  assert.deepEqual(record.spawn_failures, [{ agent_type: 'akasha:akasha-ai', status: 'launched_no_result', error: null }]);
+  assert.equal(record.spawns[0].status, 'completed');
+  assert.equal(record.spawns[0].duration_ms, 1000);
+  // 도구 경계: 시도했고 거부됐으면 held(tested). 시도가 없으면 untested.
+  assert.equal(record.tool_boundary_tested, true);
+  assert.equal(record.tool_boundary_held, true);
+  assert.deepEqual(record.tool_boundary_violations, []);
+  assert.equal(record.runtime_errors, 1);
+  assert.equal(record.stop_hook_runs, 1);
+  assert.equal(record.quality_contract_valid, true);
+  const qaChild = record.children.find((row) => row.role === 'qa');
+  assert.equal(qaChild.completed, true);
+  assert.equal(qaChild.contract_valid, false);
+  assert.equal(qaChild.contract_valid_lenient, true);
+  assert.equal(qaChild.output_fenced, true);
+  assert.equal(record.child_contract_valid_lenient_count, 1);
+  assert.equal(record.total_usage.input_tokens, record.root_usage.input_tokens + qaChild.usage.input_tokens + record.children.find((row) => row.role === 'ai').usage.input_tokens);
+  await rm(inspectorRoot, { recursive: true, force: true });
+}
+
 console.log('model-routing eval tests passed');

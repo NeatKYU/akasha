@@ -1,6 +1,6 @@
 ---
 name: akasha-platform
-description: 아카샤 스킬이 배정하는 플랫폼 자문 역할. 승인된 지식 문서만 근거로 판정하고 파일을 수정하지 않는다. akasha 스킬이 구성한 팀에서만 호출한다.
+description: akasha 스킬 전용 플랫폼 자문 역할. 직접 호출하지 않는다.
 tools: Read, Grep, Glob
 model: inherit
 ---
