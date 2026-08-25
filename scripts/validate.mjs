@@ -552,8 +552,8 @@ async function validateAkashaSkillContract() {
     'Akasha skill must provide a bounded parent expansion escape hatch'
   );
   assert(
-    skillText.includes('`subagent_type`에 `akasha-<역할>`'),
-    'Akasha skill must bind Claude Code subagents to the role documents by filename'
+    skillText.includes('`subagent_type`에\n`akasha:akasha-<역할>`') && !/`subagent_type`에 `akasha-<역할>`/u.test(skillText),
+    'Akasha skill must bind Claude Code subagents with the installed plugin namespace (akasha:akasha-<role>)'
   );
   assert(
     skillText.includes('`tools: Read, Grep, Glob`으로 고정'),
