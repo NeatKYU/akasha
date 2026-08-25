@@ -1,0 +1,376 @@
+{
+  "schema_version": 1,
+  "created": "2026-08-24",
+  "per_response": [
+    {
+      "mid": "R01",
+      "task": "r2",
+      "batch": "B2",
+      "run_id": "10-r2-B-rep3",
+      "regex": 0.6,
+      "fp": 0,
+      "keyScore": 1,
+      "covered": [
+        "r2-K1",
+        "r2-K2",
+        "r2-K3",
+        "r2-C1"
+      ]
+    },
+    {
+      "mid": "R02",
+      "task": "r3",
+      "batch": "B1",
+      "run_id": "06-r3-B-rep2",
+      "regex": 0.625,
+      "fp": 0,
+      "keyScore": 1,
+      "covered": [
+        "r3-K1",
+        "r3-K3",
+        "r3-K4",
+        "r3-K5",
+        "r3-K6",
+        "r3-K7",
+        "r3-K8"
+      ]
+    },
+    {
+      "mid": "R03",
+      "task": "r2",
+      "batch": "B1",
+      "run_id": "02-r2-B-rep1",
+      "regex": 0.4,
+      "fp": 0,
+      "keyScore": 1,
+      "covered": [
+        "r2-K1",
+        "r2-K2",
+        "r2-K3"
+      ]
+    },
+    {
+      "mid": "R04",
+      "task": "r3",
+      "batch": "B1",
+      "run_id": "03-r3-B-rep1",
+      "regex": 0.875,
+      "fp": 0,
+      "keyScore": 1,
+      "covered": [
+        "r3-K1",
+        "r3-K3",
+        "r3-K4",
+        "r3-K5",
+        "r3-K6",
+        "r3-K7",
+        "r3-K8"
+      ]
+    },
+    {
+      "mid": "R05",
+      "task": "r3",
+      "batch": "B1",
+      "run_id": "11-r3-B-rep3",
+      "regex": 0.625,
+      "fp": 0,
+      "keyScore": 1,
+      "covered": [
+        "r3-K1",
+        "r3-K3",
+        "r3-K4",
+        "r3-K5",
+        "r3-K6",
+        "r3-K7",
+        "r3-K8"
+      ]
+    },
+    {
+      "mid": "R06",
+      "task": "r2",
+      "batch": "B1",
+      "run_id": "10-r2-B-rep3",
+      "regex": 0.4,
+      "fp": 0,
+      "keyScore": 0,
+      "covered": []
+    },
+    {
+      "mid": "R07",
+      "task": "r2",
+      "batch": "B2",
+      "run_id": "07-r2-B-rep2",
+      "regex": 0.6,
+      "fp": 0,
+      "keyScore": 1,
+      "covered": [
+        "r2-K1",
+        "r2-K2",
+        "r2-K3"
+      ]
+    },
+    {
+      "mid": "R08",
+      "task": "r3",
+      "batch": "A",
+      "run_id": "12-r3-A-rep3",
+      "regex": 0.75,
+      "fp": 2,
+      "keyScore": 1,
+      "covered": [
+        "r3-K1",
+        "r3-K3",
+        "r3-K4",
+        "r3-K5",
+        "r3-K6",
+        "r3-K7",
+        "r3-K8"
+      ]
+    },
+    {
+      "mid": "R09",
+      "task": "r3",
+      "batch": "B2",
+      "run_id": "11-r3-B-rep3",
+      "regex": 0.875,
+      "fp": 0,
+      "keyScore": 1,
+      "covered": [
+        "r3-K1",
+        "r3-K3",
+        "r3-K4",
+        "r3-K5",
+        "r3-K6",
+        "r3-K7",
+        "r3-K8"
+      ]
+    },
+    {
+      "mid": "R10",
+      "task": "r2",
+      "batch": "B2",
+      "run_id": "02-r2-B-rep1",
+      "regex": 0.8,
+      "fp": 0,
+      "keyScore": 1,
+      "covered": [
+        "r2-K1",
+        "r2-K2",
+        "r2-K3",
+        "r2-C1"
+      ]
+    },
+    {
+      "mid": "R11",
+      "task": "r3",
+      "batch": "B2",
+      "run_id": "06-r3-B-rep2",
+      "regex": 0.75,
+      "fp": 0,
+      "keyScore": 0.7142857142857143,
+      "covered": [
+        "r3-K1",
+        "r3-K3",
+        "r3-K4",
+        "r3-K5",
+        "r3-K7"
+      ]
+    },
+    {
+      "mid": "R12",
+      "task": "r3",
+      "batch": "B2",
+      "run_id": "03-r3-B-rep1",
+      "regex": 0.625,
+      "fp": 0,
+      "keyScore": 1,
+      "covered": [
+        "r3-K1",
+        "r3-K3",
+        "r3-K4",
+        "r3-K5",
+        "r3-K6",
+        "r3-K7",
+        "r3-K8"
+      ]
+    },
+    {
+      "mid": "R13",
+      "task": "r2",
+      "batch": "A",
+      "run_id": "01-r2-A-rep1",
+      "regex": 0.6,
+      "fp": 0,
+      "keyScore": 0.6666666666666666,
+      "covered": [
+        "r2-K1",
+        "r2-K3",
+        "r2-C1"
+      ]
+    },
+    {
+      "mid": "R14",
+      "task": "r3",
+      "batch": "A",
+      "run_id": "04-r3-A-rep1",
+      "regex": 0.5,
+      "fp": 1,
+      "keyScore": 1,
+      "covered": [
+        "r3-K1",
+        "r3-K3",
+        "r3-K4",
+        "r3-K5",
+        "r3-K6",
+        "r3-K7",
+        "r3-K8"
+      ]
+    },
+    {
+      "mid": "R15",
+      "task": "r2",
+      "batch": "A",
+      "run_id": "09-r2-A-rep3",
+      "regex": 0.6,
+      "fp": 2,
+      "keyScore": 1,
+      "covered": [
+        "r2-K1",
+        "r2-K2",
+        "r2-K3"
+      ]
+    },
+    {
+      "mid": "R16",
+      "task": "r3",
+      "batch": "A",
+      "run_id": "05-r3-A-rep2",
+      "regex": 0.625,
+      "fp": 1,
+      "keyScore": 1,
+      "covered": [
+        "r3-K1",
+        "r3-K3",
+        "r3-K4",
+        "r3-K5",
+        "r3-K6",
+        "r3-K7",
+        "r3-K8"
+      ]
+    },
+    {
+      "mid": "R17",
+      "task": "r2",
+      "batch": "B1",
+      "run_id": "07-r2-B-rep2",
+      "regex": 0.6,
+      "fp": 0,
+      "keyScore": 1,
+      "covered": [
+        "r2-K1",
+        "r2-K2",
+        "r2-K3"
+      ]
+    },
+    {
+      "mid": "R18",
+      "task": "r2",
+      "batch": "A",
+      "run_id": "08-r2-A-rep2",
+      "regex": 0.6,
+      "fp": 2,
+      "keyScore": 1,
+      "covered": [
+        "r2-K1",
+        "r2-K2",
+        "r2-K3"
+      ]
+    }
+  ],
+  "aggregates": {
+    "r2": {
+      "A": {
+        "runs": "R13,R15,R18",
+        "key_coverage": 88.9,
+        "fp_total": 4,
+        "regex_mean": 60
+      },
+      "B1": {
+        "runs": "R03,R06,R17",
+        "key_coverage": 66.7,
+        "fp_total": 0,
+        "regex_mean": 46.7
+      },
+      "B2": {
+        "runs": "R01,R07,R10",
+        "key_coverage": 100,
+        "fp_total": 0,
+        "regex_mean": 66.7
+      }
+    },
+    "r3": {
+      "A": {
+        "runs": "R08,R14,R16",
+        "key_coverage": 100,
+        "fp_total": 4,
+        "regex_mean": 62.5
+      },
+      "B1": {
+        "runs": "R02,R04,R05",
+        "key_coverage": 100,
+        "fp_total": 0,
+        "regex_mean": 70.8
+      },
+      "B2": {
+        "runs": "R09,R11,R12",
+        "key_coverage": 90.5,
+        "fp_total": 0,
+        "regex_mean": 75
+      }
+    }
+  },
+  "regex_vs_human": {
+    "disagreements_r2": 10,
+    "disagreements_r3": 14,
+    "of_pairs_per_task": {
+      "r2": 27,
+      "r3": 63
+    },
+    "detail": [
+      "R01(B2) r2-K2: regex=fail vs 사람=커버",
+      "R02(B1) r3-K3: regex=fail vs 사람=커버",
+      "R02(B1) r3-K8: regex=fail vs 사람=커버",
+      "R03(B1) r2-K2: regex=fail vs 사람=커버",
+      "R05(B1) r3-K5: regex=fail vs 사람=커버",
+      "R05(B1) r3-K8: regex=fail vs 사람=커버",
+      "R06(B1) r2-K1: regex=pass vs 사람=미커버",
+      "R06(B1) r2-K3: regex=pass vs 사람=미커버",
+      "R07(B2) r2-K2: regex=fail vs 사람=커버",
+      "R08(A) r3-K5: regex=fail vs 사람=커버",
+      "R08(A) r3-K8: regex=fail vs 사람=커버",
+      "R09(B2) r3-K3: regex=fail vs 사람=커버",
+      "R10(B2) r2-K2: regex=fail vs 사람=커버",
+      "R12(B2) r3-K3: regex=fail vs 사람=커버",
+      "R12(B2) r3-K4: regex=fail vs 사람=커버",
+      "R13(A) r2-K1: regex=fail vs 사람=커버",
+      "R14(A) r3-K3: regex=fail vs 사람=커버",
+      "R14(A) r3-K7: regex=fail vs 사람=커버",
+      "R14(A) r3-K8: regex=fail vs 사람=커버",
+      "R15(A) r2-K2: regex=fail vs 사람=커버",
+      "R16(A) r3-K3: regex=fail vs 사람=커버",
+      "R16(A) r3-K5: regex=fail vs 사람=커버",
+      "R17(B1) r2-K2: regex=fail vs 사람=커버",
+      "R18(A) r2-K2: regex=fail vs 사람=커버"
+    ]
+  },
+  "rubric_rewards_trap": {
+    "note": "r3 rubric 'input-validation' 항목 통과 중 사람이 FP로 판정한 응답 수",
+    "passed_total": 3,
+    "passed_on_fp_responses": 1
+  },
+  "mechanical_scorer_on_contract_json": {
+    "compared_pairs": 33,
+    "agreement": 100,
+    "mismatches": []
+  }
+}

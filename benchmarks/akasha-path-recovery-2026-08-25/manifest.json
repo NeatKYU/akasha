@@ -1,0 +1,115 @@
+{
+  "schema_version": 2,
+  "created_at": "2026-08-25T03:53:09.346Z",
+  "repetitions": 5,
+  "conditions": {
+    "A": {
+      "role": "baseline",
+      "plugin_dir": "/private/tmp/claude-501/-Users-sun-dev-client-agent-knowledge-base/49606d17-3d5d-496e-ba15-5cff17e71b25/scratchpad/baseline/akasha",
+      "subject_hash": "2d7f11997e761e9143ab8a4f1a7db39a664bd6342f578704218ac7c46d9bb9e8",
+      "declared_version": "0.15.0"
+    },
+    "B": {
+      "role": "candidate",
+      "plugin_dir": "/Users/sun/dev/client/agent-knowledge-base/akasha",
+      "subject_hash": "8b574ee02d98f517248995a6aed3f3e2271729684c1e5c1aa8392c0417973c61",
+      "declared_version": "0.15.0"
+    }
+  },
+  "provenance": {
+    "A": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "baseline",
+      "subject_hash": "2d7f11997e761e9143ab8a4f1a7db39a664bd6342f578704218ac7c46d9bb9e8",
+      "subject_full_tree_hash": "01b94c2649dbb7c2d4141ed36c09bfdcfdb639e67ed30e3b3b2ad6287b5f8caf",
+      "subject_declared_version": "0.15.0",
+      "subject_source": "/private/tmp/claude-501/-Users-sun-dev-client-agent-knowledge-base/49606d17-3d5d-496e-ba15-5cff17e71b25/scratchpad/baseline/akasha",
+      "plugin_commit": "0aed667",
+      "git_describe": "kb-2026-W32-7f7354c-75-g0aed667-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "8f389dcfa4ff399af4ed1a320582d674a2df7c0a81688a3470f5d989db4ebb80",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "f8c4e1b4b7863590a0ff9f413ae183e5dc5b14ed247b8d740fb2fa300ae98c05",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-2",
+      "key_scorer_matcher_version": "matcher-3",
+      "stderr_classifier_version": "stderr-attribution-1",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "B": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "candidate",
+      "subject_hash": "8b574ee02d98f517248995a6aed3f3e2271729684c1e5c1aa8392c0417973c61",
+      "subject_full_tree_hash": "464498ecbe9737d1fa9c257baa0ec575d8a645925f3e34435176cc71ad6c4f1c",
+      "subject_declared_version": "0.15.0",
+      "subject_source": "/Users/sun/dev/client/agent-knowledge-base/akasha",
+      "plugin_commit": "0aed667",
+      "git_describe": "kb-2026-W32-7f7354c-75-g0aed667-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "8f389dcfa4ff399af4ed1a320582d674a2df7c0a81688a3470f5d989db4ebb80",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "f8c4e1b4b7863590a0ff9f413ae183e5dc5b14ed247b8d740fb2fa300ae98c05",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-2",
+      "key_scorer_matcher_version": "matcher-3",
+      "stderr_classifier_version": "stderr-attribution-1",
+      "codex_cli_version": "codex-cli 0.147.0"
+    }
+  },
+  "schedule": [
+    {
+      "repetition": 1,
+      "taskId": "r2",
+      "condition": "A"
+    },
+    {
+      "repetition": 1,
+      "taskId": "r2",
+      "condition": "B"
+    },
+    {
+      "repetition": 2,
+      "taskId": "r2",
+      "condition": "B"
+    },
+    {
+      "repetition": 2,
+      "taskId": "r2",
+      "condition": "A"
+    },
+    {
+      "repetition": 3,
+      "taskId": "r2",
+      "condition": "A"
+    },
+    {
+      "repetition": 3,
+      "taskId": "r2",
+      "condition": "B"
+    },
+    {
+      "repetition": 4,
+      "taskId": "r2",
+      "condition": "B"
+    },
+    {
+      "repetition": 4,
+      "taskId": "r2",
+      "condition": "A"
+    },
+    {
+      "repetition": 5,
+      "taskId": "r2",
+      "condition": "A"
+    },
+    {
+      "repetition": 5,
+      "taskId": "r2",
+      "condition": "B"
+    }
+  ]
+}

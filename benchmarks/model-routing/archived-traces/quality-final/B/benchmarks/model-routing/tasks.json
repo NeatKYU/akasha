@@ -1,0 +1,80 @@
+[
+  {
+    "id": "l1-inherit-contract",
+    "lane": "L1",
+    "title": "모델 상속 계약 판정",
+    "prompt": "다음 운영 계약만 근거로 질문에 답하세요. 계약: production 기본값은 부모 model과 reasoning effort 상속이다. 역할 이름만으로 model을 변경하지 않는다. high-risk 신호는 자동 승격 조건이 아니라 감사용 기록이다. 질문: security 역할이 선택되고 high-risk 신호가 있으면 자동으로 상위 모델로 바꿔야 합니까? 결론, 근거 2개, 허용되는 override 조건을 한국어 JSON으로 답하세요.",
+    "rubric": [
+      { "id": "no-auto-escalation", "all_of": ["자동", "(아니|아닙|금지|않)"] },
+      { "id": "inherit-default", "all_of": ["부모", "상속"] },
+      { "id": "explicit-override", "all_of": ["(명시|사용자)", "(지정|요청|override)"] },
+      { "id": "risk-is-audit", "all_of": ["risk|위험", "(기록|감사)"] }
+    ]
+  },
+  {
+    "id": "l1-fallback-contract",
+    "lane": "L1",
+    "title": "모델 실패 fallback 판정",
+    "prompt": "다음 계약을 검토하세요. 사용자가 model/effort를 지정한 spawn이 실패하면 effort만 빼고 같은 model로 한 번 재시도한다. 그래도 실패하면 다른 model로 조용히 바꾸지 않고 역할 누락을 보고한다. 이 계약에서 허용되는 재시도와 금지되는 fallback을 한국어 JSON으로 요약하세요.",
+    "rubric": [
+      { "id": "single-retry", "all_of": ["한 번|1회", "재시도"] },
+      { "id": "same-model", "all_of": ["같은 model|동일 model|같은 모델|동일 모델"] },
+      { "id": "drop-effort", "all_of": ["effort", "(빼|생략|제거)"] },
+      { "id": "no-silent-switch", "all_of": ["다른 model|다른 모델", "(조용히|금지|않)"] }
+    ]
+  },
+  {
+    "id": "l2-dialog-review",
+    "lane": "L2",
+    "title": "frontend/design 경계 검토",
+    "prompt": "아래 React 변경을 design 기준(키보드·스크린리더 상태를 함께 설계)과 frontend 기준(상호작용에만 Client 경계)으로 검토하세요. 승인 문서에 없는 구체적 focus/Escape 규칙은 근거 없음으로 구분하세요.\n\n```tsx\n'use client';\nimport { useState } from 'react';\nexport function Dialog(){\n const [open,setOpen]=useState(false);\n return <><div onClick={()=>setOpen(true)}>Open</div>{open&&<div><h2>Delete?</h2><div onClick={()=>setOpen(false)}>OK</div></div>}</>;\n}\n```\n\n위반, 근거 있는 확인, 지식 공백을 한국어 JSON으로 답하세요.",
+    "rubric": [
+      { "id": "open-control", "all_of": ["Open|열기", "(키보드|button|버튼)"] },
+      { "id": "confirm-control", "all_of": ["OK|확인", "(키보드|button|버튼)"] },
+      { "id": "screen-reader", "all_of": ["스크린리더", "(dialog|대화상자|역할|상태)"] },
+      { "id": "client-boundary", "all_of": ["use client|Client", "(확인|부합|적절)"] },
+      { "id": "knowledge-gap", "all_of": ["focus|포커스|Escape", "(근거 없음|지식 공백|기준.*없)"] }
+    ]
+  },
+  {
+    "id": "l2-workflow-review",
+    "lane": "L2",
+    "title": "platform/security 경계 검토",
+    "prompt": "다음 GitHub Actions 변경을 최소 권한과 supply-chain 기준으로 검토하세요.\n\n```yaml\nname: release\npermissions: write-all\njobs:\n  publish:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: npm publish\n```\n\n위반 위치, 원인, 필요한 수정 방향을 한국어 JSON으로 답하세요. 모델 선택이 보안 경계를 대신한다고 주장하지 마세요.",
+    "rubric": [
+      { "id": "write-all", "all_of": ["write-all", "(최소 권한|과도|위반)"] },
+      { "id": "mutable-tag", "all_of": ["checkout@v4|@v4", "(SHA|가변|mutable|고정)"] },
+      { "id": "no-runner-false-positive", "none_of": ["ubuntu-latest[^}]{0,220}(위반|위험|약합니다)"] },
+      { "id": "no-publish-false-positive", "none_of": ["npm publish[^}]{0,220}(위반|미흡|통제가 보이지)"] }
+    ]
+  },
+  {
+    "id": "l3-cross-layer-review",
+    "lane": "L3",
+    "title": "다중 계층 결함 종합",
+    "prompt": "다음 변경 묶음을 backend/data/security/platform/qa 기준으로 검토하세요.\n\nAPI: `const body=await req.json(); await db.project.create({data:{name:body.name,ownerId:body.userId}})`\nSchema: `ownerId String`으로 바꾸며 기존 `@unique`를 제거했지만 migration과 cardinality 설명은 없음\nWorkflow: `permissions: write-all`, `uses: actions/checkout@v4`\nE2E: `page.locator('.project-card').click(); await page.waitForTimeout(3000); expect(await page.locator('.project-card').count()).toBe(1)`\n\n근거가 있는 위반과 판단 근거가 부족한 항목을 구분하고, 최대 8개 finding을 한국어 JSON으로 답하세요.",
+    "rubric": [
+      { "id": "client-owner", "all_of": ["userId|ownerId", "(인증|인가|신뢰)"] },
+      { "id": "input-validation", "all_of": ["입력", "검증"] },
+      { "id": "migration-gap", "all_of": ["migration|마이그레이션", "(근거|설명|cardinality|카디널리티)"] },
+      { "id": "write-all", "all_of": ["write-all", "최소 권한"] },
+      { "id": "sha", "all_of": ["@v4", "SHA"] },
+      { "id": "locator", "all_of": ["project-card|CSS", "locator|로케이터"] },
+      { "id": "fixed-wait", "all_of": ["waitForTimeout", "(고정|flaky|불안정)"] },
+      { "id": "web-first", "all_of": ["count", "(web-first|즉시|재시도|기다)"] }
+    ]
+  },
+  {
+    "id": "l3-conflict-synthesis",
+    "lane": "L3",
+    "title": "상충 근거와 지식 공백 종합",
+    "prompt": "두 검토자가 같은 schema 변경을 다르게 판단했습니다. A: `ownerId @unique` 제거는 무조건 무결성 위반이다. B: owner당 여러 project가 의도라면 제거가 맞을 수 있으나 migration, 기존 데이터, cardinality 계약이 없어 결론 불가다. 승인 기준은 schema와 migration을 별도 고위험 산출물로 검토하고 실제 계약·대표 데이터 근거를 요구합니다. 어느 결론을 채택할지, 무엇을 위반으로 확정할 수 있고 무엇은 지식 공백인지 한국어 JSON으로 답하세요.",
+    "rubric": [
+      { "id": "conditional-verdict", "all_of": ["(무조건|단정)", "(없|어렵|불가|않)"] },
+      { "id": "cardinality", "all_of": ["cardinality|카디널리티", "(계약|의도)"] },
+      { "id": "migration", "all_of": ["migration|마이그레이션", "(필요|누락|검토)"] },
+      { "id": "existing-data", "all_of": ["기존 데이터", "(전환|검증|영향)"] },
+      { "id": "knowledge-gap", "all_of": ["지식 공백|근거 없음|결론 불가", "(owner|소유|unique|유일)"] }
+    ]
+  }
+]

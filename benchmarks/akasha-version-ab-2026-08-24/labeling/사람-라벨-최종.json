@@ -1,0 +1,25 @@
+{
+  "batch": "akasha-version-ab-2026-08-24",
+  "condition": "A",
+  "subject_hash": "5f7a0f1fc9c4d4eb573cb78a6a70085e1b17428c046a8b8c9aef55b8700f434c",
+  "subject_version": "0.14.0",
+  "key_versions": { "r2": "final-1", "r3": "final-2" },
+  "labeled_by": "사람 확정 — Sun (2026-08-24)",
+  "fp_rule": "관대 — 주된 지적이 맞으면 곁다리 언급은 오탐으로 세지 않는다. 문장 전체가 사실이 아닌 독립 finding만 오탐.",
+  "resolved": {
+    "05-r3-A-rep2.r3-K6": "보류 → cover. 응답이 '역할·라벨 locator를 CSS selector로 교체해 UI 구조에 결합했습니다'라고 명시",
+    "09-r2-A-rep3.fp": "0 → 1. 위반 절의 '포커스 진입·Tab 트랩·Escape·포커스 복귀가 없습니다'는 문장 전체가 변경 전에도 없던 것 (함정 r2-T1)"
+  },
+  "responses": {
+    "01-r2-A-rep1": { "task": "r2", "keys": { "r2-K1": "cover", "r2-K2": "cover", "r2-K3": "miss", "r2-C1": "cover" }, "fp": 0 },
+    "08-r2-A-rep2": { "task": "r2", "keys": { "r2-K1": "cover", "r2-K2": "miss", "r2-K3": "miss", "r2-C1": "cover" }, "fp": 0 },
+    "09-r2-A-rep3": { "task": "r2", "keys": { "r2-K1": "cover", "r2-K2": "cover", "r2-K3": "miss", "r2-C1": "cover" }, "fp": 1 },
+    "16-r2-A-rep4": { "task": "r2", "keys": { "r2-K1": "cover", "r2-K2": "cover", "r2-K3": "cover", "r2-C1": "miss" }, "fp": 0 },
+    "17-r2-A-rep5": { "task": "r2", "keys": { "r2-K1": "cover", "r2-K2": "cover", "r2-K3": "cover", "r2-C1": "cover" }, "fp": 0 },
+    "04-r3-A-rep1": { "task": "r3", "keys": { "r3-K1": "cover", "r3-K2": "miss", "r3-K3": "cover", "r3-K4": "cover", "r3-K5": "cover", "r3-K6": "cover", "r3-K7": "cover", "r3-K8": "cover" }, "fp": 0 },
+    "05-r3-A-rep2": { "task": "r3", "keys": { "r3-K1": "cover", "r3-K2": "miss", "r3-K3": "cover", "r3-K4": "cover", "r3-K5": "cover", "r3-K6": "cover", "r3-K7": "cover", "r3-K8": "miss" }, "fp": 0 },
+    "12-r3-A-rep3": { "task": "r3", "keys": { "r3-K1": "cover", "r3-K2": "miss", "r3-K3": "cover", "r3-K4": "cover", "r3-K5": "cover", "r3-K6": "cover", "r3-K7": "cover", "r3-K8": "cover" }, "fp": 0 },
+    "13-r3-A-rep4": { "task": "r3", "keys": { "r3-K1": "cover", "r3-K2": "miss", "r3-K3": "miss", "r3-K4": "cover", "r3-K5": "cover", "r3-K6": "cover", "r3-K7": "cover", "r3-K8": "cover" }, "fp": 0 },
+    "20-r3-A-rep5": { "task": "r3", "keys": { "r3-K1": "cover", "r3-K2": "miss", "r3-K3": "miss", "r3-K4": "cover", "r3-K5": "cover", "r3-K6": "cover", "r3-K7": "cover", "r3-K8": "miss" }, "fp": 0 }
+  }
+}

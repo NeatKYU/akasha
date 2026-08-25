@@ -1,0 +1,298 @@
+{
+  "schema_version": 1,
+  "experiment": "plugin-version-ab",
+  "total_records": 20,
+  "infra_invalid_records": 0,
+  "quality_metric": "quality_score_regex (task rubric only)",
+  "provenance": {
+    "stamped_records": 20,
+    "unstamped_records": 0,
+    "by_condition": {
+      "A": {
+        "runs": 10,
+        "subject_hashes": [
+          "2d7f11997e761e9143ab8a4f1a7db39a664bd6342f578704218ac7c46d9bb9e8"
+        ]
+      },
+      "B": {
+        "runs": 10,
+        "subject_hashes": [
+          "6b8bcc5427cab0f32f66846c317a9f830af29c58227c2f24e3d6163271302858"
+        ]
+      }
+    },
+    "condition_subject_pure": true,
+    "conditions_differ": true,
+    "harness_hashes": [
+      "f5aa5714114614f5d9443a15f04d526abc28ca195fe03a5d3303f53b96d8eedc"
+    ],
+    "fixtures_hashes": [
+      "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c"
+    ],
+    "quality_score_scopes": [
+      "task_rubric_only"
+    ],
+    "codex_cli_versions": [
+      "codex-cli 0.147.0"
+    ],
+    "consistent": true
+  },
+  "tasks": {
+    "r2": {
+      "baseline": {
+        "runs": 5,
+        "root_input_tokens_p50": 296951,
+        "root_uncached_input_tokens_p50": 33865,
+        "root_output_tokens_p50": 3508,
+        "total_tokens_p50": 460006,
+        "total_uncached_input_tokens_p50": 60755,
+        "root_share_of_total": 0.6576,
+        "quality_mean": 0.48,
+        "quality_contract_rate": 1,
+        "exact_roles_rate": 1,
+        "knowledge_documents_read_p50": 4,
+        "knowledge_bypass_rate": 0,
+        "grounded_citation_rate": 1,
+        "wall_ms_p50": 115547,
+        "cost_usd_p50": 0.3369405,
+        "internal_errors": 0,
+        "runtime_errors": 0
+      },
+      "candidate": {
+        "runs": 5,
+        "root_input_tokens_p50": 257196,
+        "root_uncached_input_tokens_p50": 30833,
+        "root_output_tokens_p50": 2927,
+        "total_tokens_p50": 429242,
+        "total_uncached_input_tokens_p50": 51461,
+        "root_share_of_total": 0.641,
+        "quality_mean": 0.56,
+        "quality_contract_rate": 0.8,
+        "exact_roles_rate": 1,
+        "knowledge_documents_read_p50": 3,
+        "knowledge_bypass_rate": 0,
+        "grounded_citation_rate": 1,
+        "wall_ms_p50": 98677,
+        "cost_usd_p50": 0.2954345,
+        "internal_errors": 0,
+        "runtime_errors": 0
+      },
+      "delta": {
+        "root_input_percent": -13.39,
+        "root_uncached_percent": -8.95,
+        "total_tokens_percent": -6.69,
+        "cost_percent": -12.32,
+        "wall_percent": -14.6,
+        "quality_points": 8
+      },
+      "verdict": "blocked",
+      "verdict_reason": "contract_regressed",
+      "significance": {
+        "root_input": {
+          "baseline_mean": 289230.8,
+          "candidate_mean": 247802.8,
+          "baseline_sd": 31372.89,
+          "candidate_sd": 47096.48,
+          "change_percent": -14.32,
+          "p_value": 0.1429,
+          "p_exact": true,
+          "p_method": "exact_enumeration",
+          "significant": false,
+          "mde_percent": 26.39,
+          "verdict": "underpowered"
+        },
+        "total_tokens": {
+          "baseline_mean": 445283,
+          "candidate_mean": 393213,
+          "baseline_sd": 42555.18,
+          "candidate_sd": 74318.48,
+          "change_percent": -11.69,
+          "p_value": 0.2222,
+          "p_exact": true,
+          "p_method": "exact_enumeration",
+          "significant": false,
+          "mde_percent": 25.58,
+          "verdict": "underpowered"
+        },
+        "cost_usd": {
+          "baseline_mean": 0.33,
+          "candidate_mean": 0.29,
+          "baseline_sd": 0.03,
+          "candidate_sd": 0.04,
+          "change_percent": -14.45,
+          "p_value": 0.0794,
+          "p_exact": true,
+          "p_method": "exact_enumeration",
+          "significant": false,
+          "mde_percent": 19.74,
+          "verdict": "underpowered"
+        },
+        "quality": {
+          "baseline_mean": 0.48,
+          "candidate_mean": 0.56,
+          "baseline_sd": 0.11,
+          "candidate_sd": 0.09,
+          "change_percent": 16.67,
+          "p_value": 0.5238,
+          "p_exact": true,
+          "p_method": "exact_enumeration",
+          "significant": false,
+          "mde_percent": 34.06,
+          "verdict": "underpowered"
+        }
+      }
+    },
+    "r3": {
+      "baseline": {
+        "runs": 5,
+        "root_input_tokens_p50": 375008,
+        "root_uncached_input_tokens_p50": 40160,
+        "root_output_tokens_p50": 5938,
+        "total_tokens_p50": 758253,
+        "total_uncached_input_tokens_p50": 94981,
+        "root_share_of_total": 0.5125,
+        "quality_mean": 0.95,
+        "quality_contract_rate": 0.8,
+        "exact_roles_rate": 1,
+        "knowledge_documents_read_p50": 10,
+        "knowledge_bypass_rate": 0,
+        "grounded_citation_rate": 1,
+        "wall_ms_p50": 162246,
+        "cost_usd_p50": 0.5941765,
+        "internal_errors": 0,
+        "runtime_errors": 3
+      },
+      "candidate": {
+        "runs": 5,
+        "root_input_tokens_p50": 410907,
+        "root_uncached_input_tokens_p50": 36844,
+        "root_output_tokens_p50": 5370,
+        "total_tokens_p50": 788988,
+        "total_uncached_input_tokens_p50": 92072,
+        "root_share_of_total": 0.5393,
+        "quality_mean": 0.925,
+        "quality_contract_rate": 1,
+        "exact_roles_rate": 1,
+        "knowledge_documents_read_p50": 9,
+        "knowledge_bypass_rate": 0,
+        "grounded_citation_rate": 0.8,
+        "wall_ms_p50": 143863,
+        "cost_usd_p50": 0.5814755,
+        "internal_errors": 0,
+        "runtime_errors": 17
+      },
+      "delta": {
+        "root_input_percent": 9.57,
+        "root_uncached_percent": -8.26,
+        "total_tokens_percent": 4.05,
+        "cost_percent": -2.14,
+        "wall_percent": -11.33,
+        "quality_points": -2.5
+      },
+      "verdict": "blocked",
+      "verdict_reason": "quality_regressed",
+      "significance": {
+        "root_input": {
+          "baseline_mean": 385527.2,
+          "candidate_mean": 410744.2,
+          "baseline_sd": 33379.33,
+          "candidate_sd": 36906.2,
+          "change_percent": 6.54,
+          "p_value": 0.2778,
+          "p_exact": true,
+          "p_method": "exact_enumeration",
+          "significant": false,
+          "mde_percent": 15.65,
+          "verdict": "underpowered"
+        },
+        "total_tokens": {
+          "baseline_mean": 763756,
+          "candidate_mean": 779943.8,
+          "baseline_sd": 58594.73,
+          "candidate_sd": 117779.65,
+          "change_percent": 2.12,
+          "p_value": 0.7857,
+          "p_exact": true,
+          "p_method": "exact_enumeration",
+          "significant": false,
+          "mde_percent": 21.34,
+          "verdict": "underpowered"
+        },
+        "cost_usd": {
+          "baseline_mean": 0.57,
+          "candidate_mean": 0.56,
+          "baseline_sd": 0.05,
+          "candidate_sd": 0.08,
+          "change_percent": -1.33,
+          "p_value": 0.8492,
+          "p_exact": true,
+          "p_method": "exact_enumeration",
+          "significant": false,
+          "mde_percent": 20.82,
+          "verdict": "underpowered"
+        },
+        "quality": {
+          "baseline_mean": 0.95,
+          "candidate_mean": 0.93,
+          "baseline_sd": 0.07,
+          "candidate_sd": 0.11,
+          "change_percent": -2.63,
+          "p_value": 1,
+          "p_exact": true,
+          "p_method": "exact_enumeration",
+          "significant": false,
+          "mde_percent": 17.51,
+          "verdict": "underpowered"
+        }
+      }
+    }
+  },
+  "overall": {
+    "note": "descriptive_only — 태스크별 평균 차이가 분산에 섞이므로 판정에 쓰지 않는다. tasks[*].significance 를 볼 것.",
+    "baseline": {
+      "runs": 10,
+      "root_input_tokens_p50": 321781,
+      "root_uncached_input_tokens_p50": 33865,
+      "root_output_tokens_p50": 4016,
+      "total_tokens_p50": 489060,
+      "total_uncached_input_tokens_p50": 71445,
+      "root_share_of_total": 0.585,
+      "quality_mean": 0.715,
+      "quality_contract_rate": 0.9,
+      "exact_roles_rate": 1,
+      "knowledge_documents_read_p50": 5,
+      "knowledge_bypass_rate": 0,
+      "grounded_citation_rate": 1,
+      "wall_ms_p50": 118543,
+      "cost_usd_p50": 0.3710295,
+      "internal_errors": 0,
+      "runtime_errors": 3
+    },
+    "candidate": {
+      "runs": 10,
+      "root_input_tokens_p50": 293937,
+      "root_uncached_input_tokens_p50": 31072,
+      "root_output_tokens_p50": 3654,
+      "total_tokens_p50": 473138,
+      "total_uncached_input_tokens_p50": 57636,
+      "root_share_of_total": 0.5902,
+      "quality_mean": 0.7425,
+      "quality_contract_rate": 0.9,
+      "exact_roles_rate": 1,
+      "knowledge_documents_read_p50": 4,
+      "knowledge_bypass_rate": 0,
+      "grounded_citation_rate": 0.9,
+      "wall_ms_p50": 125678,
+      "cost_usd_p50": 0.33502,
+      "internal_errors": 0,
+      "runtime_errors": 17
+    },
+    "delta": {
+      "root_input_percent": -8.65,
+      "root_uncached_percent": -8.25,
+      "total_tokens_percent": -3.26,
+      "cost_percent": -9.71,
+      "quality_points": 2.75
+    }
+  }
+}

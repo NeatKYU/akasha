@@ -1,0 +1,32 @@
+{
+  "version": "draft-1",
+  "scored_by": "claude-code (2026-08-24)",
+  "status": "사람 검수 대기",
+  "legend": { "covered": "커버 확실", "missed": "미커버 확실", "pending": "확인 필요(질문 번호)", "fp": "오탐" },
+  "notes": [
+    "r3-K2(@unique 중복 허용 효과 확정)는 18건 전원 미커버 — 해당 판정용 지식 문서(unique-constraint-integrity.md)가 측정 시점에 아직 없었으므로 예상된 패턴이며 버전 간 차이를 만들지 않는다.",
+    "Q13은 단일 정책 질문: @unique를 '판정 불가' 공백으로만 처리한 응답들의 r3-K3 인정 여부."
+  ],
+  "r2": {
+    "R01": { "keys": { "r2-K1": "covered", "r2-K2": "covered", "r2-K3": "covered", "r2-C1": "covered" }, "traps": {}, "fp_other": [] },
+    "R03": { "keys": { "r2-K1": "covered", "r2-K2": "covered", "r2-K3": "covered", "r2-C1": "missed" }, "traps": {}, "fp_other": [] },
+    "R06": { "keys": { "r2-K1": "pending:Q1", "r2-K2": "pending:Q1", "r2-K3": "pending:Q1", "r2-C1": "missed" }, "traps": {}, "fp_other": [] },
+    "R07": { "keys": { "r2-K1": "covered", "r2-K2": "covered", "r2-K3": "covered", "r2-C1": "missed" }, "traps": {}, "fp_other": [] },
+    "R10": { "keys": { "r2-K1": "covered", "r2-K2": "covered", "r2-K3": "covered", "r2-C1": "covered" }, "traps": {}, "fp_other": [] },
+    "R13": { "keys": { "r2-K1": "covered", "r2-K2": "pending:Q2", "r2-K3": "covered", "r2-C1": "covered" }, "traps": {}, "fp_other": [] },
+    "R15": { "keys": { "r2-K1": "covered", "r2-K2": "covered", "r2-K3": "covered", "r2-C1": "missed" }, "traps": { "r2-T1": "pending:Q4", "r2-T2": "pending:Q3" }, "fp_other": [] },
+    "R17": { "keys": { "r2-K1": "covered", "r2-K2": "covered", "r2-K3": "covered", "r2-C1": "missed" }, "traps": {}, "fp_other": [] },
+    "R18": { "keys": { "r2-K1": "covered", "r2-K2": "covered", "r2-K3": "covered", "r2-C1": "missed" }, "traps": { "r2-T1": "pending:Q6" }, "fp_other": ["pending:Q5 alertdialog 부재를 위반 표에 배치"] }
+  },
+  "r3": {
+    "R02": { "keys": { "r3-K1": "covered", "r3-K2": "missed", "r3-K3": "pending:Q13", "r3-K4": "covered", "r3-K5": "covered", "r3-K6": "covered", "r3-K7": "covered", "r3-K8": "covered" }, "traps": {}, "fp_other": [] },
+    "R04": { "keys": { "r3-K1": "covered", "r3-K2": "missed", "r3-K3": "pending:Q13", "r3-K4": "covered", "r3-K5": "covered", "r3-K6": "covered", "r3-K7": "covered", "r3-K8": "covered" }, "traps": {}, "fp_other": [] },
+    "R05": { "keys": { "r3-K1": "covered", "r3-K2": "missed", "r3-K3": "pending:Q13", "r3-K4": "covered", "r3-K5": "covered", "r3-K6": "covered", "r3-K7": "covered", "r3-K8": "covered" }, "traps": { "r3-T1": "pending:Q7" }, "fp_other": [] },
+    "R08": { "keys": { "r3-K1": "covered", "r3-K2": "missed", "r3-K3": "pending:Q13", "r3-K4": "covered", "r3-K5": "covered", "r3-K6": "covered", "r3-K7": "covered", "r3-K8": "covered" }, "traps": { "r3-T1": "pending:Q8" }, "fp_other": ["pending:Q8 ORM 응답 그대로 반환(pre-existing)을 위반으로"] },
+    "R09": { "keys": { "r3-K1": "covered", "r3-K2": "missed", "r3-K3": "covered", "r3-K4": "covered", "r3-K5": "covered", "r3-K6": "covered", "r3-K7": "covered", "r3-K8": "covered" }, "traps": {}, "fp_other": [] },
+    "R11": { "keys": { "r3-K1": "pending:Q11", "r3-K2": "missed", "r3-K3": "pending:Q13", "r3-K4": "covered", "r3-K5": "covered", "r3-K6": "missed", "r3-K7": "covered", "r3-K8": "pending:Q12" }, "traps": {}, "fp_other": [] },
+    "R12": { "keys": { "r3-K1": "covered", "r3-K2": "missed", "r3-K3": "covered", "r3-K4": "covered", "r3-K5": "covered", "r3-K6": "covered", "r3-K7": "covered", "r3-K8": "covered" }, "traps": {}, "fp_other": [] },
+    "R14": { "keys": { "r3-K1": "covered", "r3-K2": "missed", "r3-K3": "pending:Q13", "r3-K4": "covered", "r3-K5": "covered", "r3-K6": "covered", "r3-K7": "covered", "r3-K8": "covered" }, "traps": { "r3-T1": "pending:Q9" }, "fp_other": [] },
+    "R16": { "keys": { "r3-K1": "covered", "r3-K2": "missed", "r3-K3": "pending:Q13", "r3-K4": "covered", "r3-K5": "covered", "r3-K6": "covered", "r3-K7": "covered", "r3-K8": "covered" }, "traps": { "r3-T1": "pending:Q10" }, "fp_other": [] }
+  }
+}

@@ -1,0 +1,6 @@
+model Project {
+  id        String @id @default(cuid())
+  name      String
+  ownerId   String @unique
+  createdAt DateTime @default(now())
+}

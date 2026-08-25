@@ -1,0 +1,34 @@
+{
+  "prices_snapshot": {
+    "date": "2026-08-14",
+    "unit": "USD per 1M tokens",
+    "note": "API-equivalent estimate only; not a Codex billing statement.",
+    "models": {
+      "gpt-5.6-luna": { "input": 1, "cached_input": 0.1, "output": 6 },
+      "gpt-5.6-terra": { "input": 2.5, "cached_input": 0.25, "output": 15 },
+      "gpt-5.6-sol": { "input": 5, "cached_input": 0.5, "output": 30 },
+      "gpt-5.5": { "input": 5, "cached_input": 0.5, "output": 30 },
+      "gpt-5.4": { "input": 2.5, "cached_input": 0.25, "output": 15 }
+    }
+  },
+  "smoke": [
+    { "id": "luna-low", "lane": "L1", "model": "gpt-5.6-luna", "effort": "low" },
+    { "id": "terra-medium", "lane": "L2", "model": "gpt-5.6-terra", "effort": "medium" },
+    { "id": "sol-medium", "lane": "L3", "model": "gpt-5.6-sol", "effort": "medium" },
+    { "id": "5.5-medium", "lane": "L2", "model": "gpt-5.5", "effort": "medium" },
+    { "id": "5.4-medium", "lane": "L2", "model": "gpt-5.4", "effort": "medium" }
+  ],
+  "screen": [
+    { "id": "luna-low", "lane": "L1", "model": "gpt-5.6-luna", "effort": "low" },
+    { "id": "5.4-low", "lane": "L1", "model": "gpt-5.4", "effort": "low" },
+    { "id": "terra-low", "lane": "L1", "model": "gpt-5.6-terra", "effort": "low" },
+    { "id": "luna-medium", "lane": "L2", "model": "gpt-5.6-luna", "effort": "medium" },
+    { "id": "5.4-medium", "lane": "L2", "model": "gpt-5.4", "effort": "medium" },
+    { "id": "terra-medium", "lane": "L2", "model": "gpt-5.6-terra", "effort": "medium" },
+    { "id": "5.5-medium", "lane": "L2", "model": "gpt-5.5", "effort": "medium" },
+    { "id": "terra-high", "lane": "L3", "model": "gpt-5.6-terra", "effort": "high" },
+    { "id": "5.4-high", "lane": "L3", "model": "gpt-5.4", "effort": "high" },
+    { "id": "5.5-high", "lane": "L3", "model": "gpt-5.5", "effort": "high" },
+    { "id": "sol-high", "lane": "L3", "model": "gpt-5.6-sol", "effort": "high" }
+  ]
+}

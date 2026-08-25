@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "experiment": "plugin-version-ab",
+  "total_records": 4,
+  "infra_invalid_records": 0,
+  "quality_metric": "quality_score_regex (task rubric only)",
+  "provenance": {
+    "stamped_records": 4,
+    "unstamped_records": 0,
+    "by_condition": {
+      "A": {
+        "runs": 2,
+        "subject_hashes": [
+          "c19e221d3519bf5a0218298ac4a7efd705d0e630247d9cc6601fc87e2d8dd87a"
+        ]
+      },
+      "B": {
+        "runs": 2,
+        "subject_hashes": [
+          "17b937e36ac697b898c52f91342b316b31302bdc4984c5b8535a7dc808e5f3c2"
+        ]
+      }
+    },
+    "condition_subject_pure": true,
+    "conditions_differ": true,
+    "harness_hashes": [
+      "8f389dcfa4ff399af4ed1a320582d674a2df7c0a81688a3470f5d989db4ebb80"
+    ],
+    "fixtures_hashes": [
+      "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c"
+    ],
+    "quality_score_scopes": [
+      "task_rubric_only"
+    ],
+    "codex_cli_versions": [
+      "codex-cli 0.147.0"
+    ],
+    "consistent": true
+  },
+  "tasks": {
+    "r2": {
+      "baseline": {
+        "runs": 2,
+        "root_input_tokens_p50": 282036,
+        "root_uncached_input_tokens_p50": 35987,
+        "root_output_tokens_p50": 3333,
+        "total_tokens_p50": 417684,
+        "total_uncached_input_tokens_p50": 54600,
+        "root_share_of_total": 0.6709,
+        "quality_mean": 0.4,
+        "quality_contract_rate": 1,
+        "exact_roles_rate": 1,
+        "knowledge_documents_read_p50": 2,
+        "knowledge_bypass_rate": 0,
+        "unresolved_path_rate": 0,
+        "grounded_citation_rate": 1,
+        "wall_ms_p50": 100113,
+        "cost_usd_p50": 0.300136,
+        "internal_errors": 0,
+        "runtime_errors": 3
+      },
+      "candidate": {
+        "runs": 2,
+        "root_input_tokens_p50": 239767,
+        "root_uncached_input_tokens_p50": 25061,
+        "root_output_tokens_p50": 3518,
+        "total_tokens_p50": 385408,
+        "total_uncached_input_tokens_p50": 59555,
+        "root_share_of_total": 0.6568,
+        "quality_mean": 0.5,
+        "quality_contract_rate": 1,
+        "exact_roles_rate": 1,
+        "knowledge_documents_read_p50": 2,
+        "knowledge_bypass_rate": 0,
+        "unresolved_path_rate": 0,
+        "grounded_citation_rate": 1,
+        "wall_ms_p50": 110889,
+        "cost_usd_p50": 0.3166825,
+        "internal_errors": 0,
+        "runtime_errors": 8
+      },
+      "delta": {
+        "root_input_percent": -14.99,
+        "root_uncached_percent": -30.36,
+        "total_tokens_percent": -7.73,
+        "cost_percent": 5.51,
+        "wall_percent": 10.76,
+        "quality_points": 10
+      },
+      "verdict": "blocked",
+      "verdict_reason": "underpowered",
+      "significance": {
+        "root_input": {
+          "baseline_mean": 292131.5,
+          "candidate_mean": 254142,
+          "baseline_sd": 14277.19,
+          "candidate_sd": 20329.32,
+          "change_percent": -13,
+          "p_value": 0.3333,
+          "p_exact": true,
+          "p_method": "exact_enumeration",
+          "significant": false,
+          "mde_percent": 18.01,
+          "verdict": "underpowered"
+        },
+        "total_tokens": {
+          "baseline_mean": 442880.5,
+          "candidate_mean": 392882,
+          "baseline_sd": 35633.23,
+          "candidate_sd": 10569.83,
+          "change_percent": -11.29,
+          "p_value": 0.3333,
+          "p_exact": true,
+          "p_method": "exact_enumeration",
+          "significant": false,
+          "mde_percent": 17.61,
+          "verdict": "underpowered"
+        },
+        "cost_usd": {
+          "baseline_mean": 0.37,
+          "candidate_mean": 0.34,
+          "baseline_sd": 0.1,
+          "candidate_sd": 0.03,
+          "change_percent": -8.89,
+          "p_value": 1,
+          "p_exact": true,
+          "p_method": "exact_enumeration",
+          "significant": false,
+          "mde_percent": 55.78,
+          "verdict": "underpowered"
+        },
+        "quality": {
+          "baseline_mean": 0.4,
+          "candidate_mean": 0.5,
+          "baseline_sd": 0,
+          "candidate_sd": 0.14,
+          "change_percent": 25,
+          "p_value": 1,
+          "p_exact": true,
+          "p_method": "exact_enumeration",
+          "significant": false,
+          "mde_percent": 62.22,
+          "verdict": "underpowered"
+        }
+      }
+    }
+  },
+  "overall": {
+    "note": "descriptive_only — 태스크별 평균 차이가 분산에 섞이므로 판정에 쓰지 않는다. tasks[*].significance 를 볼 것.",
+    "baseline": {
+      "runs": 2,
+      "root_input_tokens_p50": 282036,
+      "root_uncached_input_tokens_p50": 35987,
+      "root_output_tokens_p50": 3333,
+      "total_tokens_p50": 417684,
+      "total_uncached_input_tokens_p50": 54600,
+      "root_share_of_total": 0.6709,
+      "quality_mean": 0.4,
+      "quality_contract_rate": 1,
+      "exact_roles_rate": 1,
+      "knowledge_documents_read_p50": 2,
+      "knowledge_bypass_rate": 0,
+      "unresolved_path_rate": 0,
+      "grounded_citation_rate": 1,
+      "wall_ms_p50": 100113,
+      "cost_usd_p50": 0.300136,
+      "internal_errors": 0,
+      "runtime_errors": 3
+    },
+    "candidate": {
+      "runs": 2,
+      "root_input_tokens_p50": 239767,
+      "root_uncached_input_tokens_p50": 25061,
+      "root_output_tokens_p50": 3518,
+      "total_tokens_p50": 385408,
+      "total_uncached_input_tokens_p50": 59555,
+      "root_share_of_total": 0.6568,
+      "quality_mean": 0.5,
+      "quality_contract_rate": 1,
+      "exact_roles_rate": 1,
+      "knowledge_documents_read_p50": 2,
+      "knowledge_bypass_rate": 0,
+      "unresolved_path_rate": 0,
+      "grounded_citation_rate": 1,
+      "wall_ms_p50": 110889,
+      "cost_usd_p50": 0.3166825,
+      "internal_errors": 0,
+      "runtime_errors": 8
+    },
+    "delta": {
+      "root_input_percent": -14.99,
+      "root_uncached_percent": -30.36,
+      "total_tokens_percent": -7.73,
+      "cost_percent": 5.51,
+      "quality_points": 10
+    }
+  }
+}

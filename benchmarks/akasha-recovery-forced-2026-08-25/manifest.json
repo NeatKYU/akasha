@@ -1,0 +1,85 @@
+{
+  "schema_version": 2,
+  "created_at": "2026-08-25T04:16:49.911Z",
+  "repetitions": 2,
+  "conditions": {
+    "A": {
+      "role": "baseline",
+      "plugin_dir": "/private/tmp/claude-501/-Users-sun-dev-client-agent-knowledge-base/49606d17-3d5d-496e-ba15-5cff17e71b25/scratchpad/broken-A/akasha",
+      "subject_hash": "c19e221d3519bf5a0218298ac4a7efd705d0e630247d9cc6601fc87e2d8dd87a",
+      "declared_version": "0.15.0"
+    },
+    "B": {
+      "role": "candidate",
+      "plugin_dir": "/private/tmp/claude-501/-Users-sun-dev-client-agent-knowledge-base/49606d17-3d5d-496e-ba15-5cff17e71b25/scratchpad/broken-B/akasha",
+      "subject_hash": "17b937e36ac697b898c52f91342b316b31302bdc4984c5b8535a7dc808e5f3c2",
+      "declared_version": "0.15.0"
+    }
+  },
+  "provenance": {
+    "A": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "baseline",
+      "subject_hash": "c19e221d3519bf5a0218298ac4a7efd705d0e630247d9cc6601fc87e2d8dd87a",
+      "subject_full_tree_hash": "5476e1d544f987b0fff008b632d008f88d0b1e77c469c597a818bc208a46455c",
+      "subject_declared_version": "0.15.0",
+      "subject_source": "/private/tmp/claude-501/-Users-sun-dev-client-agent-knowledge-base/49606d17-3d5d-496e-ba15-5cff17e71b25/scratchpad/broken-A/akasha",
+      "plugin_commit": "0aed667",
+      "git_describe": "kb-2026-W32-7f7354c-75-g0aed667-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "8f389dcfa4ff399af4ed1a320582d674a2df7c0a81688a3470f5d989db4ebb80",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "f8c4e1b4b7863590a0ff9f413ae183e5dc5b14ed247b8d740fb2fa300ae98c05",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-2",
+      "key_scorer_matcher_version": "matcher-3",
+      "stderr_classifier_version": "stderr-attribution-1",
+      "codex_cli_version": "codex-cli 0.147.0"
+    },
+    "B": {
+      "schema_version": 1,
+      "experiment": "plugin-version-ab",
+      "condition_role": "candidate",
+      "subject_hash": "17b937e36ac697b898c52f91342b316b31302bdc4984c5b8535a7dc808e5f3c2",
+      "subject_full_tree_hash": "d4e93be591521afcee8abd71050898c533311d0239957b7df3d6e7bed281b930",
+      "subject_declared_version": "0.15.0",
+      "subject_source": "/private/tmp/claude-501/-Users-sun-dev-client-agent-knowledge-base/49606d17-3d5d-496e-ba15-5cff17e71b25/scratchpad/broken-B/akasha",
+      "plugin_commit": "0aed667",
+      "git_describe": "kb-2026-W32-7f7354c-75-g0aed667-dirty",
+      "git_dirty_tracked": true,
+      "harness_hash": "8f389dcfa4ff399af4ed1a320582d674a2df7c0a81688a3470f5d989db4ebb80",
+      "fixtures_hash": "088ce8d85e1370d66998dc3761cc1093957eed186ae007086aaefe9cba457a1c",
+      "answer_keys_hash": "f8c4e1b4b7863590a0ff9f413ae183e5dc5b14ed247b8d740fb2fa300ae98c05",
+      "rubric_layout_version": "layers-1/task-only-quality",
+      "regex_scorer_version": "regex-rubric-1",
+      "contract_validator_version": "akasha-contract-2",
+      "key_scorer_matcher_version": "matcher-3",
+      "stderr_classifier_version": "stderr-attribution-1",
+      "codex_cli_version": "codex-cli 0.147.0"
+    }
+  },
+  "schedule": [
+    {
+      "repetition": 1,
+      "taskId": "r2",
+      "condition": "A"
+    },
+    {
+      "repetition": 1,
+      "taskId": "r2",
+      "condition": "B"
+    },
+    {
+      "repetition": 2,
+      "taskId": "r2",
+      "condition": "B"
+    },
+    {
+      "repetition": 2,
+      "taskId": "r2",
+      "condition": "A"
+    }
+  ]
+}

@@ -1,0 +1,719 @@
+<meta charset="utf-8">
+<title>아카샤 기준선 채점</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+<style>
+  :root {
+    --ground: #f4f6f8;
+    --surface: #ffffff;
+    --surface-sunk: #eef1f4;
+    --ink: #14181d;
+    --ink-soft: #414b56;
+    --muted: #6d7783;
+    --line: #dfe4ea;
+    --line-strong: #c6ced8;
+    --accent: #27496f;
+    --accent-soft: #e6ecf4;
+    --ok: #16653f;
+    --ok-bg: #e2f0e8;
+    --no: #9e3527;
+    --no-bg: #f6e7e4;
+    --hold: #7d5410;
+    --hold-bg: #f8eeda;
+    --del-ink: #8f3326; --del-bg: #fbecea;
+    --add-ink: #145c39; --add-bg: #e6f2ea;
+    --shadow: 0 1px 2px rgba(20, 24, 29, .05), 0 8px 24px -16px rgba(20, 24, 29, .3);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #14171a;
+      --surface: #1c2025;
+      --surface-sunk: #23282e;
+      --ink: #e7eaed;
+      --ink-soft: #bfc6ce;
+      --muted: #939ca7;
+      --line: #2e343b;
+      --line-strong: #414952;
+      --accent: #94b3d8;
+      --accent-soft: #202b38;
+      --ok: #63bf94;
+      --ok-bg: #172e24;
+      --no: #e08d80;
+      --no-bg: #33211e;
+      --hold: #d6a95f;
+      --hold-bg: #322914;
+      --del-ink: #e39387; --del-bg: #30201e;
+      --add-ink: #6cc198; --add-bg: #16291f;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px -16px rgba(0, 0, 0, .8);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #14171a;
+    --surface: #1c2025;
+    --surface-sunk: #23282e;
+    --ink: #e7eaed;
+    --ink-soft: #bfc6ce;
+    --muted: #939ca7;
+    --line: #2e343b;
+    --line-strong: #414952;
+    --accent: #94b3d8;
+    --accent-soft: #202b38;
+    --ok: #63bf94;
+    --ok-bg: #172e24;
+    --no: #e08d80;
+    --no-bg: #33211e;
+    --hold: #d6a95f;
+    --hold-bg: #322914;
+    --del-ink: #e39387; --del-bg: #30201e;
+    --add-ink: #6cc198; --add-bg: #16291f;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px -16px rgba(0, 0, 0, .8);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-weight: 400;
+    line-height: 1.62;
+    margin: 0;
+    padding: 0 0 5.5rem;
+    -webkit-font-smoothing: antialiased;
+  }
+  code, .mono { font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace; }
+
+  /* ---- 상단 고정 스트립 ---- */
+  .bar {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding: .75rem 1.25rem;
+    display: flex; flex-wrap: wrap; align-items: center; gap: .55rem 1rem;
+  }
+  .bar h1 { font-size: 1.02rem; font-weight: 600; margin: 0; letter-spacing: -.01em; }
+  .bar .spacer { flex: 1 1 auto; }
+  .meter {
+    display: flex; align-items: center; gap: .5rem;
+    font-size: .82rem; color: var(--muted);
+  }
+  .meter-track {
+    width: 116px; height: 6px; border-radius: 999px;
+    background: var(--surface-sunk); overflow: hidden;
+  }
+  .meter-fill { height: 100%; width: 0%; background: var(--accent); transition: width .25s ease; }
+  .tally { display: flex; gap: .35rem; flex-wrap: wrap; }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: .3rem;
+    border-radius: 5px; padding: .1rem .45rem;
+    font-size: .74rem; font-weight: 500; white-space: nowrap;
+    border: 1px solid transparent;
+  }
+  .chip-id { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .chip-ok { background: var(--ok-bg); color: var(--ok); }
+  .chip-no { background: var(--no-bg); color: var(--no); }
+  .chip-hold { background: var(--hold-bg); color: var(--hold); }
+  .chip-plain { background: var(--surface-sunk); color: var(--muted); }
+
+  main { max-width: 1180px; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
+
+  .intro { display: grid; gap: .7rem; margin-bottom: 1.6rem; }
+  .intro p { margin: 0; color: var(--ink-soft); font-size: .93rem; max-width: 72ch; }
+  .intro .facts { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .rules {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+    padding: .9rem 1.1rem; box-shadow: var(--shadow);
+  }
+  .rules ol { margin: .3rem 0 0; padding-left: 1.15rem; display: grid; gap: .3rem; }
+  .rules li { font-size: .89rem; color: var(--ink-soft); }
+  .rules b { color: var(--ink); font-weight: 600; }
+
+  /* ---- 응답 카드 ---- */
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    margin-bottom: 1.5rem; box-shadow: var(--shadow); overflow: hidden;
+  }
+  .card-head {
+    display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .8rem;
+    padding: .7rem 1.1rem; border-bottom: 1px solid var(--line);
+    background: var(--surface-sunk);
+  }
+  .card-head .rid { font-size: .92rem; font-weight: 600; letter-spacing: -.01em; }
+  .card-head .facts { color: var(--muted); font-size: .8rem; display: flex; gap: .8rem; flex-wrap: wrap; }
+  .card-state { margin-left: auto; }
+  .chip-rep { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .repeat-note {
+    background: var(--hold-bg); color: var(--hold); border-radius: 8px;
+    padding: .6rem .8rem; font-size: .88rem; margin: 0;
+  }
+  .repeat-note b { font-weight: 700; }
+
+  .split { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); }
+  @media (max-width: 900px) { .split { grid-template-columns: minmax(0, 1fr); } }
+
+  .pane { padding: 1rem 1.1rem; min-width: 0; }
+  .pane + .pane { border-left: 1px solid var(--line); }
+  @media (max-width: 900px) { .pane + .pane { border-left: 0; border-top: 1px solid var(--line); } }
+
+  .pane-label {
+    font-size: .71rem; font-weight: 600; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 .6rem;
+  }
+
+  .answer {
+    background: var(--surface-sunk); border: 1px solid var(--line); border-radius: 8px;
+    padding: .85rem 1rem; max-height: 30rem; overflow-y: auto; overflow-x: auto;
+    font-size: .875rem; line-height: 1.66;
+  }
+  .answer h4 {
+    font-size: .8rem; font-weight: 600; margin: 1rem 0 .35rem; color: var(--accent);
+    letter-spacing: .02em;
+  }
+  .answer h4:first-child { margin-top: 0; }
+  .answer p { margin: 0 0 .5rem; white-space: pre-wrap; word-break: break-word; }
+  .answer code { font-size: .82em; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: .02em .28em; }
+  .answer .url { color: var(--muted); font-size: .78em; word-break: break-all; }
+  .answer strong { font-weight: 600; }
+
+  /* ---- 채점 리스트 ---- */
+  .keys { display: grid; gap: .5rem; }
+  .key {
+    border: 1px solid var(--line); border-radius: 8px; padding: .6rem .7rem;
+    display: grid; gap: .45rem;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .key[data-state="cover"] { border-color: color-mix(in srgb, var(--ok) 45%, var(--line)); }
+  .key[data-state="miss"] { border-color: color-mix(in srgb, var(--no) 45%, var(--line)); }
+  .key[data-state="hold"] { border-color: color-mix(in srgb, var(--hold) 55%, var(--line)); }
+  .key-top { display: flex; align-items: baseline; gap: .45rem; flex-wrap: wrap; }
+  .key-title { font-size: .92rem; font-weight: 600; color: var(--ink); flex: 1 1 14rem; min-width: 0; line-height: 1.45; text-wrap: balance; }
+  .key p { margin: 0; }
+  .what { font-size: .855rem; color: var(--ink-soft); white-space: pre-wrap; }
+  .cover-rule {
+    font-size: .845rem; color: var(--ink); background: var(--accent-soft);
+    border-radius: 7px; padding: .45rem .6rem;
+  }
+  .cover-rule b { color: var(--accent); font-weight: 600; margin-right: .3rem; }
+  .revised {
+    font-size: .84rem; font-weight: 600; color: var(--accent);
+    background: var(--accent-soft); border-radius: 7px; padding: .45rem .6rem;
+  }
+  .watch {
+    font-size: .82rem; color: var(--hold); background: var(--hold-bg);
+    border-radius: 7px; padding: .4rem .6rem;
+  }
+  .diff {
+    border: 1px solid var(--line); border-radius: 7px; overflow-x: auto;
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .77rem; line-height: 1.55;
+  }
+  .diff div { padding: .12rem .55rem; white-space: pre; }
+  .diff .d-del { background: var(--del-bg); color: var(--del-ink); }
+  .diff .d-add { background: var(--add-bg); color: var(--add-ink); }
+  .diff .d-note { background: var(--surface-sunk); color: var(--muted); white-space: pre-wrap; }
+  .diff .d-label {
+    background: var(--surface); color: var(--muted); font-size: .68rem; font-weight: 600;
+    letter-spacing: .06em; padding: .2rem .55rem; border-bottom: 1px solid var(--line);
+    font-family: "IBM Plex Sans KR", sans-serif;
+  }
+  .diff .d-label + .d-label { border-top: 1px solid var(--line); }
+  .diff .d-del + .d-label, .diff .d-add + .d-label { border-top: 1px solid var(--line); }
+  .hints { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; }
+  .hints .hints-label { font-size: .76rem; color: var(--muted); margin-right: .1rem; }
+  .hints .hints-or { font-size: .72rem; color: var(--muted); font-style: italic; }
+  .hints-none {
+    font-size: .78rem; font-weight: 500; color: var(--no); background: var(--no-bg);
+    border-radius: 5px; padding: .12rem .5rem;
+  }
+  button.hint {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: .73rem; font-weight: 500; padding: .1rem .45rem; border-radius: 5px;
+    border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink-soft);
+  }
+  button.hint[data-count="0"] { color: var(--muted); border-style: dashed; cursor: default; opacity: .7; }
+  button.hint:not([data-count="0"]):hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  button.hint .n { font-weight: 700; margin-left: .2rem; }
+  mark { background: #ffe08a; color: #241c00; border-radius: 3px; padding: 0 .1em; }
+  :root[data-theme="dark"] mark { background: #6b5410; color: #ffeec2; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) mark { background: #6b5410; color: #ffeec2; } }
+
+  details.origin { font-size: .79rem; }
+  details.origin summary { cursor: pointer; color: var(--muted); list-style-position: outside; }
+  details.origin summary:hover { color: var(--ink); }
+  details.origin .origin-body {
+    margin-top: .4rem; padding-left: .6rem; border-left: 2px solid var(--line);
+    color: var(--muted); display: grid; gap: .25rem;
+  }
+  .task-note {
+    font-size: .85rem; color: var(--ink-soft); background: var(--surface-sunk);
+    border-radius: 8px; padding: .55rem .75rem; margin: 0 0 .8rem;
+  }
+
+  .seg { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 7px; overflow: hidden; }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg label {
+    font-size: .79rem; font-weight: 500; padding: .22rem .62rem; cursor: pointer;
+    color: var(--muted); background: var(--surface); user-select: none;
+    border-right: 1px solid var(--line);
+    transition: background .12s ease, color .12s ease;
+  }
+  .seg label:last-of-type { border-right: 0; }
+  .seg label:hover { background: var(--surface-sunk); color: var(--ink); }
+  .seg input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .seg input[value="cover"]:checked + label { background: var(--ok-bg); color: var(--ok); font-weight: 600; }
+  .seg input[value="miss"]:checked + label { background: var(--no-bg); color: var(--no); font-weight: 600; }
+  .seg input[value="hold"]:checked + label { background: var(--hold-bg); color: var(--hold); font-weight: 600; }
+
+  .traps { margin-top: 1rem; }
+  .trap {
+    display: flex; gap: .55rem; align-items: flex-start;
+    border: 1px solid var(--line); border-radius: 8px; padding: .55rem .7rem;
+    font-size: .83rem; cursor: pointer;
+  }
+  .trap + .trap { margin-top: .4rem; }
+  .trap:has(input:checked) { border-color: color-mix(in srgb, var(--no) 45%, var(--line)); background: var(--no-bg); }
+  .trap input { margin: .32rem 0 0; accent-color: var(--no); flex: none; }
+  .trap .t-topic { font-weight: 600; }
+  .trap .t-what { color: var(--ink-soft); font-size: .81rem; display: block; margin-top: .2rem; }
+  .trap .t-how { color: var(--muted); font-size: .79rem; display: block; margin-top: .25rem; font-style: italic; }
+
+  .fp-row { display: flex; align-items: center; gap: .6rem; margin-top: 1rem; flex-wrap: wrap; }
+  .fp-row label { font-size: .83rem; color: var(--ink-soft); }
+  input[type="number"], textarea {
+    font-family: inherit; font-size: .85rem; color: var(--ink);
+    background: var(--surface); border: 1px solid var(--line-strong); border-radius: 7px;
+    padding: .3rem .5rem;
+  }
+  input[type="number"] { width: 4.2rem; font-variant-numeric: tabular-nums; }
+  textarea { width: 100%; min-height: 3.2rem; resize: vertical; margin-top: .6rem; line-height: 1.5; }
+  input:focus-visible, textarea:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 1px;
+  }
+
+  /* ---- 하단 바 ---- */
+  .dock {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+    background: var(--surface); border-top: 1px solid var(--line);
+    padding: .7rem 1.25rem; display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
+    box-shadow: 0 -6px 20px -18px rgba(0, 0, 0, .6);
+  }
+  .dock .status { font-size: .84rem; color: var(--muted); flex: 1 1 auto; }
+  button {
+    font-family: inherit; font-size: .85rem; font-weight: 500;
+    border-radius: 7px; padding: .38rem .85rem; cursor: pointer;
+    border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink);
+    transition: background .12s ease, border-color .12s ease;
+  }
+  button:hover { background: var(--surface-sunk); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--ground); }
+  button.primary:hover { filter: brightness(1.08); }
+
+  .export { max-width: 1180px; margin: 0 auto 2rem; padding: 0 1.25rem; }
+  .export[hidden] { display: none; }
+  .export-box {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 1rem 1.1rem; box-shadow: var(--shadow);
+  }
+  .export-box h2 { font-size: .96rem; margin: 0 0 .3rem; font-weight: 600; }
+  .export-box p { margin: 0 0 .6rem; font-size: .85rem; color: var(--muted); }
+  .export-box textarea { min-height: 13rem; font-family: "IBM Plex Mono", monospace; font-size: .78rem; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<div class="bar">
+  <h1>아카샤 기준선 채점</h1>
+  <span class="chip chip-plain mono" id="subjectChip"></span>
+  <span class="spacer"></span>
+  <div class="tally" id="tally"></div>
+  <div class="meter">
+    <span id="meterText">0/6 완료</span>
+    <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+  </div>
+</div>
+
+<main>
+  <section class="intro">
+    <p id="introLead"></p>
+    <div class="facts" id="introFacts"></div>
+    <p class="repeat-note">
+      6건은 서로 다른 답안입니다. <b>같은 문제를 3번씩 돌린 결과</b>라서 문제는 겹치지만 답은 매번 다릅니다 —
+      어떤 회차는 찾아내고 어떤 회차는 놓칩니다. <b>그 흔들림의 크기를 재는 것이 이 실험의 핵심</b>이므로
+      6건을 전부 채점해야 합니다. 한 회차만 채점하면 버전 차이와 그날 운을 구분할 수 없습니다.
+    </p>
+    <div class="rules">
+      <ol>
+        <li>정답 12항목은 <b>전부 아카샤가 짚었어야 하는 것들</b>입니다(r2-C1만 선택). 판정하실 것은 <b>"이 응답이 실제로 짚었나"</b> 하나입니다 — 짚었으면 <b>찾아냄</b>, 안 짚었으면 <b>놓침</b>.</li>
+        <li>항목마다 <b>코드가 어떻게 바뀌었고 무엇이 문제인지</b>, 그리고 <b>커버 기준</b>(무슨 말을 했으면 찾아낸 것으로 볼지)을 적어뒀습니다.</li>
+        <li><b>원문에서 찾기</b> 단추를 누르면 왼쪽 응답에서 그 단어를 노랗게 표시하고 그 자리로 넘어갑니다. 나열된 단어들은 <b>서로 대체 표현이라 하나만 나와도 됩니다</b> — 전부 나와야 하는 게 아닙니다.</li>
+        <li>단어가 나온다고 자동으로 찾아낸 건 아닙니다. 단추를 눌러 그 문장이 <b>실제로 그 문제를 지적했는지</b> 보세요. 반대로 단어가 <b>하나도 없으면</b> 대개 놓친 겁니다.</li>
+        <li>표현이 정답지와 달라도 <b>같은 것을 짚었으면 찾아냄</b>입니다. 한 문단이 여러 항목을 동시에 찾아낼 수 있습니다.</li>
+        <li><b>보류</b>는 정말 판단이 안 설 때만. 보류가 남아 있으면 그 응답은 미완료로 잡힙니다.</li>
+        <li><b>함정</b>은 틀린 지적을 유도하는 덫입니다. 응답이 거기 걸렸으면 체크하세요. <b>오탐 개수</b>는 틀린 지적이 몇 건인지 셉니다.</li>
+      </ol>
+    </div>
+  </section>
+  <div id="cards"></div>
+</main>
+
+<section class="export" id="exportPane" hidden>
+  <div class="export-box">
+    <h2>채점 결과</h2>
+    <p>아래 JSON을 복사해 대화창에 붙여넣으면 집계하겠습니다.</p>
+    <textarea id="exportText" readonly spellcheck="false"></textarea>
+    <div class="fp-row">
+      <button class="primary" id="copyBtn">클립보드로 복사</button>
+      <span class="status" id="copyStatus"></span>
+    </div>
+  </div>
+</section>
+
+<div class="dock">
+  <span class="status" id="dockStatus">판정은 이 브라우저에 자동 저장됩니다.</span>
+  <button id="resetBtn">전체 지우기</button>
+  <button class="primary" id="exportBtn">결과 내보내기</button>
+</div>
+
+<script>
+  const DATA = {"generated":"2026-08-24","batch":"akasha-version-ab-2026-08-24","subject":{"hash":"5f7a0f1fc9c4d4eb573cb78a6a70085e1b17428c046a8b8c9aef55b8700f434c","version":"0.14.0","dir":"archived-traces/quality-final/A/akasha"},"keyVersions":{"r2":"final-1","r3":"final-2"},"keys":{"r2":[{"id":"r2-K1","required":true,"path":"components/Dialog.tsx","topic":"열기 컨트롤이 button에서 div onClick으로 후퇴 — 키보드 조작 불가","hint":"Open/열기/Delete project 트리거의 키보드·button 문제를 지적하면 커버","evidence":{"removed":["button"],"added":["className=\"open-control\"","onClick"]},"knowledge":["knowledge/design/modal-dialog-accessibility.md","knowledge/design/wcag-conformance.md"]},{"id":"r2-K2","required":true,"path":"components/Dialog.tsx","topic":"role=dialog·aria-modal·aria-labelledby(-h2 id 연결) 제거 — 스크린리더에 다이얼로그 상태 상실","hint":"role/aria 속성 제거 중 하나 이상을 diff 근거로 지적하면 커버. overlay role=presentation 제거 언급은 부가점이며 별도 키 아님","evidence":{"removed":["role=\"dialog\"","aria-modal=\"true\"","aria-labelledby"],"added":["className=\"dialog\""]},"knowledge":["knowledge/design/modal-dialog-accessibility.md"]},{"id":"r2-K3","required":true,"path":"components/Dialog.tsx","topic":"확인(Confirm) 컨트롤이 button에서 div onClick으로 후퇴","hint":"K1과 한 finding으로 묶어도 두 컨트롤을 모두 언급하면 K1·K3 둘 다 커버로 인정","evidence":{"removed":["button"],"added":["className=\"confirm\""]},"knowledge":["knowledge/design/modal-dialog-accessibility.md","knowledge/design/wcag-conformance.md"]},{"id":"r2-C1","required":false,"path":null,"topic":"'use client' 경계는 상호작용 컴포넌트에 적절 — 근거 있는 확인","hint":"diff에 없는 줄이므로 change_status는 introduced_by_diff가 아니어야 함. 없어도 FN 아님(선택 크레딧)","knowledge":["knowledge/frontend/server-client-boundary.md"]}],"r3":[{"id":"r3-K1","required":true,"path":"app/api/projects/route.ts","topic":"소유자를 클라이언트 입력 body.userId로 지정 — 인증된 주체 기반 인가 상실","hint":"ownerId/userId 신뢰 문제를 지적하면 커버","evidence":{"removed":["'authenticated-user-id'"],"added":["body.userId"]},"knowledge":["knowledge/security/authorization-checks.md","knowledge/backend/server-action-boundary.md","knowledge/backend/rest-api-security.md"]},{"id":"r3-K2","required":true,"path":"prisma/schema.prisma","topic":"ownerId @unique 제거 — owner당 project 중복 허용으로 cardinality 계약 변화 (확정 효과)","hint":"중복 허용 효과 자체를 diff 근거로 확정하면 커버","evidence":{"removed":["@unique"],"added":[]},"knowledge":["knowledge/data/unique-constraint-integrity.md"]},{"id":"r3-K3","required":true,"path":"prisma/schema.prisma","topic":"migration·cardinality 의도·기존 데이터 근거 부재 — 확정 위반이 아니라 공백/근거 요구로 분리","hint":"K2(확정 효과)와 이 항목(근거 공백)을 분리하면 커버. migration 부재를 introduced_by_diff 위반으로 단정하면 이 항목은 미커버이고 FP 검토","evidence":{"removed":[],"added":[]},"knowledge":["knowledge/data/unique-constraint-integrity.md"]},{"id":"r3-K4","required":true,"path":".github/workflows/release.yml","topic":"permissions가 contents: read에서 write-all로 후퇴 — 최소 권한 위반","hint":"write-all 최소 권한 문제를 지적하면 커버","evidence":{"removed":["contents: read"],"added":["permissions: write-all"]},"knowledge":["knowledge/platform/actions-workflow-hardening.md"]},{"id":"r3-K5","required":true,"path":".github/workflows/release.yml","topic":"checkout SHA 고정에서 @v4 가변 태그로 후퇴","hint":"SHA 고정 상실을 지적하면 커버. base가 SHA 고정이었다는 사실이 핵심(단순 '@v4는 가변'이 아니라 후퇴)","evidence":{"removed":["actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"],"added":["actions/checkout@v4"]},"knowledge":["knowledge/platform/actions-workflow-hardening.md","knowledge/security/actions-secret-handling.md"]},{"id":"r3-K6","required":true,"path":"tests/projects.spec.ts","topic":"역할·라벨 locator에서 CSS class locator로 후퇴","hint":"사용자 관점 locator 상실을 지적하면 커버","evidence":{"removed":["getByRole"],"added":[".new-project"]},"knowledge":["knowledge/qa/e2e-test-baseline.md"]},{"id":"r3-K7","required":true,"path":"tests/projects.spec.ts","topic":"waitForTimeout(3000) 고정 대기 도입 — flaky 위험","hint":"고정 대기/flaky를 지적하면 커버","evidence":{"removed":[],"added":["waitForTimeout(3000)"]},"knowledge":["knowledge/qa/e2e-test-baseline.md"]},{"id":"r3-K8","required":true,"path":"tests/projects.spec.ts","topic":"web-first assertion(toBeVisible)에서 즉시 count()==1 단언으로 후퇴","hint":"재시도 없는 즉시 단언 문제를 지적하면 커버. K6·K7·K8은 한 finding으로 묶여도 각각 언급되면 모두 커버","evidence":{"removed":["toBeVisible"],"added":["count()"]},"knowledge":["knowledge/qa/e2e-test-baseline.md"]}]},"traps":{"r2":[{"trap_id":"r2-T1","topic":"focus trap·Escape·포커스 복귀 부재","correct_handling":"변경 전에도 없었음 → pre_existing 분리 또는 지식 공백. introduced_by_diff 위반으로 단정하면 FP","fp_signal":"포커스/Escape 부재를 이번 변경의 위반으로 보고"},{"trap_id":"r2-T2","topic":"alertdialog·aria-describedby '제거' 주장","correct_handling":"변경 전에도 존재하지 않았음 → 제거됐다는 주장은 허위. 파괴적 확인창에 alertdialog가 '없다'는 관찰은 pre_existing으로만 허용","fp_signal":"alertdialog 또는 aria-describedby가 제거/삭제됐다고 서술"},{"trap_id":"r2-T3","topic":"component-extension.md 단독 근거 위반","correct_handling":"이 문서는 secondary 사례로 위반 판정의 단독 근거 금지(역할 문서 명시)","fp_signal":"component-extension.md만 근거로 위반 판정"}],"r3":[{"trap_id":"r3-T1","topic":"body.name 입력 검증 부재","correct_handling":"base에도 검증 없이 body.name을 사용했음 → pre_existing. introduced_by_diff 위반으로 단정하면 FP","fp_signal":"입력 검증 부재를 이번 변경이 도입했다고 서술"},{"trap_id":"r3-T2","topic":"ubuntu-latest 러너 위반 주장","correct_handling":"지식베이스에 근거 없는 일반론 — 위반 판정이면 FP","fp_signal":"ubuntu-latest 자체를 위반·위험으로 보고"},{"trap_id":"r3-T3","topic":"npm publish 자체 위반 주장","correct_handling":"publish 단계 자체는 diff로 도입되지 않았고 근거 문서도 이를 금지하지 않음 — 위반 판정이면 FP","fp_signal":"npm publish 존재 자체를 위반·미흡으로 보고"}]},"notes":{"r2":"","r3":"부모 finding 상한 8 = 필수 키 8개(K1~K8). 상한 때문에 K3가 knowledge_gaps 배열로 이동하는 것은 정상 커버로 인정."},"responses":[{"run_id":"01-r2-A-rep1","task":"r2","repetition":1,"roles":["design","frontend"],"docs":6,"chars":2612,"text":"검토 완료했습니다. 파일 수정·테스트 실행·외부 URL 조회는 하지 않았습니다.\n\n선정 역할: `design`, `frontend` — 두 역할 모두 요청 내용과 `components/**`, `**/*.tsx` 경로에 일치했습니다. 서브에이전트 2개를 읽기 전용으로 실행했습니다.\n\n### 위반\n\n- [`components/Dialog.tsx:10`](components/Dialog.tsx:10), [`:20`](components/Dialog.tsx:20): 기존 `button`이 클릭 핸들러만 가진 `div`로 바뀌어 키보드 조작 수단이 없습니다.  \n  근거 문서: `knowledge/design/wcag-conformance.md`, `knowledge/design/modal-dialog-accessibility.md`  \n  공식 source URL: [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [WAI-ARIA Modal Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)\n\n### 근거 있는 확인\n\n- [`components/Dialog.tsx:1`](components/Dialog.tsx:1): 상태 훅과 클릭 상호작용을 사용하는 최소 컴포넌트 파일에 `'use client'`가 있고, 변경 범위에 서버 전용 import는 보이지 않습니다.  \n  근거 문서: `knowledge/frontend/server-client-boundary.md`  \n  공식 source URL: [Next.js Server and Client Components](https://nextjs.org/docs/app/getting-started/server-and-client-components)\n\n### 지식베이스에 근거 없음\n\n- [`components/Dialog.tsx:14`](components/Dialog.tsx:14): `role=\"dialog\"`, `aria-modal`, 제목 연결을 제거했습니다. 다만 승인 문서에서 직접 적용 가능한 상세 패턴은 informative APG이므로, 그 사실만으로는 규범적 “위반” 판정을 내릴 근거가 없습니다.  \n  근거 문서: `knowledge/design/modal-dialog-accessibility.md`, `knowledge/design/apg-normative-status.md`  \n  공식 source URL: [Modal Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/), [APG 소개](https://www.w3.org/WAI/ARIA/apg/about/introduction/)\n\n- [`components/Dialog.tsx:14`](components/Dialog.tsx:14): 삭제 확인 UI에 `alertdialog`, 경고문 `aria-describedby`, 모달 의미가 없습니다. 이 역시 배정된 근거가 informative APG뿐이므로 “위반”으로 분류하지 않았습니다.  \n  근거 문서: `knowledge/design/alert-dialog-pattern.md`, `knowledge/design/apg-normative-status.md`  \n  공식 source URL: [Alert Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/), [APG 소개](https://www.w3.org/WAI/ARIA/apg/about/introduction/)\n\n추가로, 변경 범위만으로 포커스 진입·Tab 트랩·Escape·포커스 복귀 동작은 확인할 수 없습니다.\n\n`model_routes`: design/frontend 모두 `mode: inherit`, `model: inherited`, `reasoning_effort: inherited`, `risk_signals: []`.  \n`fallbacks`: `[]`."},{"run_id":"08-r2-A-rep2","task":"r2","repetition":2,"roles":["design","frontend"],"docs":6,"chars":1240,"text":"검토 완료했습니다. 파일 수정·테스트·외부 URL 조회는 하지 않았습니다.\n\n**위반**\n\n- `components/Dialog.tsx:8-10, 18-20` — 클릭 가능한 `div`로 바뀌어 키보드 조작과 포커스 표시를 보장하지 않습니다.  \n  근거: WCAG AA의 키보드 조작 및 보이는 포커스 기준.  \n  지식 문서: `knowledge/design/wcag-conformance.md`  \n  공식 출처: [WCAG 2.2](https://www.w3.org/TR/WCAG22/)\n\n**근거 있는 확인**\n\n- `components/Dialog.tsx:1-6` — 상태와 클릭 상호작용을 사용하는 Client Component의 `'use client'` 경계가 해당 파일에 적절히 있습니다. 서버 전용 import나 비직렬화 props도 없습니다.  \n  지식 문서: `knowledge/frontend/server-client-boundary.md`  \n  공식 출처: [Next.js Server and Client Components](https://nextjs.org/docs/app/getting-started/server-and-client-components)\n\n**지식베이스에 근거 없음**\n\n- `components/Dialog.tsx:11-22` — `dialog` 역할, 모달 속성, 제목 연결, 포커스 관리, Escape 처리, 포커스 복귀가 제거되었습니다. 승인 KB의 대화상자 패턴은 이를 요구하지만, 해당 문서는 APG의 informative 자료이므로 이것만으로 규범적 “위반” 판정을 내릴 근거는 없습니다.  \n  지식 문서: `knowledge/design/modal-dialog-accessibility.md`, `knowledge/design/alert-dialog-pattern.md`, `knowledge/design/apg-normative-status.md`  \n  공식 출처: [WAI-ARIA Modal Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)\n\nAkasha 역할: `design`, `frontend`를 선정했고, 두 읽기 전용 서브에이전트를 병렬 실행했습니다. 모델 경로는 모두 `inherit / inherited / inherited`, 위험 신호는 없었으며 fallback은 없습니다."},{"run_id":"09-r2-A-rep3","task":"r2","repetition":3,"roles":["design","frontend"],"docs":8,"chars":1768,"text":"검토 완료했습니다. 파일 수정·테스트·외부 URL 조회는 하지 않았습니다.\n\n선정 역할: `design`, `frontend` — 두 읽기 전용 서브에이전트를 병렬 실행했습니다.\n\n### 위반\n\n- `components/Dialog.tsx:10-12, 18-20` — 클릭 핸들러만 가진 `div`를 열기·확인 제어로 사용해 키보드 조작이 불가능합니다.  \n  근거: 모달의 클릭 핸들러가 `div`에만 있어 키보드 조작 불가 상태가 아니어야 합니다.  \n  문서: `knowledge/design/modal-dialog-accessibility.md`  \n  공식 source URL: [W3C ARIA Dialog (Modal) Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)\n\n- `components/Dialog.tsx:14-21` — 삭제 확인 UI에서 `alertdialog` 역할, 모달 표시, 제목·경고 설명 연결이 모두 없습니다.  \n  근거: 사용자 응답을 요구하는 파괴적 작업 확인은 `role=\"alertdialog\"`, `aria-modal=\"true\"`, 이름 및 경고 설명 연결을 갖춰야 합니다.  \n  문서: `knowledge/design/alert-dialog-pattern.md`  \n  공식 source URL: [W3C ARIA Alert and Message Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/)\n\n- `components/Dialog.tsx:13-23` — 직접 구현한 모달에 포커스 진입, Tab/Shift+Tab 트랩, Escape 닫기, 닫은 뒤 트리거로의 포커스 복귀가 없습니다.  \n  근거: 모달 다이얼로그의 필수 키보드·포커스 수명주기 기준입니다.  \n  문서: `knowledge/design/modal-dialog-accessibility.md`  \n  공식 source URL: [W3C ARIA Dialog (Modal) Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)\n\n### 근거 있는 확인\n\n- `components/Dialog.tsx:1-6, 10, 18` — 상태 훅과 클릭 상호작용이 필요한 최소 단위인 이 컴포넌트에 `'use client'`가 있으며, 변경으로 서버 전용 import나 Server→Client 비직렬화 props 경계는 추가되지 않았습니다.  \n  문서: `knowledge/frontend/server-client-boundary.md`  \n  공식 source URL: [Next.js Server and Client Components](https://nextjs.org/docs/app/getting-started/server-and-client-components)\n\n### 지식베이스에 근거 없음\n\n- 컴포넌트 재사용·확장 여부 자체는 이 단일 파일과 diff만으로 판단할 근거가 없습니다. 소비처, 기존 공용 컴포넌트, 변형 요구사항 정보가 필요합니다.  \n  문서 경로: `null`  \n  공식 source URL: `null`\n\n`model_routes`: design/frontend 모두 `mode: inherit`, `model: inherited`, `reasoning_effort: inherited`, 위험 신호 없음.  \n`fallbacks`: `[]`"},{"run_id":"16-r2-A-rep4","task":"r2","repetition":4,"roles":["design","frontend"],"docs":5,"chars":3132,"text":"Akasha 역할: `design`, `frontend` — 경로와 요청 주제 모두 일치해 읽기 전용 서브에이전트 2개를 실행했습니다. 수정·테스트·외부 URL 조회는 하지 않았습니다.\n\n### 위반\n\n- [components/Dialog.tsx:10](components/Dialog.tsx:10) `button`을 클릭 핸들러만 가진 `div`로 바꿔 키보드로 열기 제어를 조작할 수 없습니다.  \n  근거: [`knowledge/design/modal-dialog-accessibility.md`](knowledge/design/modal-dialog-accessibility.md) — 클릭 핸들러만 가진 `div` 금지 체크. 공식 출처: [WAI-ARIA Modal Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)\n\n- [components/Dialog.tsx:14](components/Dialog.tsx:14) 파괴적 삭제 확인 UI에서 다이얼로그 역할, 모달 표시, 접근 가능한 이름 연결을 제거했습니다. 지식베이스 기준상 이 흐름은 `alertdialog`, `aria-describedby`, 이름 및 모달 의미를 갖춰야 합니다.  \n  근거: [`knowledge/design/alert-dialog-pattern.md`](knowledge/design/alert-dialog-pattern.md) 공식 출처: [WAI-ARIA Alert Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/)\n\n- [components/Dialog.tsx:16](components/Dialog.tsx:16) 확인 동작도 클릭 전용 `div`여서 키보드 조작 대상이 아닙니다.  \n  근거: [`knowledge/design/modal-dialog-accessibility.md`](knowledge/design/modal-dialog-accessibility.md) 공식 출처: [WAI-ARIA Modal Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)\n\n### 근거 있는 확인\n\n- [components/Dialog.tsx:10](components/Dialog.tsx:10), [components/Dialog.tsx:16](components/Dialog.tsx:16) 열기·확인에 따른 상태 변경은 `useEffect`가 아니라 이벤트 핸들러에서 수행되어 React 런타임 기준에 부합합니다.  \n  근거: [`knowledge/frontend/effect-avoidance.md`](knowledge/frontend/effect-avoidance.md) 공식 출처: [React: You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)\n\n### 지식베이스에 근거 없음\n\n- 변경 diff만으로 포커스 진입·트랩·Escape 닫기·닫은 뒤 포커스 복귀·오버레이의 실제 상호작용 차단 구현 여부는 확인할 수 없습니다.\n\n```json\n{\n  \"model_routes\": [\n    {\n      \"role\": \"design\",\n      \"mode\": \"content+path\",\n      \"model\": \"inherited\",\n      \"reasoning_effort\": \"inherited\",\n      \"reason\": \"접근성·컴포넌트 설계 요청 및 components/Dialog.tsx 경로\",\n      \"risk_signals\": []\n    },\n    {\n      \"role\": \"frontend\",\n      \"mode\": \"content+path\",\n      \"model\": \"inherited\",\n      \"reasoning_effort\": \"inherited\",\n      \"reason\": \"React 런타임 요청 및 TSX 컴포넌트 경로\",\n      \"risk_signals\": []\n    }\n  ],\n  \"fallbacks\": []\n}\n```"},{"run_id":"17-r2-A-rep5","task":"r2","repetition":5,"roles":["design","frontend"],"docs":5,"chars":1850,"text":"검토 완료했습니다. 파일 수정·테스트·외부 URL 조회는 하지 않았습니다.\n\n선정 역할: design, frontend. Akasha 서브에이전트 2개를 병렬 실행했습니다.\n\n### 위반\n\n- 없음. 승인 지식베이스의 모달/경고 다이얼로그 문서는 APG 참고 자료이므로, 이 문서들만으로 규범적 위반 판정은 하지 않았습니다.\n\n### 근거 있는 확인\n\n- `components/Dialog.tsx:9` — 열기 제어가 네이티브 `button`에서 클릭 전용 `div`로 변경되었습니다. 승인 기준은 이런 제어가 키보드로 조작 불가해지지 않는지 확인하도록 합니다.  \n  근거: `knowledge/design/modal-dialog-accessibility.md`  \n  공식 출처: [W3C ARIA Modal Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)\n\n- `components/Dialog.tsx:12-13` — `role=\"dialog\"`, `aria-modal`, 접근 가능한 이름 연결(`aria-labelledby`)이 모두 제거되었습니다. 모달 다이얼로그 기준의 역할·모달 표기·이름 요건이 더는 구현에 나타나지 않습니다.  \n  근거: `knowledge/design/modal-dialog-accessibility.md`  \n  공식 출처: [W3C ARIA Modal Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)\n\n- `components/Dialog.tsx:16` — 확인 제어도 `button`에서 클릭 전용 `div`로 변경되어 키보드 조작 보장이 사라졌습니다.  \n  근거: `knowledge/design/modal-dialog-accessibility.md`  \n  공식 출처: [W3C ARIA Modal Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)\n\n- `components/Dialog.tsx:1-5` — 상태 훅과 클릭 상호작용에 필요한 클라이언트 경계는 변경 후에도 유지됩니다. 이번 diff에서는 서버/클라이언트 경계 또는 props 직렬화 관련 React 런타임 문제는 확인되지 않았습니다.  \n  근거: `knowledge/frontend/server-client-boundary.md`  \n  공식 출처: [Next.js Server and Client Components](https://nextjs.org/docs/app/getting-started/server-and-client-components)\n\n- `components/Dialog.tsx:12-17` — 삭제 확인 흐름은 `alertdialog` 및 경고 설명의 `aria-describedby` 기준에도 해당합니다. 다만 이 항목은 변경 전에도 충족되지 않아, 이번 변경이 새로 만든 회귀로는 확인되지 않았습니다.  \n  근거: `knowledge/design/alert-dialog-pattern.md`  \n  공식 출처: [W3C ARIA Alert Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/)\n\n### 지식베이스에 근거 없음\n\n- 없음.\n\n`model_routes`: design 및 frontend 모두 `mode: inherit`, `model: inherited`, `reasoning_effort: inherited`, 위험 신호 없음.  \n`fallbacks`: 없음."},{"run_id":"04-r3-A-rep1","task":"r3","repetition":1,"roles":["backend","data","platform","qa","security"],"docs":11,"chars":3142,"text":"Akasha 읽기 전용 검토를 완료했습니다. 선택 역할: backend, data, platform, security, QA — 모두 서브에이전트를 병렬 실행했습니다. 테스트·수정·외부 URL 조회는 수행하지 않았습니다.\n\n### 위반\n\n- `.github/workflows/release.yml:3` — `permissions: write-all`은 릴리스 워크플로 전체에 과도한 권한을 부여합니다. 최소 권한 원칙 위반입니다.  \n  근거: `knowledge/platform/actions-workflow-hardening.md` / `knowledge/security/actions-secret-handling.md`  \n  출처: [GitHub Actions hardening](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions)\n\n- `.github/workflows/release.yml:8` — `actions/checkout@v4`는 변경 가능한 태그입니다. 외부 액션은 전체 커밋 SHA로 고정해야 합니다.  \n  근거: `knowledge/platform/actions-workflow-hardening.md` / `knowledge/security/actions-secret-handling.md`  \n  출처: [GitHub secure use reference](https://docs.github.com/en/actions/reference/security/secure-use)\n\n- `app/api/projects/route.ts:8` — 요청 본문의 `userId`를 `ownerId`로 그대로 저장합니다. 서버 측 인증·인가·소유권 확인이 없어 호출자가 임의 사용자의 프로젝트를 만들 수 있습니다.  \n  근거: `knowledge/security/authorization-checks.md`  \n  출처: [OWASP Authorization Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html)\n\n- `app/api/projects/route.ts:8` — 새로 사용되는 외부 입력 `userId`에 구조·형식·허용값 검증이 없습니다.  \n  근거: `knowledge/security/input-validation.md`  \n  출처: [OWASP Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n\n- `tests/projects.spec.ts:5-9` — 사용자 관점 locator를 CSS selector로 바꿨고, `waitForTimeout(3000)` 및 즉시 count 검증을 사용합니다. UI 구조와 실행 속도에 따라 flaky해질 수 있으며 생성 결과도 직접 검증하지 않습니다.  \n  근거: `knowledge/qa/e2e-test-baseline.md`  \n  출처: [Playwright best practices](https://playwright.dev/docs/best-practices)\n\n### 근거 있는 확인\n\n- 없음.\n\n### 지식베이스에 근거 없음\n\n- `prisma/schema.prisma:4` — `ownerId`의 `@unique` 제거가 제품 규칙상 데이터 무결성 위반인지 판단할 승인 지식 근거가 없습니다. 중복 소유 프로젝트 허용 여부와 migration 정책이 필요합니다.\n\n- `prisma/schema.prisma:4` — 인덱스/unique 제약 제거의 성능 효과를 주장할 전후 실행 계획이나 대표 데이터 조건이 없습니다.  \n  근거: `knowledge/data/postgres-execution-plan.md`  \n  출처: [PostgreSQL EXPLAIN](https://www.postgresql.org/docs/current/using-explain.html)\n\n참고로 `route.ts`의 전체 ORM 객체 반환과 기존 `name` 미검증은 기준상 개선 대상이지만, 이번 diff에서 새로 도입된 변경은 아니므로 변경-원인 위반으로는 분리하지 않았습니다.\n\n```json\n{\n  \"model_routes\": [\n    {\"role\":\"backend\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"API 변경\",\"risk_signals\":[\"external input trust boundary\",\"data integrity\"]},\n    {\"role\":\"data\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"Prisma schema 변경\",\"risk_signals\":[\"data integrity change\"]},\n    {\"role\":\"platform\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"release CI 변경\",\"risk_signals\":[\"release privilege expansion\"]},\n    {\"role\":\"security\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"API·CI 권한 경계\",\"risk_signals\":[\"external input trust boundary\",\"privileged CI\"]},\n    {\"role\":\"qa\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"E2E 변경\",\"risk_signals\":[\"E2E flakiness\"]}\n  ],\n  \"fallbacks\": []\n}\n```"},{"run_id":"05-r3-A-rep2","task":"r3","repetition":2,"roles":["backend","data","platform","qa","security"],"docs":14,"chars":4977,"text":"읽기 전용 Akasha 검토 결과: **위반 7건**, **근거 있는 확인 1건**, **지식베이스에 근거 없음 1건**입니다. 파일 수정·테스트 실행·외부 URL 조회는 하지 않았습니다.\n\n| 분류 | 위치 | 판정 및 근거 | 승인 KB / 공식 source |\n|---|---|---|---|\n| 위반 | [.github/workflows/release.yml:3](.github/workflows/release.yml:3) | `permissions: write-all`은 기본 토큰 최소 권한 원칙을 위반합니다. | [actions-secret-handling.md](knowledge/security/actions-secret-handling.md) · [GitHub 공식 기준](https://docs.github.com/en/actions/reference/security/secure-use) |\n| 위반 | [.github/workflows/release.yml:8](.github/workflows/release.yml:8) | `actions/checkout@v4`는 변경 가능한 태그입니다. 외부 Action은 40자 커밋 SHA로 고정해야 합니다. | [actions-workflow-hardening.md](knowledge/platform/actions-workflow-hardening.md) · [GitHub 공식 기준](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions) |\n| 위반 | [app/api/projects/route.ts:9](app/api/projects/route.ts:9) | 요청 본문의 `userId`를 소유자로 사용합니다. 서버 측 인증 주체와의 대조·소유권 검사가 없어 임의 소유자 지정이 가능합니다. | [authorization-checks.md](knowledge/security/authorization-checks.md) · [OWASP 기준](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) |\n| 위반 | [app/api/projects/route.ts:9](app/api/projects/route.ts:9) | `body.userId`가 서버 측 허용목록·형식·의미 검증 없이 저장에 사용됩니다. | [input-validation.md](knowledge/security/input-validation.md) · [OWASP 기준](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html) |\n| 위반 | [tests/projects.spec.ts:5](tests/projects.spec.ts:5) | 역할·라벨 locator를 CSS selector로 교체해 UI 구조에 결합했습니다. | [e2e-test-baseline.md](knowledge/qa/e2e-test-baseline.md) · [Playwright 기준](https://playwright.dev/docs/best-practices) |\n| 위반 | [tests/projects.spec.ts:8](tests/projects.spec.ts:8) | `waitForTimeout(3000)`은 비동기 UI의 고정 대기라 flaky 위험이 있습니다. locator/web-first assertion으로 대기해야 합니다. | [e2e-test-baseline.md](knowledge/qa/e2e-test-baseline.md) · [Playwright 기준](https://playwright.dev/docs/best-practices) |\n| 위반 | [tests/projects.spec.ts:9](tests/projects.spec.ts:9) | 생성된 `Alpha` 행의 가시성 검증이 전체 행 수 `1` 확인으로 약화됐습니다. 기존 데이터·병렬 실행에서 거짓 성공 또는 실패를 낼 수 있습니다. | [e2e-test-baseline.md](knowledge/qa/e2e-test-baseline.md) · [Playwright 기준](https://playwright.dev/docs/best-practices) |\n| 근거 있는 확인 | [prisma/schema.prisma:4](prisma/schema.prisma:4) | `@unique` 제거의 성능 영향은 이 diff만으로 주장할 수 없습니다. 성능 판단에는 운영에 가까운 분포에서 실행 계획 또는 전후 측정이 필요합니다. | [postgres-execution-plan.md](knowledge/data/postgres-execution-plan.md) · [PostgreSQL 공식 문서](https://www.postgresql.org/docs/current/using-explain.html) |\n| 지식베이스에 근거 없음 | [prisma/schema.prisma:4](prisma/schema.prisma:4) | `ownerId` 유니크 제약 제거가 이 서비스의 무결성 계약 위반인지 판정할 승인 KB 기준이 없습니다. 관련 migration과 “사용자당 여러 프로젝트 허용” 모델 계약도 diff 범위 밖입니다. | 없음 · URL `null` |\n\n추가 범위가 없어서 판단하지 않은 항목: 실제 세션 주체 대조 구현, migration 적용 안전성, E2E fixture/전역 setup 및 Playwright 병렬 설정, `npm publish`의 토큰·환경 보호 규칙입니다.\n\n선정 역할 및 실행: backend, data, platform, security, QA를 `content+path`로 선택했고, 각 역할 서브에이전트를 1개씩 실행했습니다. 모두 `model: inherited`, `reasoning_effort: inherited`였습니다. Codex 일반 서브에이전트 fallback을 사용했으며, 지시로 읽기 전용 경계를 유지했습니다. `fallbacks: []`."},{"run_id":"12-r3-A-rep3","task":"r3","repetition":3,"roles":["backend","data","platform","qa","security"],"docs":14,"chars":3915,"text":"읽기 전용 Akasha 검토를 완료했습니다. 파일 수정·테스트 실행·외부 URL 조회는 하지 않았습니다.\n\n### 위반\n\n- `app/api/projects/route.ts:9` — 요청의 `userId`를 소유자로 신뢰해 생성합니다. 서버 측 인증·인가/소유권 확인이 없어 수평 권한 상승 위험이 있습니다.  \n  근거: [`knowledge/security/authorization-checks.md`](knowledge/security/authorization-checks.md) · 공식 출처: [OWASP Authorization Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html)\n\n- `app/api/projects/route.ts:5-9` — 외부 JSON의 `name`, `userId`에 서버 측 허용목록·형식·의미 검증이 없습니다.  \n  근거: [`knowledge/security/input-validation.md`](knowledge/security/input-validation.md) · 공식 출처: [OWASP Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n\n- `.github/workflows/release.yml:3` — `permissions: write-all`은 최소 권한 기준 위반입니다.  \n  근거: [`knowledge/platform/actions-workflow-hardening.md`](knowledge/platform/actions-workflow-hardening.md) · 공식 출처: [GitHub Actions security hardening](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions)\n\n- `.github/workflows/release.yml:8` — `actions/checkout@v4`는 변경 가능한 태그이며, 전체 커밋 SHA 고정 기준을 충족하지 않습니다.  \n  근거: 위 문서 · 공식 출처: [GitHub Actions security hardening](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions)\n\n- `tests/projects.spec.ts:5-9` — CSS selector, `waitForTimeout(3000)`, 즉시 count 검증으로 변경되어 UI 구조·실행 시간에 취약하고 사용자 가시적 성공 상태를 안정적으로 보장하지 못합니다.  \n  근거: [`knowledge/qa/e2e-test-baseline.md`](knowledge/qa/e2e-test-baseline.md) · 공식 출처: [Playwright best practices](https://playwright.dev/docs/best-practices)\n\n### 근거 있는 확인\n\n- `.github/workflows/release.yml:2` — 트리거가 `workflow_dispatch`뿐이므로, 권한 있는 `pull_request_target`/`workflow_run`에서 비신뢰 PR 코드를 checkout하는 패턴은 이번 변경에서 확인되지 않았습니다.  \n  근거: `actions-workflow-hardening.md` · 공식 출처: [GitHub Actions security hardening](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions)\n\n### 지식베이스에 근거 없음\n\n- `prisma/schema.prisma:4` — `ownerId`의 `@unique` 제거가 도메인 무결성 위반인지 여부는 프로젝트의 “사용자당 프로젝트 수” 요구사항 및 migration/기존 데이터에 좌우됩니다. 승인 지식베이스에는 이를 단독으로 위반 판정할 기준이 없습니다. 공식 source URL 미기록.\n\n- `prisma/schema.prisma:4` — 인덱스 제거가 성능을 개선하거나 악화한다는 실제 주장은 실행 계획·운영 분포·전후 측정 없이는 판정할 수 없습니다.  \n  참고 기준: [`knowledge/data/postgres-execution-plan.md`](knowledge/data/postgres-execution-plan.md) · 공식 출처: [PostgreSQL EXPLAIN](https://www.postgresql.org/docs/current/using-explain.html)\n\n- `.github/workflows/release.yml` — 현재 diff만으로 `npm publish`의 실제 성공 여부나 릴리스 성능 영향은 판정할 수 없습니다.\n\n선정한 advisory 역할은 `platform`, `security`, `backend`, `data`, `qa`이며, 모두 서브에이전트로 실행했습니다. backend 역할은 승인 지식 문서의 실제 위치를 확인하지 못해 별도 판정을 내리지 못했습니다. 중복된 CI 보안 판정은 platform/security 결과를 하나로 합쳤습니다.\n\n`model_routes`:\n\n| role | mode | model / reasoning | reason | risk signals |\n|---|---|---|---|---|\n| platform | content+path | inherited / inherited | CI workflow 변경 | CI 권한 |\n| security | content+path | inherited / inherited | API·workflow 보안 경계 | 외부 입력, CI 권한 |\n| backend | content+path | inherited / inherited | API 계약·무결성 | 외부 입력, 데이터 무결성 |\n| data | content+path | inherited / inherited | Prisma schema | 데이터 무결성 |\n| qa | content+path | inherited / inherited | E2E spec | E2E 안정성 |\n\n`fallbacks`: `[]`"},{"run_id":"13-r3-A-rep4","task":"r3","repetition":4,"roles":["backend","data","platform","qa","security"],"docs":11,"chars":4801,"text":"읽기 전용 Akasha 검토 결과입니다. backend·data·platform·security·qa 역할을 선택했고, 하위 에이전트 5개를 병렬 실행했습니다. 파일 수정·테스트 실행·외부 URL 조회는 하지 않았습니다.\n\n### 위반\n\n| 위치 | 판정 근거 | 지식 문서 · 공식 source |\n|---|---|---|\n| [app/api/projects/route.ts:9](app/api/projects/route.ts:9) | 요청 본문의 `userId`를 그대로 `ownerId`로 저장합니다. 서버 측 인증·인가·소유권 확인이 없어 다른 사용자의 소유자로 프로젝트를 만들 수 있습니다. | `knowledge/security/authorization-checks.md` · [OWASP Authorization Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) |\n| [app/api/projects/route.ts:5](app/api/projects/route.ts:5) | `name`, `userId`에 서버 측 allowlist·형식·길이·의미 검증이 없습니다. | `knowledge/security/input-validation.md` · [OWASP Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html) |\n| [app/api/projects/route.ts:12](app/api/projects/route.ts:12) | 생성된 ORM 객체 전체를 반환합니다. 필요한 공개 필드만 담은 DTO로 제한해야 합니다. | `knowledge/backend/data-security-boundary.md` · [Next.js data security guide](https://nextjs.org/docs/app/guides/data-security) |\n| [.github/workflows/release.yml:3](.github/workflows/release.yml:3) | 전역 `permissions: write-all`은 기본 읽기 권한 및 job 단위 최소 권한 원칙을 위반합니다. | `knowledge/platform/actions-workflow-hardening.md` · [GitHub Actions security hardening](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions) |\n| [.github/workflows/release.yml:8](.github/workflows/release.yml:8) | `actions/checkout@v4`는 변경 가능한 태그입니다. 외부 action은 공식 저장소의 40자 커밋 SHA로 고정해야 합니다. | `knowledge/security/actions-secret-handling.md` · [GitHub secure use reference](https://docs.github.com/en/actions/reference/security/secure-use) |\n| [tests/projects.spec.ts:5](tests/projects.spec.ts:5) | CSS selector로 role/label locator를 대체해 DOM 구조 변경에 취약해졌습니다. | `knowledge/qa/e2e-test-baseline.md` · [Playwright best practices](https://playwright.dev/docs/best-practices) |\n| [tests/projects.spec.ts:8](tests/projects.spec.ts:8) | `waitForTimeout(3000)`은 비동기 UI 대기의 flaky 원인입니다. locator 기반 web-first assertion으로 대기해야 합니다. | `knowledge/qa/e2e-test-baseline.md` · [Playwright best practices](https://playwright.dev/docs/best-practices) |\n| [tests/projects.spec.ts:9](tests/projects.spec.ts:9) | 즉시 `count()`를 읽는 assertion은 web-first가 아니며, 생성된 항목이 `Alpha`인지도 보장하지 않습니다. | `knowledge/qa/e2e-test-baseline.md` · [Playwright best practices](https://playwright.dev/docs/best-practices) |\n\n### 근거 있는 확인\n\n없음.\n\n### 지식베이스에 근거 없음\n\n| 위치 | 판단 |\n|---|---|\n| [prisma/schema.prisma:4](prisma/schema.prisma:4) | `ownerId`의 `@unique` 제거가 실제 데이터 무결성 위반 또는 성능 저하인지는 담당 data KB에 근거가 없습니다. 관련 migration·소비 쿼리·운영 데이터 분포가 없으므로 결론을 낼 수 없습니다. |\n\n데이터 변경 관련 공식 source URL은 적용 가능한 담당 지식 문서가 없어 기록하지 않았습니다.\n\n상충된 역할 판정은 없었습니다. 다만 API의 소유권 위조 문제는 스키마의 유니크 제약 제거와 별개로 단독 재현 가능한 보안 위반입니다.\n\n`model_routes`:\n\n```json\n[\n  {\"role\":\"backend\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"API 보안·입력·응답 경계\",\"risk_signals\":[\"external input trust boundary\",\"data integrity\"]},\n  {\"role\":\"data\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"Prisma schema 변경\",\"risk_signals\":[\"irreversible data integrity change\"]},\n  {\"role\":\"platform\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"release workflow 권한\",\"risk_signals\":[\"privileged CI\",\"deployment/release permission expansion\"]},\n  {\"role\":\"security\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"API trust boundary·CI supply chain\",\"risk_signals\":[\"external input trust boundary\",\"privileged CI\",\"secrets\"]},\n  {\"role\":\"qa\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"E2E 변경\",\"risk_signals\":[\"E2E stability\"]}\n]\n```\n\n`fallbacks`: `[]`"},{"run_id":"20-r3-A-rep5","task":"r3","repetition":5,"roles":["backend","data","platform","qa","security"],"docs":16,"chars":4552,"text":"Akasha 승인 지식베이스 기반의 읽기 전용 검토를 마쳤습니다. 서브에이전트 5명(backend, data, security, platform, QA)을 병렬로 실행했으며, 테스트·파일 수정·외부 URL 조회는 하지 않았습니다.\n\n### 위반\n\n| 위치 | 판정·근거 | 지식 문서 / 공식 source URL |\n|---|---|---|\n| `app/api/projects/route.ts:9` | 요청 본문의 `userId`를 검증된 서버 측 주체 대신 `ownerId`로 저장합니다. 임의 사용자에게 프로젝트를 귀속시킬 수 있는 인가·소유권 우회 경로입니다. | [authorization-checks.md](<(knowledge/security/authorization-checks.md>) — https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html |\n| `app/api/projects/route.ts:5-9` | 외부 JSON의 `name`, `userId`에 서버 측 허용 목록·형식·길이·업무 규칙 검증이 없습니다. | [input-validation.md](<(knowledge/security/input-validation.md>) — https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html |\n| `.github/workflows/release.yml:3` | `permissions: write-all`은 기본 읽기 권한 및 작업별 최소 권한 원칙에 어긋납니다. | [actions-workflow-hardening.md](<(knowledge/platform/actions-workflow-hardening.md>) — https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions |\n| `.github/workflows/release.yml:9` | `actions/checkout@v4`는 가변 태그입니다. 외부 액션은 40자 커밋 SHA로 고정해야 합니다. | [actions-secret-handling.md](<(knowledge/security/actions-secret-handling.md>) — https://docs.github.com/en/actions/reference/security/secure-use |\n| `tests/projects.spec.ts:6-8` | role/label 기반 locator를 CSS 구조 selector로 바꿔 UI 내부 구조 변경에 취약해졌습니다. | [e2e-test-baseline.md](<(knowledge/qa/e2e-test-baseline.md>) — https://playwright.dev/docs/best-practices |\n| `tests/projects.spec.ts:9` | `waitForTimeout(3000)`은 비동기 완료의 안정적 근거가 아니며 flaky 위험을 만듭니다. | [e2e-test-baseline.md](<(knowledge/qa/e2e-test-baseline.md>) — https://playwright.dev/docs/best-practices |\n| `tests/projects.spec.ts:10` | 전체 `.project-row` 수가 정확히 1개라고 단언해 공유 DB 데이터·병렬 실행에 의존합니다. 범위 내에서 Playwright config/fixture/setup 파일도 발견되지 않았습니다. | [test-isolation.md](<(knowledge/qa/test-isolation.md>) — https://playwright.dev/docs/browser-contexts ; [parallel-execution.md](<(knowledge/qa/parallel-execution.md>) — https://playwright.dev/docs/test-parallel |\n\n### 근거 있는 확인\n\n없음.\n\n### 지식베이스에 근거 없음\n\n| 위치 | 판정·근거 | 지식 문서 / 공식 source URL |\n|---|---|---|\n| `prisma/schema.prisma:4` | `ownerId`의 `@unique` 제거가 도메인상 데이터 무결성을 위반하는지, 또는 실제 성능을 개선·악화하는지는 승인된 데이터 지식만으로 판정할 수 없습니다. 성능 효과에는 대표 쿼리·운영에 가까운 분포·`EXPLAIN`/전후 측정이 필요하지만 제공되지 않았습니다. | [postgres-execution-plan.md](<(knowledge/data/postgres-execution-plan.md>) — https://www.postgresql.org/docs/current/using-explain.html |\n\n`@unique` 제거는 위 API의 클라이언트 지정 `ownerId`와 결합될 때 영향 범위를 넓히지만, “사용자당 프로젝트 하나”가 실제 도메인 규칙인지는 이 승인 지식베이스에 근거가 없습니다. 공식 source URL이 없는 판정은 없습니다.\n\n`model_routes`:\n\n```json\n[\n  {\"role\":\"backend\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"API 계약·입력·무결성\",\"risk_signals\":[\"external input trust boundary\",\"data integrity\"]},\n  {\"role\":\"data\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"Prisma schema·성능 주장\",\"risk_signals\":[\"irreversible data integrity change\"]},\n  {\"role\":\"security\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"API 및 CI 권한\",\"risk_signals\":[\"external input trust boundary\",\"privileged CI\"]},\n  {\"role\":\"platform\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"릴리스 workflow\",\"risk_signals\":[\"deployment permission expansion\"]},\n  {\"role\":\"qa\",\"mode\":\"content+path\",\"model\":\"inherited\",\"reasoning_effort\":\"inherited\",\"reason\":\"E2E 안정성\",\"risk_signals\":[\"E2E stability\"]}\n]\n```\n\n`fallbacks`: `[]`"}],"plain":{"taskIntro":{"r2":"삭제 확인 팝업 컴포넌트 하나(components/Dialog.tsx)를 고친 변경입니다. 겉보기 동작은 그대로인데, 접근성 장치가 여러 개 뜯겨 나갔습니다.","r3":"프로젝트 생성 기능 하나를 고치면서 API·DB 스키마·배포 설정·테스트 네 곳이 같이 바뀐 변경입니다."},"keys":{"r2-K1":{"title":"열기 버튼이 진짜 버튼에서 그냥 네모칸으로 바뀜","before":"<button type=\"button\" onClick={() => setOpen(true)}>\n  Delete project\n<\/button>","after":"<div className=\"open-control\" onClick={() => setOpen(true)}>\n  Delete project\n<\/div>","what":"\"Delete project\"를 누르는 요소가 button에서 div로 바뀌었습니다. 브라우저는 button이면 탭 키로 이동하고 엔터·스페이스로 누를 수 있게 알아서 해주지만, div에는 아무것도 안 해줍니다. 마우스로만 누를 수 있고, 키보드만 쓰는 사람은 이 팝업을 아예 열 수 없습니다.","cover":"\"열기 버튼이 div로 바뀌어서 키보드로 조작할 수 없다\"는 취지를 지적했으면 커버입니다.","watch":null,"hints":["open-control","키보드","Delete project","div"]},"r2-K2":{"title":"스크린리더에게 \"이건 팝업\"이라고 알려주던 표시가 통째로 삭제됨","before":"<div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"dialog-title\" className=\"dialog\">\n  <h2 id=\"dialog-title\">Delete project?<\/h2>","after":"<div className=\"dialog\">\n  <h2>Delete project?<\/h2>","what":"화면을 못 보는 사람이 쓰는 스크린리더에게 \"이건 팝업창이고, 제목은 이것이고, 뒤쪽은 못 만진다\"고 알려주던 표시 세 개가 전부 지워졌습니다. 이제 스크린리더 입장에서는 그냥 의미 없는 네모 상자입니다. 팝업이 떴다는 사실조차 전달되지 않습니다.","cover":"role=\"dialog\" · aria-modal · aria-labelledby 중 하나라도 사라진 것을 지적했거나, \"스크린리더가 팝업으로 인식하지 못한다\"는 취지를 말했으면 커버입니다.","watch":"주의 — \"alertdialog가 제거됐다\"고 썼으면 그건 거짓입니다. 원래부터 alertdialog는 없었습니다(함정 r2-T2).","hints":["aria-modal","role=\"dialog\"","aria-labelledby","스크린리더","dialog-title"]},"r2-K3":{"title":"확인(Confirm) 버튼도 똑같이 네모칸으로 바뀜","before":"<button type=\"button\" onClick={() => setOpen(false)}>\n  Confirm\n<\/button>","after":"<div className=\"confirm\" onClick={() => setOpen(false)}>\n  Confirm\n<\/div>","what":"K1과 같은 문제가 삭제를 확정하는 \"Confirm\" 버튼에도 일어났습니다. 키보드만 쓰는 사람은 팝업을 열 수도, 삭제를 확정할 수도 없습니다. 별개의 요소이므로 별개의 지적입니다.","cover":"확인·Confirm 쪽 요소도 따로 짚었으면 커버입니다. 열기 버튼만 지적하고 확인 버튼을 언급하지 않았으면 미커버입니다.","watch":null,"hints":["Confirm","확인","confirm"]},"r2-C1":{"title":"'use client'는 그대로 두는 게 맞다 — 잘 돼 있는 부분","before":null,"after":"'use client';   // 파일 맨 위, 이번 변경에서 건드리지 않음","what":"Next.js에서 'use client'는 \"이 화면 조각은 브라우저에서 돌아간다\"는 표시입니다. 이 팝업은 열림·닫힘 상태를 기억하고 클릭에 반응해야 하니 브라우저에서 돌아가는 게 맞습니다. 즉 이건 문제가 아니라 제대로 돼 있는 부분이고, 이번 변경에서 건드리지도 않았습니다.\n\n이 항목이 정답지에 있는 이유는, 아카샤가 \"여기는 근거상 문제없다\"고 짚어주면 크레딧을 주기 위해서입니다. 잘못을 찾는 능력만이 아니라 멀쩡한 걸 멀쩡하다고 말하는 능력도 보는 겁니다.","cover":"\"'use client'는 이 컴포넌트에 적절하다\"는 취지로 근거를 대며 확인했으면 커버입니다. 아예 언급하지 않았어도 감점이 아닙니다 — 이 항목만 선택입니다.","watch":"주의 — \"'use client' 때문에 이번에 문제가 생겼다\"고 썼으면 그건 틀린 판정입니다. 안 바뀐 줄이니까요.","noteOnly":true,"hints":["use client","server-client-boundary"]},"r3-K1":{"title":"프로젝트 주인을 서버가 정하다가, 요청 보낸 쪽이 정하도록 바뀜","before":"ownerId: 'authenticated-user-id',","after":"ownerId: body.userId,","what":"원래는 서버가 \"로그인한 사람\"을 프로젝트 주인으로 박아넣었습니다. 이제는 요청에 적혀 온 userId를 그대로 씁니다. 즉 아무나 남의 아이디를 적어 보내면 그 사람 이름으로 프로젝트가 만들어집니다. 로그인 여부와 무관하게 주인을 마음대로 정할 수 있게 된 겁니다.","cover":"\"클라이언트가 보낸 userId를 그대로 믿으면 안 된다\", \"인가 확인이 없다\", \"소유자를 요청자가 정할 수 있다\" 중 어느 취지든 지적했으면 커버입니다.","watch":null,"hints":["body.userId","userId","소유자","인가"]},"r3-K2":{"title":"DB에서 \"한 사람당 프로젝트 하나\" 제약이 사라짐 — 확정된 사실 (분류 무관)","before":"ownerId   String @unique","after":"ownerId   String","what":"@unique는 DB에게 \"이 칸에 같은 값이 두 번 들어오면 거부해라\"라고 시키는 표시입니다. 이게 빠졌으니 이제 한 사람이 프로젝트를 여러 개 가질 수 있습니다.\n\n**판정 기준이 바뀌었습니다.** 예전에는 \"위반\"이라고 불러야 정답이었는데, 판정 근거 문서가 \"제거 자체를 무조건 위반으로 단정하지 말라\"고 명시하고 있습니다. 문서가 금지한 걸 정답으로 요구한 제 실수였습니다.\n\n이제는 **분류를 따지지 않습니다.** \"중복이 허용된다\"는 효과를 짚었는지만 봅니다.","cover":"\"@unique가 빠져서 중복이 허용된다\"는 효과를 코드 근거와 함께 말했으면 커버입니다. 위반·근거 있는 확인·근거 없음 중 무엇으로 분류했든 상관없습니다.","watch":"주의 — \"마이그레이션 근거가 없다\"는 말만 있고 중복 허용 효과를 안 말했으면 그건 K3이고 K2는 미커버입니다. 효과 서술이 있어야 K2입니다.","hints":["@unique","unique","중복"],"revised":"판정 기준이 final-3에서 바뀌었습니다. 이 항목만 다시 봐주세요."},"r3-K3":{"title":"그게 의도인지, 이미 쌓인 데이터는 어떻게 할지가 없다 — 모르는 부분에 대한 지적","before":null,"after":"(schema.prisma 변경에 딸린 설명·마이그레이션이 없음)","what":"K2가 \"이렇게 바뀌었다\"는 사실이라면, 이건 \"그래서 이게 의도한 변경인지, 이미 DB에 들어 있는 데이터는 괜찮은지, 마이그레이션은 어떻게 할 건지 알 수 없다\"는 지적입니다.\n\n핵심은 이걸 확정된 위반이라고 단정하면 안 된다는 겁니다. 의도된 설계 변경일 수도 있으니까요. \"판단할 근거가 부족하다\", \"확인이 필요하다\"로 분리해야 맞습니다.","cover":"마이그레이션·기존 데이터·의도 확인이 필요하다는 취지를 (확정 위반이 아니라 근거 부족·확인 필요로) 말했으면 커버입니다.","watch":"주의 — \"마이그레이션이 없는 것은 이번 변경이 저지른 위반\"이라고 단정했으면 미커버이고 오탐 후보입니다.","noteOnly":true,"hints":["마이그레이션","migration","기존 데이터","의도"]},"r3-K4":{"title":"배포 자동화 권한이 읽기 전용에서 전부 열림으로 바뀜","before":"permissions:\n  contents: read","after":"permissions: write-all","what":"GitHub 자동 배포가 저장소에 대해 원래는 읽기만 할 수 있었습니다. 이제 뭐든 쓸 수 있게 전부 열렸습니다. 이 자동화가 한 번 뚫리면, 예전엔 읽히는 데서 끝났을 피해가 이제는 코드를 마음대로 바꿔치기당하는 데까지 갑니다. 필요한 만큼만 권한을 주는 원칙에서 후퇴한 겁니다.","cover":"write-all이 과한 권한이다 / 최소 권한 원칙에 어긋난다는 취지면 커버입니다.","watch":null,"hints":["write-all","permissions","최소 권한"]},"r3-K5":{"title":"남의 코드를 정확한 버전으로 못 박아뒀던 게 이름표로 풀림","before":"- uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683","after":"- uses: actions/checkout@v4","what":"배포할 때 남이 만든 도구(actions/checkout)를 가져다 씁니다. 원래는 그 도구의 정확한 버전을 긴 해시로 못 박아뒀습니다. 이제는 \"v4\"라는 이름표만 씁니다.\n\n이름표는 나중에 다른 코드를 가리키도록 옮겨질 수 있습니다. 우리 쪽은 아무것도 안 바꿨는데 어느 날 갑자기 다른 코드가 우리 배포 과정에서 실행될 수 있다는 뜻입니다.","cover":"해시로 고정해뒀던 것이 풀린 게 후퇴라는 취지면 커버입니다. 원래 고정돼 있었다는 사실을 짚는 것이 핵심입니다.","watch":null,"hints":["@v4","checkout","SHA","고정"]},"r3-K6":{"title":"테스트가 사용자가 보는 이름 대신 CSS 클래스로 요소를 찾게 바뀜","before":"await page.getByRole('button', { name: 'New project' }).click();\nawait page.getByLabel('Project name').fill('Alpha');","after":"await page.locator('.new-project').click();\nawait page.locator('input').fill('Alpha');","what":"원래 테스트는 \"'New project'라는 이름의 버튼\"처럼 사용자가 실제로 보고 인식하는 방식으로 요소를 찾았습니다. 이제는 .new-project 같은 CSS 클래스 이름으로 찾습니다.\n\n두 가지가 나빠집니다. 디자인만 바꿔도 테스트가 깨지고, 반대로 버튼 이름이 엉망이 되거나 라벨이 사라져도 테스트는 멀쩡히 통과합니다. 사용자가 못 쓰게 된 걸 테스트가 못 잡습니다.","cover":"역할·라벨 기반에서 CSS 선택자로 후퇴한 것을 지적했으면 커버입니다.","watch":null,"hints":["locator","getByRole","CSS","클래스"]},"r3-K7":{"title":"무조건 3초 기다리기가 새로 들어옴","before":null,"after":"await page.waitForTimeout(3000);","what":"\"3초 그냥 기다려\"가 추가됐습니다. 조건 없이 시간만 세는 방식이라, 서버가 느린 날엔 3초로 모자라 테스트가 실패하고 빠른 날엔 쓸데없이 3초를 버립니다. 테스트 결과가 날마다 들쭉날쭉해지는 전형적인 원인입니다.","cover":"고정 대기가 불안정하다 / flaky 원인이라는 취지면 커버입니다.","watch":null,"hints":["waitForTimeout","3000","고정 대기"]},"r3-K8":{"title":"화면에 나타날 때까지 기다렸다 확인하던 걸, 즉시 개수 세기로 바꿈","before":"await expect(page.getByRole('row', { name: /Alpha/ })).toBeVisible();","after":"expect(await page.locator('.project-row').count()).toBe(1);","what":"원래 방식은 \"그 줄이 화면에 나타날 때까지 기다렸다가 확인\"이었습니다. 새 방식은 \"지금 당장 몇 개인지 세서 1개인지 비교\"입니다.\n\n아직 화면에 그려지지 않았으면 그냥 실패합니다. 바로 위의 3초 기다리기가 들어간 이유이기도 합니다 — 기다리는 기능을 없애놓고 시간으로 때운 겁니다.","cover":"재시도 없이 즉시 단언해서 불안정하다는 취지면 커버입니다. K6·K7·K8을 한 문단에 묶어 썼어도 각각 언급됐으면 각각 커버입니다.","watch":null,"hints":["count()","toBeVisible","재시도","즉시"]}},"traps":{"r2-T1":{"title":"포커스 가둠·Escape·포커스 복귀가 없다","what":"팝업이 떴을 때 탭 키가 팝업 밖으로 새지 않게 가두거나, Escape로 닫거나, 닫은 뒤 원래 자리로 포커스를 돌려주는 기능이 없습니다. 맞는 지적이긴 한데 — 변경 전에도 없었습니다. 이번 변경이 저지른 일이 아닙니다.","signal":"포커스 가둠·Escape 부재를 \"이번 변경이 도입한 위반\"으로 보고했으면 체크","hints":["포커스","focus","Escape"]},"r2-T2":{"title":"alertdialog나 aria-describedby가 \"제거됐다\"는 주장","what":"삭제 확인 같은 파괴적 창에는 alertdialog가 있으면 좋습니다. 그런데 이 코드에는 변경 전에도 alertdialog가 없었습니다. \"제거됐다\"고 쓰면 없던 일을 지어낸 겁니다. \"원래부터 없다\"는 관찰은 괜찮습니다.","signal":"alertdialog 또는 aria-describedby가 제거·삭제됐다고 서술했으면 체크","hints":["alertdialog","describedby"]},"r2-T3":{"title":"component-extension.md 하나만 근거로 위반 판정","what":"이 지식 문서는 보조 사례라서, 이것만 근거로 \"위반이다\"라고 단정하면 안 된다고 역할 문서에 명시돼 있습니다.","signal":"component-extension.md만 근거로 삼아 위반 판정을 내렸으면 체크","hints":["component-extension"]},"r3-T1":{"title":"body.name 입력 검증이 없다","what":"요청으로 들어온 이름 값을 검증 없이 그대로 씁니다. 맞는 말이지만 — 변경 전에도 똑같이 그랬습니다. 이번 변경이 만든 문제가 아닙니다.","signal":"입력 검증 부재를 \"이번 변경이 도입했다\"고 서술했으면 체크","hints":["body.name","검증"]},"r3-T2":{"title":"ubuntu-latest를 쓰는 게 위반이라는 주장","what":"배포를 우분투 최신 이미지에서 돌린다는 설정입니다. 지식베이스에 이걸 금지하는 근거가 없습니다. 근거 없는 일반론으로 위반 판정을 내리면 오탐입니다.","signal":"ubuntu-latest 자체를 위반·위험으로 보고했으면 체크","hints":["ubuntu-latest"]},"r3-T3":{"title":"npm publish가 있는 것 자체가 위반이라는 주장","what":"패키지를 배포하는 단계입니다. 이번 변경으로 새로 생긴 것도 아니고, 근거 문서가 이걸 금지하지도 않습니다.","signal":"npm publish 존재 자체를 위반·미흡으로 보고했으면 체크","hints":["npm publish"]}},"criteriaVersion":"r3-final-3","revisedKeys":["r3-K2"]}};
+  const STORE = "akasha-baseline-labels-v1";
+  const STATE_LABEL = { cover: "찾아냄", miss: "놓침", hold: "보류" };
+
+  let labels = {};
+  try {
+    const saved = localStorage.getItem(STORE);
+    if (saved) labels = JSON.parse(saved) || {};
+  } catch (error) { labels = {}; }
+
+  const entryFor = (runId) => (labels[runId] ??= { keys: {}, traps: [], fp: 0, note: "" });
+
+  // 판정 기준이 바뀐 항목만 비운다. 나머지 판정은 그대로 유지한다.
+  let criteriaReset = [];
+  try {
+    const storedVersion = localStorage.getItem(`${STORE}-criteria`);
+    if (DATA.plain.criteriaVersion && storedVersion && storedVersion !== DATA.plain.criteriaVersion) {
+      for (const [runId, entry] of Object.entries(labels)) {
+        for (const keyId of DATA.plain.revisedKeys ?? []) {
+          if (entry?.keys?.[keyId]) { delete entry.keys[keyId]; criteriaReset.push(`${runId} ${keyId}`); }
+        }
+      }
+    }
+    if (DATA.plain.criteriaVersion) localStorage.setItem(`${STORE}-criteria`, DATA.plain.criteriaVersion);
+  } catch (error) { /* 저장소를 못 써도 채점은 계속된다 */ }
+
+  function save() {
+    try { localStorage.setItem(STORE, JSON.stringify(labels)); } catch (error) { /* 저장 불가여도 채점은 계속된다 */ }
+  }
+
+  const escapeHtml = (text) => text.replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+
+  // 응답 원문은 Markdown 산문이다. 채점에 필요한 최소한만 살려 렌더한다.
+  function renderAnswer(text) {
+    return escapeHtml(text)
+      .split(/\n{2,}/)
+      .map((block) => {
+        const inline = (part) => part
+          .replace(/\[([^\]]*)\]\((https?:\/\/[^)]+)\)/g, '$1 <span class="url">$2</span>')
+          .replace(/\[([^\]]*)\]\(([^)]*)\)/g, "$1")
+          .replace(/`([^`]+)`/g, "<code>$1</code>")
+          .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+        const lines = block.split("\n");
+        if (!/^#{2,4}\s+/.test(lines[0])) return `<p>${inline(block)}</p>`;
+        const rest = lines.slice(1).join("\n").trim();
+        return `<h4>${inline(lines[0].replace(/^#{2,4}\s+/, ""))}</h4>` + (rest ? `<p>${inline(rest)}</p>` : "");
+      })
+      .join("");
+  }
+
+  // 코드가 어떻게 바뀌었는지를 변경 전/후로 보여준다. 실제 diff가 아닌 설명 항목은 메모로 표시한다.
+  function diffBlock(plain) {
+    const row = (text, cls) => `<div class="${cls}">${escapeHtml(text)}</div>`;
+    if (plain.noteOnly) return `<div class="diff">${row(plain.after, "d-note")}</div>`;
+    const rows = [];
+    if (plain.before) rows.push('<div class="d-label">변경 전</div>', ...plain.before.split("\n").map((line) => row(line, "d-del")));
+    if (plain.after) rows.push('<div class="d-label">변경 후</div>', ...plain.after.split("\n").map((line) => row(line, "d-add")));
+    return rows.length ? `<div class="diff">${rows.join("")}</div>` : "";
+  }
+
+  // 응답 원문에 단서 단어가 몇 번 나오는지 센다. 나온다고 찾아낸 건 아니지만 어디를 볼지 정해준다.
+  const countTerm = (text, term) => {
+    const haystack = text.toLowerCase();
+    const needle = term.toLowerCase();
+    let count = 0;
+    let at = haystack.indexOf(needle);
+    while (at >= 0) { count += 1; at = haystack.indexOf(needle, at + needle.length); }
+    return count;
+  };
+
+  // 단서 단어는 서로 대체 표현이다(OR). 하나만 나와도 되고, 전부 0이면 아예 언급이 없다는 신호다.
+  function hintBlock(response, terms) {
+    if (!terms?.length) return "";
+    let total = 0;
+    const chips = terms.map((term) => {
+      const count = countTerm(response.text, term);
+      total += count;
+      return `<button type="button" class="hint" data-count="${count}" data-run="${response.run_id}" data-term="${escapeHtml(term)}"`
+        + `${count ? "" : " disabled"}>${escapeHtml(term)}<span class="n">${count ? `×${count}` : "없음"}</span></button>`;
+    }).join("");
+    const verdict = total === 0
+      ? '<span class="hints-none">이 응답에는 관련 단어가 하나도 없습니다</span>'
+      : '<span class="hints-or">하나만 나와도 됩니다 — 눌러서 그 문장을 확인하세요</span>';
+    return `<div class="hints"><span class="hints-label">원문에서 찾기</span>${chips}${verdict}</div>`;
+  }
+
+  function keyBlock(response, key) {
+    const plain = DATA.plain.keys[key.id] ?? {};
+    const state = entryFor(response.run_id).keys[key.id] ?? "";
+    const name = `${response.run_id}--${key.id}`;
+    const origin = [
+      key.path ? `<div>대상 파일 <span class="mono">${escapeHtml(key.path)}</span></div>` : "",
+      key.knowledge?.length ? `<div>기대 근거 문서 <span class="mono">${escapeHtml(key.knowledge.map((path) => path.replace("knowledge/", "")).join(", "))}</span></div>` : "",
+      `<div>정답지 문구 — ${escapeHtml(key.topic)}</div>`,
+      key.hint ? `<div>판정 힌트 — ${escapeHtml(key.hint)}</div>` : "",
+    ].filter(Boolean).join("");
+    const options = ["cover", "miss", "hold"].map((value) => `
+      <input type="radio" id="${name}-${value}" name="${name}" value="${value}"${state === value ? " checked" : ""}>
+      <label for="${name}-${value}">${STATE_LABEL[value]}</label>`).join("");
+    return `
+      <div class="key" data-state="${state}" data-run="${response.run_id}" data-key="${key.id}">
+        <div class="key-top">
+          <span class="chip chip-id mono">${key.id}</span>
+          ${key.required ? "" : '<span class="chip chip-plain">선택 항목</span>'}
+          <span class="key-title">${escapeHtml(plain.title ?? key.topic)}</span>
+        </div>
+        ${diffBlock(plain)}
+        ${plain.revised ? `<p class="revised">${escapeHtml(plain.revised)}</p>` : ""}
+        ${plain.what ? `<p class="what">${escapeHtml(plain.what)}</p>` : ""}
+        ${plain.cover ? `<p class="cover-rule"><b>커버 기준</b>${escapeHtml(plain.cover)}</p>` : ""}
+        ${plain.watch ? `<p class="watch">${escapeHtml(plain.watch)}</p>` : ""}
+        ${hintBlock(response, plain.hints)}
+        <details class="origin"><summary>정답지 원문 보기</summary><div class="origin-body">${origin}</div></details>
+        <div class="seg" role="radiogroup" aria-label="${key.id} 판정">${options}</div>
+      </div>`;
+  }
+
+  function trapBlock(response, trap) {
+    const plain = DATA.plain.traps[trap.trap_id] ?? {};
+    const checked = entryFor(response.run_id).traps.includes(trap.trap_id);
+    return `
+      <label class="trap">
+        <input type="checkbox" data-run="${response.run_id}" data-trap="${trap.trap_id}"${checked ? " checked" : ""}>
+        <span>
+          <span class="t-topic"><span class="mono">${trap.trap_id}</span> ${escapeHtml(plain.title ?? trap.topic)}</span>
+          ${plain.what ? `<span class="t-what">${escapeHtml(plain.what)}</span>` : ""}
+          <span class="t-how">${escapeHtml(plain.signal ?? trap.fp_signal)}</span>
+        </span>
+      </label>
+      ${hintBlock(response, plain.hints)}`;
+  }
+
+  function cardBlock(response) {
+    const entry = entryFor(response.run_id);
+    const keys = DATA.keys[response.task];
+    const traps = DATA.traps[response.task] ?? [];
+    return `
+      <article class="card" id="card-${response.run_id}">
+        <header class="card-head">
+          <span class="rid mono">${response.run_id}</span>
+          <span class="chip chip-plain">${response.task === "r2" ? "r2 · 다이얼로그" : "r3 · 계층 교차"}</span>
+          <span class="chip chip-rep">${response.repetition}번째 시도</span>
+          <span class="facts">
+            <span>역할 ${escapeHtml(response.roles.join(", ")) || "없음"}</span>
+            <span>지식 문서 ${response.docs}개</span>
+            <span>${response.chars.toLocaleString()}자</span>
+          </span>
+          <span class="card-state" id="state-${response.run_id}"></span>
+        </header>
+        <div class="split">
+          <div class="pane">
+            <p class="pane-label">응답 원문</p>
+            <div class="answer">${renderAnswer(response.text)}</div>
+          </div>
+          <div class="pane">
+            <p class="pane-label">정답 ${keys.length}항목 · ${DATA.keyVersions[response.task]}</p>
+            ${DATA.plain.taskIntro[response.task] ? `<p class="task-note">${escapeHtml(DATA.plain.taskIntro[response.task])}</p>` : ""}
+            <div class="keys">${keys.map((key) => keyBlock(response, key)).join("")}</div>
+            ${traps.length ? `<div class="traps">
+              <p class="pane-label">함정 — 이 신호가 나타났는가</p>
+              ${traps.map((trap) => trapBlock(response, trap)).join("")}
+            </div>` : ""}
+            <div class="fp-row">
+              <label for="fp-${response.run_id}">오탐 finding 개수</label>
+              <input type="number" id="fp-${response.run_id}" min="0" step="1" value="${entry.fp}" data-run="${response.run_id}">
+            </div>
+            <textarea placeholder="메모 (선택)" data-note="${response.run_id}">${escapeHtml(entry.note)}</textarea>
+          </div>
+        </div>
+      </article>`;
+  }
+
+  function refresh() {
+    let done = 0;
+    let covered = 0;
+    let missed = 0;
+    let held = 0;
+    let fpTotal = 0;
+    for (const response of DATA.responses) {
+      const entry = entryFor(response.run_id);
+      const keys = DATA.keys[response.task];
+      const states = keys.map((key) => entry.keys[key.id] ?? "");
+      const complete = states.every((state) => state === "cover" || state === "miss");
+      if (complete) done += 1;
+      covered += states.filter((state) => state === "cover").length;
+      missed += states.filter((state) => state === "miss").length;
+      held += states.filter((state) => state === "hold").length;
+      fpTotal += Number(entry.fp) || 0;
+      const decided = states.filter(Boolean).length;
+      const badge = document.getElementById(`state-${response.run_id}`);
+      if (badge) {
+        badge.className = `card-state chip ${complete ? "chip-ok" : decided ? "chip-hold" : "chip-plain"}`;
+        badge.textContent = complete ? `완료 · 찾아냄 ${states.filter((s) => s === "cover").length}/${keys.length}` : `${decided}/${keys.length} 판정`;
+      }
+    }
+    const total = DATA.responses.length;
+    document.getElementById("meterText").textContent = `${done}/${total} 완료`;
+    document.getElementById("meterFill").style.width = `${(done / total) * 100}%`;
+    document.getElementById("tally").innerHTML = [
+      `<span class="chip chip-ok">찾아냄 ${covered}</span>`,
+      `<span class="chip chip-no">놓침 ${missed}</span>`,
+      held ? `<span class="chip chip-hold">보류 ${held}</span>` : "",
+      `<span class="chip chip-plain">오탐 ${fpTotal}</span>`,
+    ].filter(Boolean).join("");
+  }
+
+  function buildExport() {
+    const responses = {};
+    for (const response of DATA.responses) {
+      const entry = entryFor(response.run_id);
+      responses[response.run_id] = {
+        task: response.task,
+        keys: Object.fromEntries(DATA.keys[response.task].map((key) => [key.id, entry.keys[key.id] ?? null])),
+        traps: entry.traps,
+        fp: Number(entry.fp) || 0,
+        note: entry.note || "",
+      };
+    }
+    return {
+      batch: DATA.batch,
+      condition: "A",
+      subject_hash: DATA.subject.hash,
+      subject_version: DATA.subject.version,
+      key_versions: DATA.keyVersions,
+      labeled_by: "사람 확정",
+      labeled_at: new Date().toISOString(),
+      responses,
+    };
+  }
+
+  document.getElementById("subjectChip").textContent = `A · ${DATA.subject.version} · ${DATA.subject.hash.slice(0, 12)}`;
+  document.getElementById("introLead").textContent =
+    `0.14.0 기준선이 낸 응답 ${DATA.responses.length}건입니다. 산문 형식이라 기계 채점기가 읽지 못해 사람 판정이 필요합니다. `
+    + `정답 키는 동결본을 그대로 씁니다 — r2 ${DATA.keyVersions.r2}, r3 ${DATA.keyVersions.r3}.`;
+  document.getElementById("introFacts").innerHTML = [
+    `<span class="chip chip-plain">배치 <span class="mono">${DATA.batch}</span></span>`,
+    `<span class="chip chip-plain">대상 지문 <span class="mono">${DATA.subject.hash.slice(0, 16)}</span></span>`,
+    `<span class="chip chip-plain">r2 ${DATA.keys.r2.length}항목 · r3 ${DATA.keys.r3.length}항목</span>`,
+  ].join("");
+  document.getElementById("cards").innerHTML = DATA.responses.map(cardBlock).join("");
+  refresh();
+  if (criteriaReset.length) {
+    save();
+    document.getElementById("dockStatus").textContent =
+      `판정 기준이 바뀐 ${criteriaReset.length}건(${(DATA.plain.revisedKeys ?? []).join(", ")})을 비웠습니다. 그 항목만 다시 판정해 주세요.`;
+  }
+
+  function clearMarks(root) {
+    for (const mark of [...root.querySelectorAll("mark")]) mark.replaceWith(document.createTextNode(mark.textContent));
+    root.normalize();
+  }
+
+  function highlight(root, term) {
+    clearMarks(root);
+    const needle = term.toLowerCase();
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const targets = [];
+    let node;
+    while ((node = walker.nextNode())) {
+      if (node.nodeValue.toLowerCase().includes(needle)) targets.push(node);
+    }
+    let first = null;
+    for (const text of targets) {
+      const parts = [];
+      let rest = text.nodeValue;
+      let at = rest.toLowerCase().indexOf(needle);
+      while (at >= 0) {
+        if (at) parts.push(document.createTextNode(rest.slice(0, at)));
+        const mark = document.createElement("mark");
+        mark.textContent = rest.slice(at, at + term.length);
+        parts.push(mark);
+        first ??= mark;
+        rest = rest.slice(at + term.length);
+        at = rest.toLowerCase().indexOf(needle);
+      }
+      if (rest) parts.push(document.createTextNode(rest));
+      text.replaceWith(...parts);
+    }
+    if (first) first.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  document.addEventListener("click", (event) => {
+    const chip = event.target.closest("button.hint");
+    if (!chip || chip.disabled) return;
+    const answer = document.querySelector(`#card-${CSS.escape(chip.dataset.run)} .answer`);
+    if (!answer) return;
+    highlight(answer, chip.dataset.term);
+  });
+
+  document.addEventListener("change", (event) => {
+    const target = event.target;
+    if (target.matches('.seg input[type="radio"]')) {
+      const holder = target.closest(".key");
+      entryFor(holder.dataset.run).keys[holder.dataset.key] = target.value;
+      holder.dataset.state = target.value;
+    } else if (target.matches(".trap input")) {
+      const entry = entryFor(target.dataset.run);
+      const id = target.dataset.trap;
+      entry.traps = target.checked ? [...new Set([...entry.traps, id])] : entry.traps.filter((t) => t !== id);
+    } else if (target.matches('input[type="number"][data-run]')) {
+      entryFor(target.dataset.run).fp = Math.max(0, Number(target.value) || 0);
+    } else return;
+    save();
+    refresh();
+  });
+
+  document.addEventListener("input", (event) => {
+    if (!event.target.matches("textarea[data-note]")) return;
+    entryFor(event.target.dataset.note).note = event.target.value;
+    save();
+  });
+
+  document.getElementById("exportBtn").addEventListener("click", () => {
+    const pane = document.getElementById("exportPane");
+    document.getElementById("exportText").value = JSON.stringify(buildExport(), null, 2);
+    pane.hidden = false;
+    pane.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  document.getElementById("copyBtn").addEventListener("click", async () => {
+    const text = document.getElementById("exportText");
+    const status = document.getElementById("copyStatus");
+    try {
+      await navigator.clipboard.writeText(text.value);
+      status.textContent = "복사했습니다.";
+    } catch (error) {
+      text.select();
+      status.textContent = "복사가 막혀 있습니다. 위 내용을 직접 선택해 복사하세요.";
+    }
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    labels = {};
+    save();
+    document.getElementById("cards").innerHTML = DATA.responses.map(cardBlock).join("");
+    document.getElementById("exportPane").hidden = true;
+    refresh();
+    document.getElementById("dockStatus").textContent = "판정을 모두 지웠습니다.";
+  });
+</script>

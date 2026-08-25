@@ -3,20 +3,29 @@ import path from 'node:path';
 import {
   ROOT,
   assertAllowlistedUrl,
-  assertDate,
   assertRelativePath,
-  assertSnapshot,
-  assertSource,
   detectPromptInjection,
   detectRawHtmlPromptInjection,
   detectRawHtmlSecret,
   detectSecret,
-  loadSources,
+  loadKnowledgeSources,
   resolveContained
 } from './lib.mjs';
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
+}
+
+
+// docs/versioning.md 의 등급 규칙을 검사한다. 배포 대상(akasha/)의 변화 종류가
+// 올린 SemVer 등급과 맞는지 본다. base ref가 없는 환경에서는 건너뛴다.
+async function validateVersionLevel() {
+  const { execFileSync } = await import('node:child_process');
+  try {
+    execFileSync('node', ['scripts/check-version.mjs'], { cwd: ROOT, stdio: 'inherit' });
+  } catch (error) {
+    assert(false, 'Version level does not match the change class. See docs/versioning.md.');
+  }
 }
 
 async function validateReleaseVersion() {
@@ -40,110 +49,6 @@ async function validateReleaseVersion() {
     changelog.includes(`## [${packageJson.version}]`),
     `CHANGELOG.md must contain a ${packageJson.version} release entry`
   );
-}
-
-async function validateManifest() {
-  const manifest = JSON.parse(await readFile(resolveContained(ROOT, 'manifest.json'), 'utf8'));
-  assert(manifest.schema_version === 1, 'manifest.schema_version must be 1');
-  assert(
-    ['bootstrap', 'approved-main'].includes(manifest.snapshot_status),
-    'manifest.snapshot_status is invalid'
-  );
-  assert(manifest.trust === 'human-reviewed-main-only', 'manifest trust boundary is invalid');
-  assertRelativePath(manifest.knowledge_index, 'manifest.knowledge_index');
-  assert(
-    manifest.knowledge_index === 'akasha/knowledge/INDEX.md',
-    'manifest.knowledge_index must point to akasha/knowledge/INDEX.md'
-  );
-  await access(resolveContained(ROOT, manifest.knowledge_index));
-  if (manifest.approved_report_date !== undefined) assertDate(manifest.approved_report_date);
-  if (manifest.approved_commit !== null && manifest.approved_commit !== undefined) {
-    assert(/^[a-f0-9]{40}$/.test(manifest.approved_commit), 'manifest.approved_commit is invalid');
-  }
-  if (manifest.unavailable_sources !== undefined) {
-    assert(
-      Array.isArray(manifest.unavailable_sources),
-      'manifest.unavailable_sources must be an array'
-    );
-    for (const entry of manifest.unavailable_sources) {
-      assert(
-        entry && /^[a-z0-9-]+$/.test(entry.source_id),
-        'manifest unavailable source id is invalid'
-      );
-      // 승인된 스냅샷은 secondary 출처만 누락할 수 있다. primary 누락은 승격 자체가 막혀야 한다.
-      assert(
-        entry.authority === 'secondary',
-        `manifest unavailable source ${entry.source_id} must be secondary`
-      );
-      assert(
-        !Object.hasOwn(manifest.source_hashes ?? {}, entry.source_id),
-        `manifest unavailable source ${entry.source_id} must not carry a hash`
-      );
-    }
-  }
-  assert(
-    manifest.source_hashes && typeof manifest.source_hashes === 'object' && !Array.isArray(manifest.source_hashes),
-    'manifest.source_hashes must be an object'
-  );
-  for (const [sourceId, hashes] of Object.entries(manifest.source_hashes)) {
-    assert(/^[a-z0-9-]+$/.test(sourceId), `manifest source id is invalid: ${sourceId}`);
-    assert(/^[a-f0-9]{64}$/.test(hashes.content_sha256), `manifest content hash is invalid for ${sourceId}`);
-    assert(/^[a-f0-9]{64}$/.test(hashes.snapshot_sha256), `manifest snapshot hash is invalid for ${sourceId}`);
-  }
-}
-
-async function validateReports(sourcesById) {
-  const reportsRoot = resolveContained(ROOT, 'reports');
-  let dateEntries = [];
-  try {
-    dateEntries = await readdir(reportsRoot, { withFileTypes: true });
-  } catch (error) {
-    if (error.code === 'ENOENT') return;
-    throw error;
-  }
-
-  for (const dateEntry of dateEntries.filter((entry) => entry.isDirectory())) {
-    assertDate(dateEntry.name);
-    const dateRoot = resolveContained(reportsRoot, dateEntry.name);
-    const collectionPath = resolveContained(dateRoot, '_collection.json');
-    const collection = JSON.parse(await readFile(collectionPath, 'utf8'));
-    assert(collection.schema_version === 1, `${dateEntry.name} collection schema_version must be 1`);
-    assert(collection.date === dateEntry.name, `${dateEntry.name} collection date mismatch`);
-    assert(collection.trust === 'quarantine-only', `${dateEntry.name} collection trust marker is invalid`);
-    assert(Number.isInteger(collection.attempted) && collection.attempted >= 0, 'collection attempted is invalid');
-    assert(Number.isInteger(collection.succeeded) && collection.succeeded >= 0, 'collection succeeded is invalid');
-    assert(Array.isArray(collection.failures), 'collection failures must be an array');
-    assert(
-      collection.attempted === collection.succeeded + collection.failures.length,
-      `${dateEntry.name} collection attempted/succeeded/failures mismatch`
-    );
-    let snapshotCount = 0;
-    const roleEntries = await readdir(dateRoot, { withFileTypes: true });
-    for (const roleEntry of roleEntries.filter((entry) => entry.isDirectory())) {
-      assert(/^[a-z0-9-]+$/.test(roleEntry.name), `Invalid report role directory: ${roleEntry.name}`);
-      const roleRoot = resolveContained(dateRoot, roleEntry.name);
-      const files = await readdir(roleRoot);
-      for (const file of files.filter((name) => name.endsWith('.json'))) {
-        assert(/^[a-z0-9-]+\.json$/.test(file), `Invalid report filename: ${file}`);
-        const snapshot = JSON.parse(
-          await readFile(resolveContained(roleRoot, file), 'utf8')
-        );
-        assertSnapshot(snapshot);
-        const source = sourcesById.get(snapshot.source_id);
-        assert(source, `Unknown snapshot source ${snapshot.source_id}`);
-        assert(snapshot.role === source.role, `Snapshot role mismatch for ${snapshot.source_id}`);
-        assert(snapshot.source_url === source.url, `Snapshot URL mismatch for ${snapshot.source_id}`);
-        if (snapshot.final_url !== undefined) assertAllowlistedUrl(snapshot.final_url, 'Snapshot final_url');
-        assert(/^[a-f0-9]{64}$/.test(snapshot.content_sha256), 'Invalid snapshot SHA-256');
-        assert(snapshot.trust === 'untrusted-external-data', 'Snapshot trust marker is missing');
-        snapshotCount += 1;
-      }
-    }
-    assert(
-      snapshotCount === collection.succeeded,
-      `${dateEntry.name} collection succeeded count does not match snapshots`
-    );
-  }
 }
 
 async function validateKnowledgeDocuments() {
@@ -220,27 +125,56 @@ async function validateKnowledgeDocuments() {
 }
 
 async function validateRoleKnowledgeRouting(documentPaths) {
-  const rolesRoot = resolveContained(ROOT, 'akasha', 'roles');
+  const rolesRoot = resolveContained(ROOT, 'akasha', 'agents');
   const knowledgeRoot = resolveContained(ROOT, 'akasha', 'knowledge');
   const roleEntries = (await readdir(rolesRoot)).filter((entry) => entry.endsWith('.md')).sort();
-  assert(roleEntries.length > 0, 'akasha/roles must contain at least one role document');
+  assert(roleEntries.length > 0, 'akasha/agents must contain at least one role document');
 
   const routedDocuments = new Map();
   const roleNames = new Set();
+  const roleTexts = new Map();
 
   for (const roleEntry of roleEntries) {
-    const roleName = roleEntry.slice(0, -3);
-    assert(/^[a-z0-9-]+$/.test(roleName), `Invalid role document name: akasha/roles/${roleEntry}`);
+    assert(
+      roleEntry.startsWith('akasha-'),
+      `Role agent filename must be prefixed to avoid colliding with project agents: akasha/agents/${roleEntry}`
+    );
+    const roleName = roleEntry.slice('akasha-'.length, -3);
+    assert(/^[a-z0-9-]+$/.test(roleName), `Invalid role document name: akasha/agents/${roleEntry}`);
     roleNames.add(roleName);
     const roleText = await readFile(resolveContained(rolesRoot, roleEntry), 'utf8');
+    roleTexts.set(roleName, { file: roleEntry, text: roleText });
 
-    const section = roleText.match(/^## 담당 지식\s*$([\s\S]*?)(?=^## |\Z)/m);
-    assert(section, `Role document must declare a 담당 지식 section: akasha/roles/${roleEntry}`);
+    // JS 정규식에 \Z 는 없다. 리터럴 'Z'로 해석되어 본문 중간에서 절이 잘린다.
+    const sectionBody = sectionText(roleText, '담당 지식');
+    assert(sectionBody !== null, `Role document must declare a 담당 지식 section: akasha/agents/${roleEntry}`);
+    const section = [null, sectionBody];
+
+    // 골라 읽기가 성립하려면 목록의 각 항목이 "언제 쓰는 문서인지"를 스스로 말해야 한다.
+    // 설명 없는 항목은 자식이 선택 근거 없이 추측하게 만든다.
+    const entryLines = section[1]
+      .split('\n')
+      .filter((line) => line.trim().startsWith('- ') && line.includes('.md`'));
+    for (const line of entryLines) {
+      const entry = line.match(/^\s*- `([^`]+\.md)`\s*—\s*(\S.*)$/);
+      assert(
+        entry,
+        `담당 지식 entry must read "- \`path.md\` — 선택 힌트" in akasha/agents/${roleEntry}: ${line.trim()}`
+      );
+      assert(
+        entry[2].trim().length >= 10,
+        `담당 지식 selection hint is too short to choose on in akasha/agents/${roleEntry}: ${entry[1]}`
+      );
+    }
 
     const references = [...section[1].matchAll(/`([^`]+\.md)`/g)].map((match) => match[1]);
     assert(
+      references.length === entryLines.length,
+      `Every 담당 지식 reference must be its own "- \`path.md\` — 힌트" line in akasha/agents/${roleEntry}`
+    );
+    assert(
       references.length > 0,
-      `Role document must reference at least one knowledge document: akasha/roles/${roleEntry}`
+      `Role document must reference at least one knowledge document: akasha/agents/${roleEntry}`
     );
 
     const seenInRole = new Set();
@@ -248,7 +182,7 @@ async function validateRoleKnowledgeRouting(documentPaths) {
       assertRelativePath(reference, `role ${roleName} 담당 지식 reference`);
       assert(
         reference.startsWith('knowledge/'),
-        `Role knowledge reference must be plugin-root relative and start with knowledge/: ${reference} (akasha/roles/${roleEntry})`
+        `Role knowledge reference must be plugin-root relative and start with knowledge/: ${reference} (akasha/agents/${roleEntry})`
       );
 
       const relativePath = normalizeRelativePath(
@@ -256,11 +190,11 @@ async function validateRoleKnowledgeRouting(documentPaths) {
       );
       assert(
         documentPaths.has(relativePath),
-        `Role knowledge reference does not resolve to an approved knowledge document: ${reference} (akasha/roles/${roleEntry})`
+        `Role knowledge reference does not resolve to an approved knowledge document: ${reference} (akasha/agents/${roleEntry})`
       );
       assert(
         !seenInRole.has(relativePath),
-        `Duplicate 담당 지식 reference in akasha/roles/${roleEntry}: ${reference}`
+        `Duplicate 담당 지식 reference in akasha/agents/${roleEntry}: ${reference}`
       );
       seenInRole.add(relativePath);
 
@@ -275,7 +209,7 @@ async function validateRoleKnowledgeRouting(documentPaths) {
     const details = orphans.map((documentPath) => {
       const directory = documentPath.split('/')[0];
       const target = roleNames.has(directory)
-        ? `akasha/roles/${directory}.md`
+        ? `akasha/agents/akasha-${directory}.md`
         : 'the owning role document';
       return [
         `  - akasha/knowledge/${documentPath}`,
@@ -292,6 +226,189 @@ async function validateRoleKnowledgeRouting(documentPaths) {
       ].join('\n')
     );
   }
+
+  return roleTexts;
+}
+
+// 자식에게 절대 주어져서는 안 되는 도구. 역할 문서가 그대로 Claude Code 서브에이전트가
+// 되므로, 읽기 전용 경계는 이 검사로만 보장된다.
+const FORBIDDEN_AGENT_TOOLS = [
+  'Bash', 'Write', 'Edit', 'NotebookEdit', 'Task', 'Agent', 'WebFetch', 'WebSearch'
+];
+
+// 자식 실행에만 쓰이는 절. 모든 역할에서 완전히 같아야 Codex와 Claude Code의 판정
+// 규칙이 갈라지지 않는다.
+const SHARED_CHILD_SECTIONS = ['규칙', '실행 예산', '반환 계약', '도구 경계'];
+
+function parseFrontmatter(text, label) {
+  const match = text.match(/^---\n([\s\S]*?)\n---\n/);
+  assert(match, `${label} must start with YAML frontmatter so Claude Code can load it as an agent`);
+  return new Map(
+    match[1]
+      .split('\n')
+      .map((line) => line.match(/^([a-z]+): (.*)$/))
+      .filter(Boolean)
+      .map((entry) => [entry[1], entry[2].trim()])
+  );
+}
+
+function sectionText(text, name) {
+  const heading = `\n## ${name}\n`;
+  const start = text.indexOf(heading);
+  if (start === -1) return null;
+  const rest = text.slice(start + heading.length);
+  const next = rest.search(/^## /m);
+  return (next === -1 ? rest : rest.slice(0, next)).trim();
+}
+
+async function validateAgentContract(roleTexts) {
+  let baseline = null;
+
+  for (const [roleName, { file, text }] of roleTexts) {
+    const label = `akasha/agents/${file}`;
+    const fields = parseFrontmatter(text, label);
+
+    assert(
+      fields.get('name') === file.slice(0, -3),
+      `${label} name field must match its filename — Claude Code derives the subagent type from the filename`
+    );
+    assert(fields.get('description'), `${label} must declare a description`);
+
+    const tools = (fields.get('tools') ?? '').split(',').map((tool) => tool.trim()).filter(Boolean);
+    assert(tools.length > 0, `${label} must declare an explicit read-only tools allowlist`);
+    for (const tool of tools) {
+      assert(
+        !FORBIDDEN_AGENT_TOOLS.includes(tool),
+        `${label} grants a non-read-only tool: ${tool}`
+      );
+    }
+
+    // 모델 상속은 검증되지 않은 역할별 tiering을 막는 계약이다.
+    assert(
+      fields.get('model') === 'inherit',
+      `${label} must inherit the parent model until routing passes the promotion gate`
+    );
+
+    const shared = SHARED_CHILD_SECTIONS.map((name) => {
+      const body = sectionText(text, name);
+      assert(body, `${label} must declare a "## ${name}" section`);
+      return `## ${name}\n${body}`;
+    }).join('\n\n');
+
+    assert(
+      shared.includes('해당 여부가 애매하면 읽지 않고 지식 공백으로 남긴다'),
+      `${label} must skip ambiguous knowledge instead of over-reading`
+    );
+    assert(
+      shared.includes('기억으로 경로를 재구성하거나 존재하지 않는 옛 경로로 대체하지 않는다'),
+      `${label} must reject stale or invented knowledge paths`
+    );
+    assert(
+      shared.includes('역할별 선택 문서는 기본 최대 2개다'),
+      `${label} must cap default knowledge selection at two documents`
+    );
+    assert(
+      shared.includes('3번째 문서를 읽고 `knowledge_selection.exception`'),
+      `${label} must audit the third-document exception`
+    );
+    assert(
+      shared.includes('4개 이상은 읽지 않는다'),
+      `${label} must prohibit four or more knowledge reads`
+    );
+    assert(
+      shared.includes('`diff_evidence`') && shared.includes('`change_status`'),
+      `${label} must require structured diff evidence for findings`
+    );
+    assert(
+      shared.includes('`path`, `removed_tokens`, `added_tokens`') && shared.includes('최소 토큰을 그대로 복사한다'),
+      `${label} must require exact removed and added diff tokens`
+    );
+    assert(
+      shared.includes('80자 이하의 가장 짧고 고유한 리터럴'),
+      `${label} must keep diff evidence tokens short and stable`
+    );
+    assert(
+      shared.includes('`introduced_by_diff`') && shared.includes('`not_in_diff`'),
+      `${label} must distinguish direct changes from findings outside the diff`
+    );
+    assert(
+      shared.includes('변경 전에도 없었다면 `pre_existing`이다'),
+      `${label} must keep pre-existing missing behavior out of introduced violations`
+    );
+    assert(
+      shared.includes('최상위 `knowledge_selection`은 `paths`와 `exception`을 포함한다'),
+      `${label} must report the actual knowledge selection`
+    );
+    assert(
+      shared.includes('Markdown 자유서술이 아니라 `findings`, `knowledge_gaps`'),
+      `${label} must return the code-review result as one structured JSON object`
+    );
+
+    if (baseline === null) baseline = { roleName, shared };
+    else {
+      assert(
+        shared === baseline.shared,
+        `Shared child sections diverge between akasha/agents/akasha-${baseline.roleName}.md and ${label}. ` +
+          `Every role must carry byte-identical ${SHARED_CHILD_SECTIONS.map((n) => `"## ${n}"`).join(', ')} sections.`
+      );
+    }
+  }
+}
+
+// 검토 부채 상한. 고정이 없는 출처가 이 수를 넘으면 CI가 막는다.
+const REVIEW_DEBT_CEILING = 12;
+
+// 지식 문서 양식. 에이전트가 어느 문서를 열든 같은 자리에서 같은 종류의 정보를 찾을 수 있어야
+// 한다. 「프로젝트에 적용할 기준」이 판정의 근거, 「체크리스트」가 판정 절차다.
+const REQUIRED_KNOWLEDGE_SECTIONS = [
+  '출처',
+  '이 문서가 해당 역할에 도움이 되는 이유',
+  '프로젝트에 적용할 기준',
+  '주의할 점',
+  '에이전트가 사용할 때의 체크리스트'
+];
+
+async function validateKnowledgeSources() {
+  const docs = await loadKnowledgeSources();
+  const debt = [];
+
+  for (const doc of docs) {
+    const label = `akasha/knowledge/${doc.path}`;
+    assert(doc.hasSourceSection, `${label} must declare a "## 출처" section`);
+    // 문서 하나에 출처 하나. 검토 스냅샷이 무엇을 가리키는지, 원본이 바뀌었을 때 어느
+    // 문서를 다시 읽어야 하는지, 담당 지식 선택 힌트가 무엇을 약속하는지가 모두 1:1이 된다.
+    assert(
+      doc.sources.size === 1,
+      `${label} must declare exactly one source (found ${doc.sources.size}). 출처가 여럿이면 문서를 나눈다.`
+    );
+    for (const section of REQUIRED_KNOWLEDGE_SECTIONS) {
+      assert(
+        doc.sections.includes(section),
+        `${label} must declare a "## ${section}" section`
+      );
+    }
+    assert(
+      doc.sections[0] === '출처',
+      `${label} must open with the "## 출처" section`
+    );
+
+    for (const source of doc.sources.values()) {
+      assertAllowlistedUrl(source.url, `${label} source ${source.id}`);
+      assert(source.owner, `${label} source ${source.id} must declare 소유자`);
+      assert(
+        ['primary', 'secondary'].includes(source.authority),
+        `${label} source ${source.id} 권위 must be primary or secondary`
+      );
+      if (!source.pin) debt.push(`${label}: ${source.id} 검토 스냅샷 없음`);
+    }
+  }
+
+  if (debt.length > 0) console.log(`고정 없는 출처 ${debt.length}건:\n${debt.map((d) => `  - ${d}`).join('\n')}`);
+  assert(
+    debt.length <= REVIEW_DEBT_CEILING,
+    `Review debt ${debt.length} exceeds ceiling ${REVIEW_DEBT_CEILING}.`
+  );
+  return docs;
 }
 
 async function validateAkashaSkillContract() {
@@ -319,7 +436,7 @@ async function validateAkashaSkillContract() {
     'Akasha skill must define a bounded role context packet'
   );
   assert(
-    skillText.includes('diff 본문은 메시지에 넣지 않고'),
+    skillText.includes('diff 본문은 메시지에 넣지 않는다'),
     'Akasha skill must not inline full diffs in subagent messages'
   );
   assert(
@@ -375,8 +492,52 @@ async function validateAkashaSkillContract() {
     'Akasha skill must bound root routing reads'
   );
   assert(
-    skillText.includes('종합 단계 재검증은 최대 2회의 읽기 호출'),
+    skillText.includes('종합 단계 재검증은 최대 1회의 읽기 호출'),
     'Akasha skill must bound root synthesis reads'
+  );
+  // 자식은 배정된 문서만 읽도록 도구 경계로 이미 묶여 있다. 부모가 같은 문서를 다시 읽어도
+  // 근거가 더 확실해지지 않으면서 부모 context만 키운다(12런 동안 재읽기가 잡아낸 오류 0건).
+  assert(
+    skillText.includes('종합 단계에서 지식 문서를 다시 열지 않는다'),
+    'Akasha skill must not reopen knowledge documents during root synthesis'
+  );
+  // 플러그인 루트를 "두 단계 위"처럼 위치로만 정하면 부모가 skills/akasha/ 를 루트로 잡는
+  // 실패가 나온다(54런 중 3건). 루트는 세어서 얻는 값이 아니라 확인해서 얻는 값이어야 한다.
+  assert(
+    skillText.includes('`knowledge/INDEX.md`와 `agents/`를 함께 가진'),
+    'Akasha skill must define the plugin root by a checkable invariant, not by path arithmetic'
+  );
+  assert(
+    skillText.includes('`skills/akasha/`를 루트로 삼지 않는다'),
+    'Akasha skill must reject the skill directory as the plugin root'
+  );
+  // 팀 전체 지식 선택이 0건인데 그대로 진행하면, 지식베이스를 한 번도 열지 않은 실행이
+  // 계약상 유효한 정상 응답으로 나간다.
+  assert(
+    skillText.includes('선택 결과가 팀 전체에서 0건이면 지식 공백이 아니라 선택 실패다'),
+    'Akasha skill must treat a team-wide empty knowledge selection as a failure, not a knowledge gap'
+  );
+  // 세 배치 연속으로 부모가 삭제된 옛 문서명(design/system-principles.md 등)을 지어냈다.
+  // 금지 문구로는 막히지 않았으므로, 틀린 경로가 spawn 전에 잡혀 고쳐지는 절차를 요구한다.
+  assert(
+    skillText.includes('지식 경로 확인과 복구'),
+    'Akasha skill must define a knowledge path verification and recovery step'
+  );
+  assert(
+    skillText.includes('그 목록에 있는 이름으로만') && skillText.includes('나열해'),
+    'Akasha skill must recover unresolvable knowledge paths by listing the real directory'
+  );
+  assert(
+    skillText.includes('목록이 옳다'),
+    'Akasha skill must prefer the directory listing over remembered document names'
+  );
+  assert(
+    skillText.includes('이 단계에서 지식 문서·manifest·역할 문서를 열지 않는다'),
+    'Akasha skill must confine synthesis reads to the scoped diff and changed files'
+  );
+  assert(
+    skillText.includes('부모는 자식이 반환한\n`source_url`을 그대로 쓰고'),
+    'Akasha skill must reuse the child-returned source_url instead of re-deriving it'
   );
   assert(
     skillText.includes('다른 지식 문서·manifest·catalog·플러그인 전체를 검색하거나 네트워크를 조회하지'),
@@ -390,74 +551,85 @@ async function validateAkashaSkillContract() {
     skillText.includes('`needs_parent_expansion`에 `reason`, `missing_scope`, 최대 3개의'),
     'Akasha skill must provide a bounded parent expansion escape hatch'
   );
+  assert(
+    skillText.includes('`subagent_type`에 `akasha-<역할>`'),
+    'Akasha skill must bind Claude Code subagents to the role documents by filename'
+  );
+  assert(
+    skillText.includes('`tools: Read, Grep, Glob`으로 고정'),
+    'Akasha skill must document the read-only tool boundary of role subagents'
+  );
+  assert(
+    skillText.includes('도구 제한이 적용되지 않았다는'),
+    'Akasha skill must report when the read-only agent definitions are unavailable'
+  );
+  assert(
+    skillText.includes('읽기 전용 도구만 가진 서브에이전트에는 부모가 같은 범위의 scoped diff를'),
+    'Akasha skill must supply scoped diffs to shell-less subagents'
+  );
+  assert(
+    skillText.includes('`selected_knowledge_paths`만 읽는다'),
+    'Akasha skill must restrict child knowledge reads to parent-selected paths'
+  );
+  assert(
+    skillText.includes('역할별 기본 상한은 2개다') && skillText.includes('4개 이상은 읽지 않는다'),
+    'Akasha skill must cap default knowledge reads at two and prohibit four or more'
+  );
+  assert(
+    skillText.includes('애매하면 선택하지 않는다'),
+    'Akasha skill must skip ambiguous knowledge selection'
+  );
+  assert(
+    skillText.includes('경로는 역할 문서 항목에서 그대로 복사하고') &&
+      skillText.includes('존재하지\n않는 경로를 전달하지 않는다'),
+    'Akasha skill must verify selected knowledge paths before spawning'
+  );
+  assert(
+    skillText.includes('`change_status: introduced_by_diff`') && skillText.includes('`diff_evidence`'),
+    'Akasha skill must verify direct diff evidence before accepting a violation'
+  );
+  assert(
+    skillText.includes('최상위 `knowledge_selection`'),
+    'Akasha skill must return an auditable knowledge selection record'
+  );
+  assert(
+    skillText.includes('코드 변경 검토의 부모와 서브에이전트는 JSON 객체 하나만 반환한다') &&
+      skillText.includes('Markdown 머리말·요약·코드 설명을 객체 앞뒤에 붙이지 않는다'),
+    'Akasha skill must enforce one machine-checkable JSON response for code reviews'
+  );
+  assert(
+    skillText.includes('반환 직전에 필수 최상위 필드, finding 필드, diff 증거 조건을 자체 검사'),
+    'Akasha parent must self-check the quality contract before returning'
+  );
 }
 
 async function validateFixtures() {
   const malicious = JSON.parse(
     await readFile(path.join(ROOT, 'fixtures', 'malicious-source.json'), 'utf8')
   );
-  assert(
-    detectPromptInjection(malicious.body) !== null,
-    'Malicious prompt-injection fixture was not rejected'
-  );
-  assert(
-    detectRawHtmlPromptInjection(malicious.body) !== null,
-    'Malicious raw HTML prompt-injection fixture was not rejected'
-  );
+  assert(detectPromptInjection(malicious.body) !== null, 'Malicious prompt-injection fixture was not rejected');
+  assert(detectRawHtmlPromptInjection(malicious.body) !== null, 'Malicious raw HTML fixture was not rejected');
   assert(
     detectRawHtmlPromptInjection('window.__data = { tool_call: "documented API field" };') === null,
     'Benign raw HTML tool_call fixture was rejected'
   );
 
-  const invalid = JSON.parse(
-    await readFile(path.join(ROOT, 'fixtures', 'invalid-source.json'), 'utf8')
-  );
+  const invalid = JSON.parse(await readFile(path.join(ROOT, 'fixtures', 'invalid-source.json'), 'utf8'));
   let rejected = false;
-  try {
-    assertSource(invalid, 'security');
-  } catch {
-    rejected = true;
-  }
+  try { assertAllowlistedUrl(invalid.url, 'fixture'); } catch { rejected = true; }
   assert(rejected, 'Non-HTTPS source fixture was not rejected');
 
-  const oversizedSnapshot = JSON.parse(
-    await readFile(resolveContained(ROOT, 'fixtures', 'oversized-snapshot.json'), 'utf8')
-  );
-  rejected = false;
-  try {
-    assertSnapshot(oversizedSnapshot);
-  } catch {
-    rejected = true;
-  }
-  assert(rejected, 'Oversized snapshot fixture was not rejected');
-
-  const pathTraversalManifest = JSON.parse(
+  const traversal = JSON.parse(
     await readFile(resolveContained(ROOT, 'fixtures', 'path-traversal-manifest.json'), 'utf8')
   );
   rejected = false;
-  try {
-    assertRelativePath(pathTraversalManifest.knowledge_index, 'fixture.knowledge_index');
-  } catch {
-    rejected = true;
-  }
+  try { assertRelativePath(traversal.knowledge_index, 'fixture'); } catch { rejected = true; }
   assert(rejected, 'Path traversal fixture was not rejected');
 
-  const promptInjectionSnapshot = JSON.parse(
-    await readFile(resolveContained(ROOT, 'fixtures', 'prompt-injection-snapshot.json'), 'utf8')
-  );
-  rejected = false;
-  try {
-    assertSnapshot(promptInjectionSnapshot);
-  } catch {
-    rejected = true;
-  }
-  assert(rejected, 'Prompt-injection snapshot fixture was not rejected');
-
-  const secretPayloadParts = JSON.parse(
+  const parts = JSON.parse(
     await readFile(resolveContained(ROOT, 'fixtures', 'secret-payload-parts.json'), 'utf8')
   );
-  const secretFixture = secretPayloadParts.parts.join('');
-  assert(detectSecret(secretFixture) !== null, 'Secret fixture was not detected');
+  assert(detectSecret(parts.parts.join('')) !== null, 'Secret fixture was not detected');
   assert(
     detectRawHtmlSecret('Gov.uk generated class sk-example-token-shaped-text') === null,
     'Benign raw HTML sk-* fixture was rejected'
@@ -513,13 +685,13 @@ function normalizeRelativePath(value) {
   return value.split(path.sep).join('/');
 }
 
-const sources = await loadSources();
+await validateKnowledgeSources();
 await validateReleaseVersion();
-await validateManifest();
-await validateRoleKnowledgeRouting(await validateKnowledgeDocuments());
+await validateVersionLevel();
+const knowledgeDocuments = await validateKnowledgeDocuments();
+await validateAgentContract(await validateRoleKnowledgeRouting(knowledgeDocuments));
 await validateAkashaSkillContract();
-await validateReports(new Map(sources.map((source) => [source.id, source])));
 await validateRepoSecretScan();
 if (process.argv.includes('--fixtures')) await validateFixtures();
 
-console.log(`Validated ${sources.length} allowlisted sources and the knowledge manifest.`);
+console.log('Validated knowledge documents, role agents, and the Akasha skill contract.');

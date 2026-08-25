@@ -3,3 +3,12 @@ node_modules/
 .cache/
 tmp/
 .omx/
+
+# 벤치마크 실행 산출물 — 용량이 크고 raw.jsonl·provenance.json으로 검증할 수 있다.
+benchmarks/**/runs/
+benchmarks/**/snapshot/
+
+# 조건별 기준선 플러그인 사본. 커밋된 상태 그대로이므로 명령으로 복원한다:
+#   git archive 2e027c8 akasha | tar -x -C benchmarks/model-routing/archived-traces/<배치>/A
+# 후보(B) 사본은 커밋되지 않은 작업 트리 상태여서 복원할 수 없으므로 저장소에 남긴다.
+benchmarks/model-routing/archived-traces/*/A/

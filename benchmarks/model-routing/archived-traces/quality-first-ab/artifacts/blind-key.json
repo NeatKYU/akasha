@@ -1,0 +1,32 @@
+[
+  {
+    "pair_id": "r2-rep1",
+    "x": "A",
+    "y": "B"
+  },
+  {
+    "pair_id": "r2-rep2",
+    "x": "B",
+    "y": "A"
+  },
+  {
+    "pair_id": "r2-rep3",
+    "x": "A",
+    "y": "B"
+  },
+  {
+    "pair_id": "r3-rep1",
+    "x": "B",
+    "y": "A"
+  },
+  {
+    "pair_id": "r3-rep2",
+    "x": "A",
+    "y": "B"
+  },
+  {
+    "pair_id": "r3-rep3",
+    "x": "B",
+    "y": "A"
+  }
+]
