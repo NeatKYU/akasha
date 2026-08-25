@@ -36,6 +36,14 @@ timeline/**
 
 - `knowledge/continuity/outline-as-reference.md` — 설정집·시트·시간선·아웃라인을 대조 기준으로 삼는 절차, 불일치의 양쪽 근거 보고, 새 사실의 문서 반영
 - `knowledge/worldbuilding/expand-before-adding.md` — 새 설정이 기존 설정·시간선과 충돌하지 않는지, 고립 설정
+- `knowledge/continuity/outline-during-drafting.md` — 장면 단위로 아웃라인 비트·소품·조연을 원고와 대조할 때
+- `knowledge/continuity/character-arcs-across-series.md` — 여러 권에 걸친 인물의 아크 단계와 행동 모순을 대조할 때
+- `knowledge/continuity/outlining-a-series.md` — 시리즈 아웃라인 갱신 여부와 권 경계의 훅 회수를 확인할 때
+- `knowledge/continuity/cause-and-effect.md` — 반응이 원인보다 앞서거나 인물이 알 수 없는 사실에 반응할 때
+- `knowledge/continuity/random-story-elements.md` — 문서에 없는 신규 인물·장소·시점과 고립 요소를 찾을 때
+- `knowledge/continuity/vanishing-setting.md` — 장면의 장소 확정 여부와 설정집·자세·소품의 연속을 볼 때
+- `knowledge/continuity/flashback-discipline.md` — 회상의 시점 확정, 진입·복귀 표시, 회상 속 사실을 대조할 때
+- `knowledge/continuity/dual-timelines.md` — 두 시간선의 절 표기, 시각 대응표, 과거 사실 일치를 볼 때
 
 ## 상충 시 확인할 역할
 

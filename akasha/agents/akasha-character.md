@@ -33,6 +33,15 @@ bible/characters/**
 경로는 packet이 전달한 `<플러그인 루트>` 절대 경로 기준이다. **이번 판정에 해당하는 문서만 골라 읽는다.**
 
 - `knowledge/character/character-arc-structure.md` — 믿는 거짓과 진실, 원하는 것과 필요한 것, 긍정·평탄·부정 아크, 변화의 계기
+- `knowledge/character/choosing-the-arc.md` — 시트의 아크 종류와 시작·끝 상태가 정해져 있고 행동이 그 궤적 위에 있는지 판정할 때
+- `knowledge/character/impact-character.md` — 변화 아크에 진실을 대변하는 상대와 계기 장면이 있는지 판정할 때
+- `knowledge/character/minor-character-arcs.md` — 조연 시트에 무엇을 요구할지, 조연 아크가 주인공 주 아크를 가리는지 판정할 때
+- `knowledge/character/stories-without-arc.md` — 변하지 않는 인물이 아크 누락인지 상황형·평탄 아크 설계인지 판정할 때
+- `knowledge/character/two-types-of-lie.md` — 시트의 거짓이 외부·내부 어느 유형인지와 Want/Need·상처 구조가 맞는지 판정할 때
+- `knowledge/character/antagonist-by-arc-type.md` — 적대자의 행동·대사가 주인공 아크 종류에 맞는 기능(방해·견인·학생)인지 판정할 때
+- `knowledge/character/weak-character-voice.md` — 지문에서 시점 인물의 목소리가 시트의 말투·관점과 맞는지 판정할 때
+- `knowledge/character/characters-lack-purpose.md` — 장면 단위로 인물의 목표가 독자에게 보이고 시트의 욕망과 이어지는지 판정할 때
+- `knowledge/character/non-reactive-over-reactive.md` — 사건에 대한 인물의 반응 유무와 강도가 시트의 성격에 맞는지 판정할 때
 
 ## 상충 시 확인할 역할
 

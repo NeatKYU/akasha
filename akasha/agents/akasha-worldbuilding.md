@@ -36,6 +36,13 @@ bible/world/**
 - `knowledge/worldbuilding/magic-system-first-law.md` — 능력으로 갈등을 해결하려면 규칙이 먼저 드러나야 함, 하드·소프트 체계 구분
 - `knowledge/worldbuilding/magic-system-limitations.md` — 능력보다 한계·약점·비용이 갈등을 만듦, 설정 항목의 필수 구성
 - `knowledge/worldbuilding/expand-before-adding.md` — 새 설정 추가 전 기존 설정 확장, 설정이 세계에 미친 결과, 고립 설정
+- `knowledge/worldbuilding/worldbuilding-questions.md` — 설정 문서에 빠진 범주와 범주 간 파급이 적혔는지 판정할 때
+- `knowledge/worldbuilding/worldbuilding-101.md` — 시점별 설명량과 새 특수 요소의 문제·비용·파생 관계 판정
+- `knowledge/worldbuilding/organic-worldbuilding-pillars.md` — 설정 항목이 플롯·적대자·역사와 연결됐는지, 체계가 요약 가능한지 판정
+- `knowledge/worldbuilding/adventure-world-second-act.md` — 무대가 바뀐 화에서 새 무대의 규칙·위험이 문서에 있는지 판정
+- `knowledge/worldbuilding/symbolic-settings.md` — 주요 무대의 이야기상 기능 기록과 같은 기능 무대의 중복 판정
+- `knowledge/worldbuilding/under-explaining.md` — 원고에 소개 없이 쓰인 설정과 그 원인(문서 결손·원고 누락) 판정
+- `knowledge/worldbuilding/too-much-explanation.md` — 이후 화에 쓰이지 않는 설정 설명과 정보 덤프 판정
 
 ## 상충 시 확인할 역할
 

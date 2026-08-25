@@ -8,8 +8,10 @@
 
 - 작가 도메인 역할 7개: worldbuilding · character · plot · staging · continuity · style · reader.
   총괄 작가·에피소드 작가·자료 조사는 읽기 전용 심사 모델에 맞지 않아 역할로 두지 않는다
-- 지식 문서 10개: 국립국어원 어문 규범 2개(primary), 작법 유파 8개(secondary — 자문 근거로만 사용)
-- 출처 허용 호스트: www.korean.go.kr, www.brandonsanderson.com, www.helpingwritersbecomeauthors.com
+- 지식 문서 69개(역할당 10개): 국립국어원 어문 규범 8개(primary), 작법 유파 61개(secondary — 자문 근거로만 사용).
+  출처는 국립국어원·Brandon Sanderson·K.M. Weiland·Jim Butcher·SFWA(Patricia C. Wrede)·N.K. Jemisin
+- 출처 허용 호스트: www.korean.go.kr, www.brandonsanderson.com, www.helpingwritersbecomeauthors.com,
+  jimbutcher.livejournal.com, sfwa.org, nkjemisin.com
 
 ### 변경
 

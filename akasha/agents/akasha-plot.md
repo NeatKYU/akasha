@@ -33,6 +33,15 @@ bible/plot/**
 경로는 packet이 전달한 `<플러그인 루트>` 절대 경로 기준이다. **이번 판정에 해당하는 문서만 골라 읽는다.**
 
 - `knowledge/plot/story-structure-beats.md` — 훅·발단·전환점·중간점·절정의 위치, 반응에서 행동으로의 방향 전환, 복선과 회수의 짝
+- `knowledge/plot/inciting-event.md` — 아웃라인의 발단 사건이 훅·제1막 중간 전환점·제1전환점 중 무엇인지 가려 제1막 배치를 판정할 때
+- `knowledge/plot/key-event-vs-first-plot-point.md` — 일상 세계를 떠나는 순간과 갈등 세계에 들어서는 순간이 아웃라인에 각각 있는지 판정할 때
+- `knowledge/plot/pinch-points.md` — 제2막 전후반에 적대 세력의 압박·단서·판돈 상기 화가 있는지로 중반 늘어짐을 판정할 때
+- `knowledge/plot/midpoint-swivel.md` — 중간점이 큰 장면·진실·갈등 정보를 갖추고 전후반 비트가 짝을 이루는지 판정할 때
+- `knowledge/plot/climactic-moment.md` — 목표 실현 화로 절정을 식별하고 제3막 단계 생략에 따른 결말 몰림을 판정할 때
+- `knowledge/plot/avoiding-formulaic-structure.md` — 정형적이라는 지적을 구조가 아닌 트롭 층위에서 하고 비율 편차를 결함으로 보지 않을 때
+- `knowledge/plot/stories-that-begin-too-early.md` — 1화 첫 장면에 목표·갈등·상대 인물이 있는지로 시작점 이동 여부를 판정할 때
+- `knowledge/plot/irrelevant-endings.md` — 후반 갈등이 제1막에 심어졌는지, 결말이 시작의 직접 결과인지 복선·회수 짝으로 판정할 때
+- `knowledge/plot/great-swampy-middle.md` — 중반 각 화가 큰 대결을 준비하는지, 중반에 열린 서브플롯이 닫히는지로 늘어짐을 판정할 때
 
 ## 상충 시 확인할 역할
 

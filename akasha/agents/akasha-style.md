@@ -35,6 +35,14 @@ manuscript/**
 
 - `knowledge/style/loanword-notation-principles.md` — 외래어 표기의 다섯 원칙, 받침 제한, 된소리 원칙, 굳어진 표기의 관용
 - `knowledge/style/standard-language-principles.md` — 표준어의 정의, 지문과 대사의 방언·비표준어 구분
+- `knowledge/style/dialect-promoted-standard-words.md` — 방언 출신 단어를 오류로 잡기 전 제23항(원 표준어 존치)·제24항(폐기) 확인
+- `knowledge/style/archaic-words-standard.md` — 애닯다·오얏 같은 옛말 형태가 고어 처리된 비표준어인지 판정
+- `knowledge/style/native-over-sino-korean-words.md` — 고유어·한자어 짝에서 쓰임을 잃은 쪽을 오류로 판정(제21항·제22항)
+- `knowledge/style/plural-standard-forms.md` — 네/예, 쇠-/소-, 어감 차이 짝을 오류가 아닌 복수 표준어로 판정
+- `knowledge/style/loanword-english-notation.md` — 영어계 인명·용어의 받침·으 삽입·어말 시/치/지·장음 표기 오류 판정
+- `knowledge/style/loanword-japanese-kana.md` — 일본어 인명·용어의 어두 예사소리·ツ는 쓰 등 가나 대조 표기 오류 판정
+- `knowledge/style/dialect-in-dialogue.md` — 대사 방언을 발음 음차 대신 어순·어휘·말버릇으로 드러내는지 자문
+- `knowledge/style/dialogue-subtext.md` — 감정·의도를 그대로 말하는 온더노즈 대사의 자연스러움 자문
 
 ## 상충 시 확인할 역할
 

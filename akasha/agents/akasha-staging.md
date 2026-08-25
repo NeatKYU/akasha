@@ -34,6 +34,15 @@ manuscript/**
 경로는 packet이 전달한 `<플러그인 루트>` 절대 경로 기준이다. **이번 판정에 해당하는 문서만 골라 읽는다.**
 
 - `knowledge/staging/scene-sequel-structure.md` — 목표·갈등·좌절과 반응·딜레마·결정의 쌍, 목표 없는 장면, 반응 없는 전개
+- `knowledge/staging/two-types-of-scene.md` — 대목이 행동 장면인지 반응 장면인지 분류하고 판정 단위를 정할 때
+- `knowledge/staging/sequel-building-blocks.md` — 큰 좌절 뒤 반응·딜레마·결정 연쇄가 다음 목표로 이어지는지 볼 때
+- `knowledge/staging/sequel-reactions.md` — 좌절 뒤 시점 인물의 감정 반응 유무·대응·비중을 판정할 때
+- `knowledge/staging/sequel-dilemmas.md` — 좌절 뒤 딜레마가 구체적 질문이고 선택지 검토가 보이는지 볼 때
+- `knowledge/staging/incidents-not-scenes.md` — 갈등 없는 짧은 대목을 미완성 장면인지 의도된 예외인지 가를 때
+- `knowledge/staging/troubleshooting-a-scene.md` — 밋밋한 장면의 원인을 여덟 가지 중 하나로 좁히고 보강을 제안할 때
+- `knowledge/staging/scene-ending-types.md` — 장면 결말 유형을 가리고 인물 상황이 바뀌어 플롯이 진전했는지 볼 때
+- `knowledge/staging/not-enough-tension.md` — 갈등 없는 장면의 긴장 부족을 위협의 난이도·거리·목표 유무로 짚을 때
+- `knowledge/staging/scene-goal-conflict-setback.md` — 장면의 시점 인물·목표·갈등·좌절 네 칸이 채워지는지 판정할 때
 
 ## 상충 시 확인할 역할
 

@@ -33,6 +33,15 @@ manuscript/**
 경로는 packet이 전달한 `<플러그인 루트>` 절대 경로 기준이다. **이번 판정에 해당하는 문서만 골라 읽는다.**
 
 - `knowledge/reader/opening-hook.md` — 훅은 암묵적 질문, 도입의 인물·배경·갈등 동반, 화 끝의 다음 질문
+- `knowledge/reader/first-chapter-hooking.md` — 첫 화·각 화 도입에 첫 문장·상황·차질·어조 훅이 있는지 볼 때
+- `knowledge/reader/first-chapter-opening-scene.md` — 화 도입이 인물·목표·갈등·조연·배경을 갖췄는지 볼 때
+- `knowledge/reader/boring-opening-lines.md` — 화 첫 문장이 날씨·배경·소개·일반 진술·인사말로 시작해 밋밋한지 볼 때
+- `knowledge/reader/opening-lines-that-lie.md` — 도입의 훅이 다음 문단에서 꿈·장난·과장·오경보로 취소되는지 볼 때
+- `knowledge/reader/chapter-cliffhangers.md` — 화 끝에 다음 화로 넘어갈 이유가 있고 훅 강도가 변주되는지 볼 때
+- `knowledge/reader/lazy-chapter-endings.md` — 화 끝 훅이 구체적 단서 없이 '무언가 일어난다'만 말하는지 볼 때
+- `knowledge/reader/pacing-tricks.md` — 늘어지는 구간·설명 덩어리의 원인을 비트·시작점·회상·폭로로 분류할 때
+- `knowledge/reader/unnecessary-filler.md` — 관례 장면·재진술·목표 없는 대화 같은 채움 구간을 짚을 때
+- `knowledge/reader/vague-writing.md` — 긴장 구간에 추정어가 몰려 서술이 느슨해지는지 볼 때
 
 ## 상충 시 확인할 역할
 
