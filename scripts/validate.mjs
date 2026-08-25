@@ -492,8 +492,52 @@ async function validateAkashaSkillContract() {
     'Akasha skill must bound root routing reads'
   );
   assert(
-    skillText.includes('종합 단계 재검증은 최대 2회의 읽기 호출'),
+    skillText.includes('종합 단계 재검증은 최대 1회의 읽기 호출'),
     'Akasha skill must bound root synthesis reads'
+  );
+  // 자식은 배정된 문서만 읽도록 도구 경계로 이미 묶여 있다. 부모가 같은 문서를 다시 읽어도
+  // 근거가 더 확실해지지 않으면서 부모 context만 키운다(12런 동안 재읽기가 잡아낸 오류 0건).
+  assert(
+    skillText.includes('종합 단계에서 지식 문서를 다시 열지 않는다'),
+    'Akasha skill must not reopen knowledge documents during root synthesis'
+  );
+  // 플러그인 루트를 "두 단계 위"처럼 위치로만 정하면 부모가 skills/akasha/ 를 루트로 잡는
+  // 실패가 나온다(54런 중 3건). 루트는 세어서 얻는 값이 아니라 확인해서 얻는 값이어야 한다.
+  assert(
+    skillText.includes('`knowledge/INDEX.md`와 `agents/`를 함께 가진'),
+    'Akasha skill must define the plugin root by a checkable invariant, not by path arithmetic'
+  );
+  assert(
+    skillText.includes('`skills/akasha/`를 루트로 삼지 않는다'),
+    'Akasha skill must reject the skill directory as the plugin root'
+  );
+  // 팀 전체 지식 선택이 0건인데 그대로 진행하면, 지식베이스를 한 번도 열지 않은 실행이
+  // 계약상 유효한 정상 응답으로 나간다.
+  assert(
+    skillText.includes('선택 결과가 팀 전체에서 0건이면 지식 공백이 아니라 선택 실패다'),
+    'Akasha skill must treat a team-wide empty knowledge selection as a failure, not a knowledge gap'
+  );
+  // 세 배치 연속으로 부모가 삭제된 옛 문서명(design/system-principles.md 등)을 지어냈다.
+  // 금지 문구로는 막히지 않았으므로, 틀린 경로가 spawn 전에 잡혀 고쳐지는 절차를 요구한다.
+  assert(
+    skillText.includes('지식 경로 확인과 복구'),
+    'Akasha skill must define a knowledge path verification and recovery step'
+  );
+  assert(
+    skillText.includes('그 목록에 있는 이름으로만') && skillText.includes('나열해'),
+    'Akasha skill must recover unresolvable knowledge paths by listing the real directory'
+  );
+  assert(
+    skillText.includes('목록이 옳다'),
+    'Akasha skill must prefer the directory listing over remembered document names'
+  );
+  assert(
+    skillText.includes('이 단계에서 지식 문서·manifest·역할 문서를 열지 않는다'),
+    'Akasha skill must confine synthesis reads to the scoped diff and changed files'
+  );
+  assert(
+    skillText.includes('부모는 자식이 반환한\n`source_url`을 그대로 쓰고'),
+    'Akasha skill must reuse the child-returned source_url instead of re-deriving it'
   );
   assert(
     skillText.includes('다른 지식 문서·manifest·catalog·플러그인 전체를 검색하거나 네트워크를 조회하지'),
